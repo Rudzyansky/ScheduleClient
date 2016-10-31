@@ -19,6 +19,7 @@ import android.widget.TextView;
 import ru.falseteam.schedule.management.FragmentManagement;
 import ru.falseteam.schedule.redraw.Redrawable;
 import ru.falseteam.schedule.redraw.Redrawer;
+import ru.falseteam.schedule.utils.BitmapUtils;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Redrawable {
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity
                 // Обновление боковой менюшки
                 ((TextView) navHeader.findViewById(R.id.group)).setText(Data.getCurrentGroup().name());
                 ((TextView) navHeader.findViewById(R.id.name)).setText(Data.getName());
-                ((ImageView) navHeader.findViewById(R.id.userIcon)).setImageBitmap(Data.getUserIcon());
+                ((ImageView) navHeader.findViewById(R.id.userIcon)).setImageBitmap(Data.getUserIconCircle());
             }
         });
     }
