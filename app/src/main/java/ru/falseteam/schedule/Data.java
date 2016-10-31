@@ -10,6 +10,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
 import ru.falseteam.schedule.redraw.Redrawer;
+import ru.falseteam.schedule.utils.BitmapUtils;
 
 public class Data {
 
@@ -31,6 +32,7 @@ public class Data {
     private static Groups currentGroup = Groups.disconnected;
     private static String name;
     private static Bitmap userIcon;
+    private static Bitmap userIconCircle;
 
     private static String iconPath;
 
@@ -44,7 +46,7 @@ public class Data {
         hostname = context.getString(R.string.hostname);
         portSchedule = context.getResources().getInteger(R.integer.port_schedule);
         portUpdate = context.getResources().getInteger(R.integer.port_update);
-        
+
         preferences = context.getSharedPreferences("schedule", Context.MODE_PRIVATE);
         name = preferences.getString("name", "guest");
         Redrawer.redraw();
@@ -56,6 +58,7 @@ public class Data {
                 FileInputStream fin = new FileInputStream(file);
                 userIcon = BitmapFactory.decodeStream(fin);
                 fin.close();
+                userIconCircle = BitmapUtils.getCircleBitmap(userIcon);
             } catch (Exception ignore) {
             }
         }
@@ -107,6 +110,7 @@ public class Data {
     static void setUserIcon(Bitmap userIcon) {
         if (Data.userIcon == null || !Data.userIcon.equals(userIcon)) {
             Data.userIcon = userIcon;
+            userIconCircle = BitmapUtils.getCircleBitmap(userIcon);
             Redrawer.redraw();
             try {
                 File file = new File(iconPath);
@@ -118,5 +122,9 @@ public class Data {
             } catch (Exception ignore) {
             }
         }
+    }
+
+    public static Bitmap getUserIconCircle() {
+        return userIconCircle;
     }
 }
