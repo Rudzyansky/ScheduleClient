@@ -63,7 +63,7 @@ public class FragmentDebug extends Fragment implements Redrawable {
             @Override
             public void run() {
                 group.setText(Data.getCurrentGroup().name());
-                version.setText(Application.version);
+                version.setText(Data.getClientVersion());
             }
         });
     }
