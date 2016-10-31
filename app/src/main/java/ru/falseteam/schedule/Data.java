@@ -25,6 +25,8 @@ public class Data {
 
     private static String clientVersion;
     private static String hostname;
+    private static int portSchedule;
+    private static int portUpdate;
 
     private static Groups currentGroup = Groups.disconnected;
     private static String name;
@@ -40,6 +42,9 @@ public class Data {
         } catch (Exception ignore) {
         }
         hostname = context.getString(R.string.hostname);
+        portSchedule = context.getResources().getInteger(R.integer.port_schedule);
+        portUpdate = context.getResources().getInteger(R.integer.port_update);
+        
         preferences = context.getSharedPreferences("schedule", Context.MODE_PRIVATE);
         name = preferences.getString("name", "guest");
         Redrawer.redraw();
@@ -54,6 +59,14 @@ public class Data {
             } catch (Exception ignore) {
             }
         }
+    }
+
+    public static int getPortSchedule() {
+        return portSchedule;
+    }
+
+    public static int getPortUpdate() {
+        return portUpdate;
     }
 
     public static String getHostname() {
