@@ -20,15 +20,9 @@ import static com.vk.sdk.api.VKApiConst.FIELDS;
 
 public class Application extends android.app.Application {
 
-    public static String version = "";
-
     @Override
     public void onCreate() {
         super.onCreate();
-        try {
-            version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-        } catch (Exception ignore) {
-        }
 //        String[] t = VKUtil.getCertificateFingerprint(this, this.getPackageName());
         // Логинимся в вк.
         VKSdk.initialize(this);

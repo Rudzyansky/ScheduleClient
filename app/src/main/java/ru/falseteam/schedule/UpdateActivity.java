@@ -33,7 +33,7 @@ public class UpdateActivity extends AppCompatActivity implements View.OnClickLis
         actRemind.setOnClickListener(this);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
-        ((TextView) findViewById(R.id.currentVersion)).setText(Application.version);
+        ((TextView) findViewById(R.id.currentVersion)).setText(Data.getClientVersion());
         ((TextView) findViewById(R.id.newVersion)).setText(getIntent().getStringExtra("version"));
     }
 
