@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity
                 // Обновление боковой менюшки
                 ((TextView) navHeader.findViewById(R.id.group)).setText(Data.getCurrentGroup().name());
                 ((TextView) navHeader.findViewById(R.id.name)).setText(Data.getName());
-                ((ImageView) navHeader.findViewById(R.id.userIcon)).setImageBitmap(Data.getUserIconCircle());
+                ((ImageView) navHeader.findViewById(R.id.userIcon)).setImageBitmap(Data.getUserIcon());
             }
         });
     }
