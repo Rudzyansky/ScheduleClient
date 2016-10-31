@@ -33,7 +33,7 @@ public class UpdateActivity extends AppCompatActivity implements View.OnClickLis
         actRemind.setOnClickListener(this);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
-        ((TextView) findViewById(R.id.currentVersion)).setText(Application.version);
+        ((TextView) findViewById(R.id.currentVersion)).setText(Data.getClientVersion());
         ((TextView) findViewById(R.id.newVersion)).setText(getIntent().getStringExtra("version"));
     }
 
@@ -91,7 +91,7 @@ public class UpdateActivity extends AppCompatActivity implements View.OnClickLis
                 if (file.exists()) file.delete();
                 if (!file.createNewFile()) throw new Exception("File not created " + path);
                 file.setReadable(true, false);
-                Socket socket = new Socket("31.40.98.246", 7102);
+                Socket socket = new Socket(Data.getHostname(), Data.getPortUpdate());
                 InputStream sin = new BufferedInputStream(socket.getInputStream());
                 OutputStream fout = new FileOutputStream(file);
 

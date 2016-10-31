@@ -86,7 +86,7 @@ public class Worker implements Runnable {
     public void run() {
         while (!interrupt) {
             try {
-                socket = new Socket("31.40.98.246", 7101);
+                socket = new Socket(Data.getHostname(), Data.getPortSchedule());
                 out = new ObjectOutputStream(socket.getOutputStream());
                 ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
                 onConnect();
