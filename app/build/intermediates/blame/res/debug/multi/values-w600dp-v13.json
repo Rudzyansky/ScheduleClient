@@ -1,0 +1,26 @@
+[
+    {
+        "outputFile": "/home/admin/workspace/AndroidStudioProjects/Schedule/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-w600dp-v13/values-w600dp-v13.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endColumn": 60,
+                    "endOffset": 111
+                },
+                "from": {
+                    "file": "/home/admin/workspace/AndroidStudioProjects/Schedule/app/build/intermediates/exploded-aar/com.vk/androidsdk/1.6.7/res/values-w600dp/values-w600dp.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 201,
+                        "endColumn": 60,
+                        "endOffset": 257
+                    }
+                }
+            }
+        ]
+    }
+]
