@@ -1,0 +1,115 @@
+package ru.falseteam.schedule.socket;
+
+import android.content.Context;
+
+import com.vk.sdk.VKAccessToken;
+
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
+
+import ru.falseteam.schedule.Data;
+import ru.falseteam.schedule.socket.commands.AccessDenied;
+import ru.falseteam.schedule.socket.commands.Auth;
+
+public class Worker implements Runnable {
+
+    private Socket socket;
+    private ObjectOutputStream out;
+    public Context context;
+
+    private boolean interrupt = false;
+
+    private static Map<String, CommandInterface> protocols;
+
+    static {
+        protocols = new HashMap<>();
+
+        addCommand(new AccessDenied());
+        addCommand(new Auth());
+    }
+
+    private static void addCommand(CommandInterface c) {
+        protocols.put(c.getName(), c);
+    }
+
+    private static Worker worker;
+
+    private Worker(Context context) {
+        this.context = context;
+        new Thread(this, "Socket worker thread").start();
+    }
+
+    public static void init(Context context) {
+        worker = new Worker(context);
+    }
+
+    public static void stop() {
+        worker.interrupt = true;
+        worker.disconnect();
+        worker = null;
+    }
+
+    public static Worker get() {
+        return worker;
+    }
+
+    public boolean send(Map<String, Object> map) {
+        try {
+            out.writeObject(map);
+            out.flush();
+        } catch (Exception ignore) {
+            return false;
+        }
+        return true;
+    }
+
+    private void disconnect() {
+        Data.setCurrentGroup(Data.Groups.disconnected);
+        try {
+            socket.close();
+        } catch (Exception ignore) {
+        }
+    }
+
+    private void sleep(int ms) {
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException ignore) {
+        }
+    }
+
+    @SuppressWarnings({"InfiniteLoopStatement", "unchecked"})
+    @Override
+    public void run() {
+        while (!interrupt) {
+            try {
+                socket = new Socket("31.40.98.246", 7101);
+                out = new ObjectOutputStream(socket.getOutputStream());
+                ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+                onConnect();
+                while (true) {
+                    Object o = in.readObject();
+                    if (!(o instanceof Map)) throw new Exception("not Map");
+                    Map<String, Object> map = (Map<String, Object>) o;
+                    if (!map.containsKey("command")) continue;
+                    protocols.get(map.get("command").toString()).exec(this, map);
+                }
+            } catch (Exception ignore) {
+            }
+            disconnect();
+            sleep(2000);
+        }
+    }
+
+    private void onConnect() {
+        Data.setCurrentGroup(Data.Groups.guest);
+        // авторизуемся на сервере с косты
+        Map<String, Object> map = new HashMap<>();
+        map.put("command", "auth");
+        map.put("token", VKAccessToken.currentToken().accessToken);
+        send(map);
+    }
+}
