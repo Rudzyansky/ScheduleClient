@@ -19,7 +19,7 @@ public class Auth extends CommandAbstract {
     @Override
     public void exec(Worker worker, Map<String, Object> map) {
         Data.setCurrentGroup(Data.Groups.valueOf(map.get("group").toString()));
-        if (!map.get("version").toString().equals(Application.version)) {
+        if (!map.get("version").toString().equals(Data.getClientVersion())) {
             Intent intent = new Intent(worker.context, UpdateActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("version", map.get("version").toString());
