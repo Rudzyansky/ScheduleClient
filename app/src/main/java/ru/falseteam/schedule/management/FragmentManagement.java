@@ -67,6 +67,7 @@ public class FragmentManagement extends Fragment implements Redrawable, View.OnC
                 (new FragmentAccessDenied()).init(getActivity(), this, R.string.access_denied_not_allowed, admin, developer);
                 return;
         }
+        buttonPairs.setEnabled(true);
     }
 
     @Override

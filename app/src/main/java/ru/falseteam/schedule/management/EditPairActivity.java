@@ -34,11 +34,16 @@ public class EditPairActivity extends AppCompatActivity implements View.OnClickL
 //        pair.setLastTask(getIntent().getStringExtra("last_task"));
         pair = (Pair) getIntent().getSerializableExtra("pair");
 
-        ((TextView) findViewById(R.id.pairId)).setText(String.valueOf(pair.getId()));
         pairName = (TextView) findViewById(R.id.pairName);
         pairAudience = (TextView) findViewById(R.id.pairAudience);
         pairTeacher = (TextView) findViewById(R.id.pairTeacher);
         pairLastTask = (TextView) findViewById(R.id.pairLastTask);
+
+        ((TextView) findViewById(R.id.pairId)).setText(String.valueOf(pair.getId()));
+        pairName.setText(pair.getName());
+        pairAudience.setText(pair.getAudience());
+        pairTeacher.setText(pair.getTeacher());
+        pairLastTask.setText(pair.getLastTask());
 
         findViewById(R.id.btnSend).setOnClickListener(this);
         findViewById(R.id.btnCancel).setOnClickListener(this);
@@ -53,13 +58,7 @@ public class EditPairActivity extends AppCompatActivity implements View.OnClickL
                 pair.setTeacher(pairTeacher.getText().toString());
                 pair.setLastTask(pairLastTask.getText().toString());
                 Map<String, Object> map = new HashMap<>();
-                map.put("command", "changePair");
-//                map.put("exists", pair.isExists());
-//                map.put("id", pair.getId());
-//                map.put("name", pair.getName());
-//                map.put("audience", pair.getAudience());
-//                map.put("teacher", pair.getTeacher());
-//                map.put("last_task", pair.getLastTask());
+                map.put("command", "change_pair");
                 map.put("pair", pair);
                 Worker.get().send(map);
                 finish();

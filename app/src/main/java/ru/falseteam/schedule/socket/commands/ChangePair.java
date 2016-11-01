@@ -7,13 +7,13 @@ import java.util.Map;
 import ru.falseteam.schedule.socket.CommandAbstract;
 import ru.falseteam.schedule.socket.Worker;
 
-public class AccessDenied extends CommandAbstract {
-    public AccessDenied() {
-        super("forbidden");
+public class ChangePair extends CommandAbstract {
+    public ChangePair() {
+        super("change_pair");
     }
 
     @Override
     public void exec(Map<String, Object> map) {
-        Toast.makeText(Worker.get().context, "Access Denied: \n" + map.get("command"), Toast.LENGTH_SHORT).show();
+        Toast.makeText(Worker.get().context, String.valueOf(map.get("result")), Toast.LENGTH_SHORT).show();
     }
 }
