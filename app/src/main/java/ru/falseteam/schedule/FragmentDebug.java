@@ -10,8 +10,7 @@ import android.widget.TextView;
 
 import ru.falseteam.schedule.redraw.Redrawable;
 import ru.falseteam.schedule.redraw.Redrawer;
-
-import static ru.falseteam.schedule.Data.Groups.developer;
+import ru.falseteam.schedule.serializable.Groups;
 
 public class FragmentDebug extends Fragment implements Redrawable {
 
@@ -56,7 +55,7 @@ public class FragmentDebug extends Fragment implements Redrawable {
 //                (new FragmentAccessDenied()).init(getActivity(), this, R.string.access_denied_offline, developer);
 //                return;
             default:
-                (new FragmentAccessDenied()).init(getActivity(), this, R.string.access_denied_not_allowed, developer);
+                (new FragmentAccessDenied()).init(getActivity(), this, R.string.access_denied_not_allowed, Groups.developer);
                 return;
         }
         getActivity().runOnUiThread(new Runnable() {

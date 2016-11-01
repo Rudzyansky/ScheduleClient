@@ -1,13 +1,11 @@
 package ru.falseteam.schedule.socket.commands;
 
-import android.content.Intent;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
-import ru.falseteam.schedule.management.ListOfPairsActivity;
+import ru.falseteam.schedule.redraw.Redrawer;
 import ru.falseteam.schedule.socket.CommandAbstract;
-import ru.falseteam.schedule.socket.Worker;
 import ru.falseteam.schedule.serializable.Pair;
 
 public class GetPairs extends CommandAbstract {
@@ -17,16 +15,16 @@ public class GetPairs extends CommandAbstract {
 
     public static ArrayList<Pair> pairs = new ArrayList<>();
 
-    @SuppressWarnings("StatementWithEmptyBody")
+    @SuppressWarnings("unchecked")
     @Override
     public void exec(Map<String, Object> map) {
-        pairs.clear();
-        for (int i = 0; i < (int) map.get("count"); ++i) {
-            Pair pair = (Pair) map.get(String.valueOf(i));
-            pairs.add(pair);
-        }
-        Intent intent = new Intent(Worker.get().getContext(), ListOfPairsActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        Worker.get().getContext().startActivity(intent);
+        pairs = (ArrayList<Pair>) map.get("pairs");
+        Redrawer.redraw();
+    }
+
+    public static Map<String, Object> getRequest() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("command", "get_pairs");
+        return map;
     }
 }

@@ -11,9 +11,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ru.falseteam.schedule.Data;
+import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.socket.commands.AccessDenied;
 import ru.falseteam.schedule.socket.commands.Auth;
-import ru.falseteam.schedule.socket.commands.ChangePair;
+import ru.falseteam.schedule.socket.commands.ToastShort;
 import ru.falseteam.schedule.socket.commands.GetPairs;
 
 public class Worker implements Runnable {
@@ -32,7 +33,7 @@ public class Worker implements Runnable {
         addCommand(new AccessDenied());
         addCommand(new Auth());
         addCommand(new GetPairs());
-        addCommand(new ChangePair());
+        addCommand(new ToastShort());
     }
 
     public Context getContext() {
@@ -75,7 +76,7 @@ public class Worker implements Runnable {
     }
 
     private void disconnect() {
-        Data.setCurrentGroup(Data.Groups.disconnected);
+        Data.setCurrentGroup(Groups.disconnected);
         try {
             socket.close();
         } catch (Exception ignore) {
@@ -113,11 +114,8 @@ public class Worker implements Runnable {
     }
 
     private void onConnect() {
-        Data.setCurrentGroup(Data.Groups.guest);
+        Data.setCurrentGroup(Groups.guest);
         // авторизуемся на сервере с косты
-        Map<String, Object> map = new HashMap<>();
-        map.put("command", "auth");
-        map.put("token", VKAccessToken.currentToken().accessToken);
-        send(map);
+        send(Auth.getRequest(VKAccessToken.currentToken().accessToken));
     }
 }

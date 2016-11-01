@@ -17,10 +17,10 @@ import ru.falseteam.schedule.FragmentAccessDenied;
 import ru.falseteam.schedule.R;
 import ru.falseteam.schedule.redraw.Redrawable;
 import ru.falseteam.schedule.redraw.Redrawer;
+import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.socket.Worker;
 import ru.falseteam.schedule.socket.commands.GetPairs;
 
-import static ru.falseteam.schedule.Data.Groups.*;
 
 public class FragmentManagement extends Fragment implements Redrawable, View.OnClickListener {
 
@@ -61,23 +61,19 @@ public class FragmentManagement extends Fragment implements Redrawable, View.OnC
             case admin:
                 break;
             case disconnected:
-                (new FragmentAccessDenied()).init(getActivity(), this, R.string.access_denied_offline, admin, developer);
+                (new FragmentAccessDenied()).init(getActivity(), this, R.string.access_denied_offline, Groups.admin, Groups.developer);
                 return;
             default:
-                (new FragmentAccessDenied()).init(getActivity(), this, R.string.access_denied_not_allowed, admin, developer);
+                (new FragmentAccessDenied()).init(getActivity(), this, R.string.access_denied_not_allowed, Groups.admin, Groups.developer);
                 return;
         }
-        buttonPairs.setEnabled(true);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.buttonPairs:
-                buttonPairs.setEnabled(false);
-                Map<String, Object> map = new HashMap<>();
-                map.put("command", "get_pairs");
-                Worker.get().send(map);
+                startActivity(new Intent(getActivity(), ListOfPairsActivity.class));
                 break;
         }
     }
