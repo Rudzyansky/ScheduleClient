@@ -35,6 +35,7 @@ public class UpdateActivity extends AppCompatActivity implements View.OnClickLis
         progressBar.setVisibility(View.GONE);
         ((TextView) findViewById(R.id.currentVersion)).setText(Data.getClientVersion());
         ((TextView) findViewById(R.id.newVersion)).setText(getIntent().getStringExtra("version"));
+        setFinishOnTouchOutside(false);
     }
 
     @Override

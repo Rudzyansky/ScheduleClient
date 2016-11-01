@@ -8,21 +8,13 @@ import android.graphics.BitmapFactory;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.net.URL;
 
 import ru.falseteam.schedule.redraw.Redrawer;
+import ru.falseteam.schedule.serializable.Groups;
+import ru.falseteam.schedule.utils.BitmapUtils;
 
 public class Data {
-
-    @SuppressWarnings("unused")
-    public enum Groups {
-        disconnected,
-        guest,
-        unconfirmed,
-        user,
-        admin,
-        developer
-    }
-
     private static String clientVersion;
     private static String hostname;
     private static int portSchedule;
@@ -31,8 +23,8 @@ public class Data {
     private static Groups currentGroup = Groups.disconnected;
     private static String name;
     private static Bitmap userIcon;
-
-    private static String iconPath;
+    private static String userIconUrl;
+    private static String userIconPath;
 
     private static SharedPreferences preferences;
 
@@ -44,13 +36,14 @@ public class Data {
         hostname = context.getString(R.string.hostname);
         portSchedule = context.getResources().getInteger(R.integer.port_schedule);
         portUpdate = context.getResources().getInteger(R.integer.port_update);
-        
+
         preferences = context.getSharedPreferences("schedule", Context.MODE_PRIVATE);
         name = preferences.getString("name", "guest");
+        userIconUrl = preferences.getString("userIconUrl", "");
         Redrawer.redraw();
 
-        iconPath = context.getApplicationInfo().dataDir + "/usericon.png";
-        File file = new File(iconPath);
+        userIconPath = context.getApplicationInfo().dataDir + "/usericon.png";
+        File file = new File(userIconPath);
         if (file.exists()) {
             try {
                 FileInputStream fin = new FileInputStream(file);
@@ -104,19 +97,37 @@ public class Data {
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    static void setUserIcon(Bitmap userIcon) {
-        if (Data.userIcon == null || !Data.userIcon.equals(userIcon)) {
-            Data.userIcon = userIcon;
-            Redrawer.redraw();
-            try {
-                File file = new File(iconPath);
-                file.createNewFile();
-                FileOutputStream fout = new FileOutputStream(iconPath);
-                userIcon.compress(Bitmap.CompressFormat.PNG, 100, fout);
-                fout.flush();
-                fout.close();
-            } catch (Exception ignore) {
+    private static void setUserIcon() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    final URL url = new URL(userIconUrl);
+                    userIcon = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                    userIcon = BitmapUtils.getCircleBitmap(userIcon);
+                    Redrawer.redraw();
+                    try {
+                        File file = new File(userIconPath);
+                        file.createNewFile();
+                        FileOutputStream fout = new FileOutputStream(userIconPath);
+                        userIcon.compress(Bitmap.CompressFormat.PNG, 100, fout);
+                        fout.flush();
+                        fout.close();
+                    } catch (Exception ignore) {
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
+        }).start();
+    }
+
+    public static void setUserIconUrl(final String userIconUrl) {
+        if (!Data.userIconUrl.equals(userIconUrl)) {
+            Data.userIconUrl = userIconUrl;
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("userIconUrl", name).apply();
+            setUserIcon();
         }
     }
 }

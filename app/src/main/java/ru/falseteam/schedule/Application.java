@@ -3,6 +3,7 @@ package ru.falseteam.schedule;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.widget.Toast;
 
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKApi;
@@ -50,18 +51,7 @@ public class Application extends android.app.Application {
                 VKList<VKApiUserFull> full = (VKList<VKApiUserFull>) response.parsedModel;
                 for (final VKApiUserFull user : full) {
                     Data.setName(user.last_name + " " + user.first_name);
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                final URL url = new URL(user.photo_100);
-                                Bitmap bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                                Data.setUserIcon(bitmap);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }).start();
+                    Data.setUserIconUrl(user.photo_100);
                 }
                 super.onComplete(response);
             }
