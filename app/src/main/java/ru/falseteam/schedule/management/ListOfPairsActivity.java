@@ -1,5 +1,6 @@
 package ru.falseteam.schedule.management;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -15,8 +16,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import ru.falseteam.schedule.R;
-
-import static ru.falseteam.schedule.socket.commands.GetPairs.pairs;
+import ru.falseteam.schedule.serializable.Pair;
+import ru.falseteam.schedule.socket.commands.GetPairs;
 
 public class ListOfPairsActivity extends AppCompatActivity {
 
@@ -27,29 +28,29 @@ public class ListOfPairsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_of_pairs);
 
-        pairAdapter = new PairAdapter(this, pairs);
+        pairAdapter = new PairAdapter(this);
         ((ListView) findViewById(R.id.pairs)).setAdapter(pairAdapter);
     }
 
     private class PairAdapter extends BaseAdapter {
         Context context;
         LayoutInflater inflater;
-        ArrayList<Pair> objects;
+//        ArrayList<Pair> objects;
 
-        PairAdapter(Context context, ArrayList<Pair> pairs) {
+        //        PairAdapter(Context context, ArrayList<Pair> pairs) {
+        PairAdapter(Activity context) {
             this.context = context;
-            objects = pairs;
-            inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+            inflater = LayoutInflater.from(context);
         }
 
         @Override
         public int getCount() {
-            return objects.size();
+            return GetPairs.pairs.size();
         }
 
         @Override
         public Object getItem(int i) {
-            return objects.get(i);
+            return GetPairs.pairs.get(i);
         }
 
         @Override
@@ -58,9 +59,8 @@ public class ListOfPairsActivity extends AppCompatActivity {
         }
 
         @Override
-        public View getView(int i, View convertView, ViewGroup parent) {
-            View view = convertView;
-            if (view == null) view = inflater.inflate(R.layout.item_pair, parent);
+        public View getView(int i, View view, ViewGroup parent) {
+            if (view == null) view = inflater.inflate(R.layout.item_pair, parent, false);
             Pair pair = getPair(i);
 
             ((TextView) view.findViewById(R.id.pairName)).setText(pair.getName());
@@ -68,7 +68,7 @@ public class ListOfPairsActivity extends AppCompatActivity {
             Button pairEdit = (Button) view.findViewById(R.id.pairEdit);
             pairEdit.setTag(pair);
             pairEdit.setOnClickListener(myOnClickListener);
-            return null;
+            return view;
         }
 
         private Pair getPair(int i) {

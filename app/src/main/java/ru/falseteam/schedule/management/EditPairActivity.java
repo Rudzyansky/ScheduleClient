@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ru.falseteam.schedule.R;
+import ru.falseteam.schedule.serializable.Pair;
 import ru.falseteam.schedule.socket.Worker;
 
 public class EditPairActivity extends AppCompatActivity implements View.OnClickListener {
