@@ -11,14 +11,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ru.falseteam.schedule.Data;
+import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.socket.commands.AccessDenied;
 import ru.falseteam.schedule.socket.commands.Auth;
+import ru.falseteam.schedule.socket.commands.ToastShort;
+import ru.falseteam.schedule.socket.commands.GetPairs;
 
 public class Worker implements Runnable {
 
     private Socket socket;
     private ObjectOutputStream out;
-    public Context context;
+    private Context context;
 
     private boolean interrupt = false;
 
@@ -29,6 +32,12 @@ public class Worker implements Runnable {
 
         addCommand(new AccessDenied());
         addCommand(new Auth());
+        addCommand(new GetPairs());
+        addCommand(new ToastShort());
+    }
+
+    public Context getContext() {
+        return context;
     }
 
     private static void addCommand(CommandInterface c) {
@@ -67,7 +76,7 @@ public class Worker implements Runnable {
     }
 
     private void disconnect() {
-        Data.setCurrentGroup(Data.Groups.disconnected);
+        Data.setCurrentGroup(Groups.disconnected);
         try {
             socket.close();
         } catch (Exception ignore) {
@@ -95,7 +104,7 @@ public class Worker implements Runnable {
                     if (!(o instanceof Map)) throw new Exception("not Map");
                     Map<String, Object> map = (Map<String, Object>) o;
                     if (!map.containsKey("command")) continue;
-                    protocols.get(map.get("command").toString()).exec(this, map);
+                    protocols.get(map.get("command").toString()).exec(map);
                 }
             } catch (Exception ignore) {
             }
@@ -105,11 +114,8 @@ public class Worker implements Runnable {
     }
 
     private void onConnect() {
-        Data.setCurrentGroup(Data.Groups.guest);
+        Data.setCurrentGroup(Groups.guest);
         // авторизуемся на сервере с косты
-        Map<String, Object> map = new HashMap<>();
-        map.put("command", "auth");
-        map.put("token", VKAccessToken.currentToken().accessToken);
-        send(map);
+        send(Auth.getRequest(VKAccessToken.currentToken().accessToken));
     }
 }

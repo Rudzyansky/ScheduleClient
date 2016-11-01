@@ -14,22 +14,23 @@ import java.util.Collections;
 
 import ru.falseteam.schedule.redraw.Redrawable;
 import ru.falseteam.schedule.redraw.Redrawer;
+import ru.falseteam.schedule.serializable.Groups;
 
 public class FragmentAccessDenied extends Fragment implements Redrawable {
 
     private Fragment parent;
     private String reason;
-    private ArrayList<Data.Groups> groupies = new ArrayList<>();
+    private ArrayList<Groups> groupies = new ArrayList<>();
     private TextView reasonView;
 
-    public void init(Activity activity, Fragment parent, String reason, Data.Groups... groupies) {
+    public void init(Activity activity, Fragment parent, String reason, Groups... groupies) {
         this.parent = parent;
         this.reason = reason;
         Collections.addAll(this.groupies, groupies);
         activity.getFragmentManager().beginTransaction().replace(R.id.content_main, this).commit();
     }
 
-    public void init(Activity activity, Fragment parent, int reason, Data.Groups... groupies) {
+    public void init(Activity activity, Fragment parent, int reason, Groups... groupies) {
         this.parent = parent;
         this.reason = activity.getString(reason);
         Collections.addAll(this.groupies, groupies);
