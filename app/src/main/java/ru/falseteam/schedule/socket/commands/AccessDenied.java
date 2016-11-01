@@ -1,5 +1,8 @@
 package ru.falseteam.schedule.socket.commands;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.widget.Toast;
 
 import java.util.Map;
@@ -13,7 +16,12 @@ public class AccessDenied extends CommandAbstract {
     }
 
     @Override
-    public void exec(Map<String, Object> map) {
-        Toast.makeText(Worker.get().context, "Access Denied: \n" + map.get("command"), Toast.LENGTH_SHORT).show();
+    public void exec(final Map<String, Object> map) {
+        new Handler(Looper.getMainLooper()) {
+            @Override
+            public void handleMessage(Message inputMessage) {
+                Toast.makeText(Worker.get().getContext(), "Access Denied: \n" + map.get("command"), Toast.LENGTH_SHORT).show();
+            }
+        }.obtainMessage().sendToTarget();
     }
 }

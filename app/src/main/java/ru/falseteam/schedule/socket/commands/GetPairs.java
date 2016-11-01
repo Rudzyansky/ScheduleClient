@@ -25,8 +25,8 @@ public class GetPairs extends CommandAbstract {
             Pair pair = (Pair) map.get(String.valueOf(i));
             pairs.add(pair);
         }
-        Intent intent = new Intent(Worker.get().context, ListOfPairsActivity.class);
+        Intent intent = new Intent(Worker.get().getContext(), ListOfPairsActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        Worker.get().context.startActivity(intent);
+        Worker.get().getContext().startActivity(intent);
     }
 }

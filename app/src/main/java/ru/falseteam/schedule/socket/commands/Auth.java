@@ -20,10 +20,10 @@ public class Auth extends CommandAbstract {
     public void exec(Map<String, Object> map) {
         Data.setCurrentGroup(Data.Groups.valueOf(map.get("group").toString()));
         if (!map.get("version").toString().equals(Data.getClientVersion())) {
-            Intent intent = new Intent(Worker.get().context, UpdateActivity.class);
+            Intent intent = new Intent(Worker.get().getContext(), UpdateActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("version", map.get("version").toString());
-            Worker.get().context.startActivity(intent);
+            Worker.get().getContext().startActivity(intent);
         }
     }
 }
