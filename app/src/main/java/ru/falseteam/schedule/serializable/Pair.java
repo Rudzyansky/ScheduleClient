@@ -1,4 +1,4 @@
-package ru.falseteam.schedule.management;
+package ru.falseteam.schedule.serializable;
 
 import java.io.Serializable;
 
