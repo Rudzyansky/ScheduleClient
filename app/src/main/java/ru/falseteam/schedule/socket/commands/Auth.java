@@ -17,13 +17,13 @@ public class Auth extends CommandAbstract {
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public void exec(Worker worker, Map<String, Object> map) {
+    public void exec(Map<String, Object> map) {
         Data.setCurrentGroup(Data.Groups.valueOf(map.get("group").toString()));
         if (!map.get("version").toString().equals(Data.getClientVersion())) {
-            Intent intent = new Intent(worker.context, UpdateActivity.class);
+            Intent intent = new Intent(Worker.get().context, UpdateActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("version", map.get("version").toString());
-            worker.context.startActivity(intent);
+            Worker.get().context.startActivity(intent);
         }
     }
 }

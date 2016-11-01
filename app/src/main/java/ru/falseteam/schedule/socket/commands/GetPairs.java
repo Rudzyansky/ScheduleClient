@@ -15,16 +15,18 @@ public class GetPairs extends CommandAbstract {
         super("get_pairs");
     }
 
+    public static ArrayList<Pair> pairs = new ArrayList<>();
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public void exec(Worker worker, Map<String, Object> map) {
+    public void exec(Map<String, Object> map) {
+        pairs.clear();
         for (int i = 0; i < (int) map.get("count"); ++i) {
-            pairs.add((Pair) map.get(String.valueOf(i)));
+            Pair pair = (Pair) map.get(String.valueOf(i));
+            pairs.add(pair);
         }
         Intent intent = new Intent(Worker.get().context, ListOfPairsActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         Worker.get().context.startActivity(intent);
     }
-
-    public static ArrayList<Pair> pairs = new ArrayList<>();
 }

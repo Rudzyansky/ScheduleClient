@@ -1,10 +1,9 @@
 package ru.falseteam.schedule.management;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,29 +27,29 @@ public class ListOfPairsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_of_pairs);
 
-        pairAdapter = new PairAdapter(this);
+        pairAdapter = new PairAdapter(this, GetPairs.pairs);
         ((ListView) findViewById(R.id.pairs)).setAdapter(pairAdapter);
     }
 
     private class PairAdapter extends BaseAdapter {
         Context context;
         LayoutInflater inflater;
-//        ArrayList<Pair> objects;
+        ArrayList<Pair> objects;
 
-        //        PairAdapter(Context context, ArrayList<Pair> pairs) {
-        PairAdapter(Activity context) {
+        PairAdapter(Context context, ArrayList<Pair> pairs) {
             this.context = context;
+            objects = pairs;
             inflater = LayoutInflater.from(context);
         }
 
         @Override
         public int getCount() {
-            return GetPairs.pairs.size();
+            return objects.size();
         }
 
         @Override
         public Object getItem(int i) {
-            return GetPairs.pairs.get(i);
+            return objects.get(i);
         }
 
         @Override
@@ -62,10 +61,11 @@ public class ListOfPairsActivity extends AppCompatActivity {
         public View getView(int i, View view, ViewGroup parent) {
             if (view == null) view = inflater.inflate(R.layout.item_pair, parent, false);
             Pair pair = getPair(i);
+            if (pair == null) return null;
 
-            ((TextView) view.findViewById(R.id.pairName)).setText(pair.getName());
-            ((TextView) view.findViewById(R.id.pairAudience)).setText(pair.getAudience());
-            Button pairEdit = (Button) view.findViewById(R.id.pairEdit);
+            ((TextView) view.findViewById(R.id.itemPairName)).setText(pair.getName());
+            ((TextView) view.findViewById(R.id.itemPairAudience)).setText(pair.getAudience());
+            Button pairEdit = (Button) view.findViewById(R.id.itemPairEdit);
             pairEdit.setTag(pair);
             pairEdit.setOnClickListener(myOnClickListener);
             return view;

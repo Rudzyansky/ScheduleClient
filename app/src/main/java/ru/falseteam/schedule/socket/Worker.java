@@ -13,6 +13,7 @@ import java.util.Map;
 import ru.falseteam.schedule.Data;
 import ru.falseteam.schedule.socket.commands.AccessDenied;
 import ru.falseteam.schedule.socket.commands.Auth;
+import ru.falseteam.schedule.socket.commands.ChangePair;
 import ru.falseteam.schedule.socket.commands.GetPairs;
 
 public class Worker implements Runnable {
@@ -31,6 +32,7 @@ public class Worker implements Runnable {
         addCommand(new AccessDenied());
         addCommand(new Auth());
         addCommand(new GetPairs());
+        addCommand(new ChangePair());
     }
 
     private static void addCommand(CommandInterface c) {
@@ -97,7 +99,7 @@ public class Worker implements Runnable {
                     if (!(o instanceof Map)) throw new Exception("not Map");
                     Map<String, Object> map = (Map<String, Object>) o;
                     if (!map.containsKey("command")) continue;
-                    protocols.get(map.get("command").toString()).exec(this, map);
+                    protocols.get(map.get("command").toString()).exec(map);
                 }
             } catch (Exception ignore) {
             }
