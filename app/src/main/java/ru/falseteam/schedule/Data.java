@@ -11,20 +11,10 @@ import java.io.FileOutputStream;
 import java.net.URL;
 
 import ru.falseteam.schedule.redraw.Redrawer;
+import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.utils.BitmapUtils;
 
 public class Data {
-
-    @SuppressWarnings("unused")
-    public enum Groups {
-        disconnected,
-        guest,
-        unconfirmed,
-        user,
-        admin,
-        developer
-    }
-
     private static String clientVersion;
     private static String hostname;
     private static int portSchedule;

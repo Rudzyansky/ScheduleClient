@@ -10,9 +10,9 @@ import java.util.Map;
 import ru.falseteam.schedule.socket.CommandAbstract;
 import ru.falseteam.schedule.socket.Worker;
 
-public class AccessDenied extends CommandAbstract {
-    public AccessDenied() {
-        super("forbidden");
+public class ToastShort extends CommandAbstract {
+    public ToastShort() {
+        super("toast_short");
     }
 
     @Override
@@ -20,7 +20,7 @@ public class AccessDenied extends CommandAbstract {
         new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(Message inputMessage) {
-                Toast.makeText(Worker.get().getContext(), "Access Denied: \n" + map.get("command"), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Worker.get().getContext(), String.valueOf(map.get("message")), Toast.LENGTH_SHORT).show();
             }
         }.obtainMessage().sendToTarget();
     }
