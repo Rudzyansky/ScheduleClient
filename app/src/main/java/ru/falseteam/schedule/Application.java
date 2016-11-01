@@ -3,6 +3,7 @@ package ru.falseteam.schedule;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.widget.Toast;
 
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKApi;

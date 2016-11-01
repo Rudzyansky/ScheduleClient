@@ -11,6 +11,7 @@ import java.util.Map;
 import ru.falseteam.schedule.R;
 import ru.falseteam.schedule.serializable.Pair;
 import ru.falseteam.schedule.socket.Worker;
+import ru.falseteam.schedule.socket.commands.GetPairs;
 
 public class EditPairActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -28,40 +29,46 @@ public class EditPairActivity extends AppCompatActivity implements View.OnClickL
 
         pair = (Pair) getIntent().getSerializableExtra("pair");
 
-        setTitle(pair.getName());
+        setTitle(pair.name);
 
         pairName = (TextView) findViewById(R.id.pairName);
         pairAudience = (TextView) findViewById(R.id.pairAudience);
         pairTeacher = (TextView) findViewById(R.id.pairTeacher);
         pairLastTask = (TextView) findViewById(R.id.pairLastTask);
 
-        ((TextView) findViewById(R.id.pairId)).setText(String.valueOf(pair.getId()));
-        pairName.setText(pair.getName());
-        pairAudience.setText(pair.getAudience());
-        pairTeacher.setText(pair.getTeacher());
-        pairLastTask.setText(pair.getLastTask());
+        ((TextView) findViewById(R.id.pairId)).setText(String.valueOf(pair.id));
+        pairName.setText(pair.name);
+        pairAudience.setText(pair.audience);
+        pairTeacher.setText(pair.teacher);
+        pairLastTask.setText(pair.lastTask);
 
         findViewById(R.id.btnSend).setOnClickListener(this);
-        findViewById(R.id.btnCancel).setOnClickListener(this);
+        findViewById(R.id.btnDelete).setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
+        Map<String, Object> map = new HashMap<>();
         switch (view.getId()) {
             case R.id.btnSend:
-                pair.setName(pairName.getText().toString());
-                pair.setAudience(pairAudience.getText().toString());
-                pair.setTeacher(pairTeacher.getText().toString());
-                pair.setLastTask(pairLastTask.getText().toString());
-                Map<String, Object> map = new HashMap<>();
+                pair.name = pairName.getText().toString();
+                pair.audience = pairAudience.getText().toString();
+                pair.teacher = pairTeacher.getText().toString();
+                pair.lastTask = pairLastTask.getText().toString();
+                map.clear();
                 map.put("command", "change_pair");
                 map.put("pair", pair);
                 Worker.get().send(map);
                 finish();
                 break;
-            case R.id.btnCancel:
+            case R.id.btnDelete:
+                map.clear();
+                map.put("command", "delete_pair");
+                map.put("id", pair.id);
+                Worker.get().send(map);
                 finish();
                 break;
         }
+        Worker.get().send(GetPairs.getRequest());
     }
 }
