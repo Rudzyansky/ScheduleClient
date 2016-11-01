@@ -13,6 +13,7 @@ import java.util.Map;
 import ru.falseteam.schedule.Data;
 import ru.falseteam.schedule.socket.commands.AccessDenied;
 import ru.falseteam.schedule.socket.commands.Auth;
+import ru.falseteam.schedule.socket.commands.GetPairs;
 
 public class Worker implements Runnable {
 
@@ -29,6 +30,7 @@ public class Worker implements Runnable {
 
         addCommand(new AccessDenied());
         addCommand(new Auth());
+        addCommand(new GetPairs());
     }
 
     private static void addCommand(CommandInterface c) {
