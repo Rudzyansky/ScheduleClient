@@ -26,13 +26,9 @@ public class EditPairActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_pair);
 
-//        pair = new Pair();
-//        pair.setExists(getIntent().getBooleanExtra("exists", false));
-//        pair.setId(getIntent().getIntExtra("id", 0));
-//        pair.setName(getIntent().getStringExtra("name"));
-//        pair.setAudience(getIntent().getStringExtra("audience"));
-//        pair.setLastTask(getIntent().getStringExtra("last_task"));
         pair = (Pair) getIntent().getSerializableExtra("pair");
+
+        setTitle(pair.getName());
 
         pairName = (TextView) findViewById(R.id.pairName);
         pairAudience = (TextView) findViewById(R.id.pairAudience);

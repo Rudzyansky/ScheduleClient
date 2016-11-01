@@ -27,6 +27,8 @@ public class ListOfPairsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_of_pairs);
 
+        setTitle("Предметы");
+
         pairAdapter = new PairAdapter(this, GetPairs.pairs);
         ((ListView) findViewById(R.id.pairs)).setAdapter(pairAdapter);
     }

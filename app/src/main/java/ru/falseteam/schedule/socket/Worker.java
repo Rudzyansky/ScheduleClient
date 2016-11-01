@@ -20,7 +20,7 @@ public class Worker implements Runnable {
 
     private Socket socket;
     private ObjectOutputStream out;
-    public Context context;
+    private Context context;
 
     private boolean interrupt = false;
 
@@ -33,6 +33,10 @@ public class Worker implements Runnable {
         addCommand(new Auth());
         addCommand(new GetPairs());
         addCommand(new ChangePair());
+    }
+
+    public Context getContext() {
+        return context;
     }
 
     private static void addCommand(CommandInterface c) {
