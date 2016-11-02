@@ -1,32 +1,30 @@
 package ru.falseteam.schedule.socket.commands;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import ru.falseteam.schedule.redraw.Redrawer;
+import ru.falseteam.schedule.serializable.User;
 import ru.falseteam.schedule.socket.CommandAbstract;
-import ru.falseteam.schedule.serializable.Pair;
 
-public class GetPairs extends CommandAbstract {
-    public GetPairs() {
-        super("get_pairs");
+public class GetUsers extends CommandAbstract {
+    public GetUsers() {
+        super("get_users");
     }
 
-    public static List<Pair> pairs;
+    public static ArrayList<User> users;
 
     @SuppressWarnings("unchecked")
     @Override
     public void exec(Map<String, Object> map) {
-        pairs = (List<Pair>) map.get("pairs");
+        users = (ArrayList<User>) map.get("users");
         Redrawer.redraw();
     }
 
     public static Map<String, Object> getRequest() {
         Map<String, Object> map = new HashMap<>();
-        map.put("command", "get_pairs");
+        map.put("command", "get_users");
         return map;
     }
 }
