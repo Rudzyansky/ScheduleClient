@@ -31,18 +31,18 @@ public class EditPairActivity extends AppCompatActivity implements View.OnClickL
 
         setTitle(pair.name);
 
-        pairName = (TextView) findViewById(R.id.pairName);
-        pairAudience = (TextView) findViewById(R.id.pairAudience);
-        pairTeacher = (TextView) findViewById(R.id.pairTeacher);
-        pairLastTask = (TextView) findViewById(R.id.pairLastTask);
+        pairName = (TextView) findViewById(R.id.name);
+        pairAudience = (TextView) findViewById(R.id.audience);
+        pairTeacher = (TextView) findViewById(R.id.teacher);
+        pairLastTask = (TextView) findViewById(R.id.lastTask);
 
-        ((TextView) findViewById(R.id.pairId)).setText(String.valueOf(pair.id));
+        ((TextView) findViewById(R.id.id)).setText(String.valueOf(pair.id));
         pairName.setText(pair.name);
         pairAudience.setText(pair.audience);
         pairTeacher.setText(pair.teacher);
         pairLastTask.setText(pair.lastTask);
 
-        findViewById(R.id.btnSend).setOnClickListener(this);
+        findViewById(R.id.btnSave).setOnClickListener(this);
         findViewById(R.id.btnDelete).setOnClickListener(this);
     }
 
@@ -50,7 +50,7 @@ public class EditPairActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View view) {
         Map<String, Object> map = new HashMap<>();
         switch (view.getId()) {
-            case R.id.btnSend:
+            case R.id.btnSave:
                 pair.name = pairName.getText().toString();
                 pair.audience = pairAudience.getText().toString();
                 pair.teacher = pairTeacher.getText().toString();

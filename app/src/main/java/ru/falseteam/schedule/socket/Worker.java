@@ -14,6 +14,7 @@ import ru.falseteam.schedule.Data;
 import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.socket.commands.AccessDenied;
 import ru.falseteam.schedule.socket.commands.Auth;
+import ru.falseteam.schedule.socket.commands.GetUsers;
 import ru.falseteam.schedule.socket.commands.ToastShort;
 import ru.falseteam.schedule.socket.commands.GetPairs;
 
@@ -33,6 +34,7 @@ public class Worker implements Runnable {
         addCommand(new AccessDenied());
         addCommand(new Auth());
         addCommand(new GetPairs());
+        addCommand(new GetUsers());
         addCommand(new ToastShort());
     }
 
@@ -67,6 +69,9 @@ public class Worker implements Runnable {
 
     public boolean send(Map<String, Object> map) {
         try {
+            // Эта строчка появилась здесь после двух часов мучений
+            out.reset();
+            // ----------------------------------------------------
             out.writeObject(map);
             out.flush();
         } catch (Exception ignore) {

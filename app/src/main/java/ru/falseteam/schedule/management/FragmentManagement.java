@@ -7,10 +7,6 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import ru.falseteam.schedule.Data;
 import ru.falseteam.schedule.FragmentAccessDenied;
@@ -18,13 +14,8 @@ import ru.falseteam.schedule.R;
 import ru.falseteam.schedule.redraw.Redrawable;
 import ru.falseteam.schedule.redraw.Redrawer;
 import ru.falseteam.schedule.serializable.Groups;
-import ru.falseteam.schedule.socket.Worker;
-import ru.falseteam.schedule.socket.commands.GetPairs;
-
 
 public class FragmentManagement extends Fragment implements Redrawable, View.OnClickListener {
-
-    Button buttonPairs;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,8 +27,8 @@ public class FragmentManagement extends Fragment implements Redrawable, View.OnC
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_management, container, false);
-        buttonPairs = (Button) rootView.findViewById(R.id.buttonPairs);
-        buttonPairs.setOnClickListener(this);
+        rootView.findViewById(R.id.buttonPairs).setOnClickListener(this);
+        rootView.findViewById(R.id.buttonUsers).setOnClickListener(this);
         return rootView;
     }
 
@@ -74,6 +65,9 @@ public class FragmentManagement extends Fragment implements Redrawable, View.OnC
         switch (view.getId()) {
             case R.id.buttonPairs:
                 startActivity(new Intent(getActivity(), ListOfPairsActivity.class));
+                break;
+            case R.id.buttonUsers:
+                startActivity(new Intent(getActivity(), ListOfUsersActivity.class));
                 break;
         }
     }
