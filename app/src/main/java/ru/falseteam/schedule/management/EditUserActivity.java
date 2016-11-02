@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -24,8 +25,9 @@ public class EditUserActivity extends AppCompatActivity implements View.OnClickL
     private User user;
 
     private TextView userName;
-    private TextView userVkId;
-    private TextView userGroup;
+
+    private List<String> groups;
+    private Spinner userGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,13 +39,13 @@ public class EditUserActivity extends AppCompatActivity implements View.OnClickL
         setTitle(user.name);
 
         userName = (TextView) findViewById(R.id.name);
-        userVkId = (TextView) findViewById(R.id.vkId);
+        Button userVkId = (Button) findViewById(R.id.vk);
 
         ((TextView) findViewById(R.id.id)).setText(String.valueOf(user.id));
         userName.setText(user.name);
         userVkId.setText(String.valueOf(user.vkId));
 
-        List<String> groups = new ArrayList<>();
+        groups = new ArrayList<>();
         groups.add(Groups.unconfirmed.name());
         groups.add(Groups.user.name());
         groups.add(Groups.admin.name());
@@ -64,6 +66,8 @@ public class EditUserActivity extends AppCompatActivity implements View.OnClickL
             }
         });
 
+        userGroup = spinner;
+
         findViewById(R.id.btnSave).setOnClickListener(this);
         findViewById(R.id.btnDelete).setOnClickListener(this);
     }
@@ -74,8 +78,7 @@ public class EditUserActivity extends AppCompatActivity implements View.OnClickL
         switch (view.getId()) {
             case R.id.btnSave:
                 user.name = userName.getText().toString();
-                user.vkId = Integer.parseInt(userVkId.getText().toString());
-                user.group = Groups.valueOf(userGroup.getText().toString());
+                user.group = Groups.valueOf(groups.get(userGroup.getSelectedItemPosition()));
                 map.clear();
                 map.put("command", "update_user");
                 map.put("user", user);
