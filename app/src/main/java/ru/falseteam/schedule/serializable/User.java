@@ -6,6 +6,7 @@ import java.io.Serializable;
  * Created by Prog on 01.11.16.
  */
 public class User implements Serializable {
+    public int id;
     public boolean exists;
     public String name;
     public String vkToken;

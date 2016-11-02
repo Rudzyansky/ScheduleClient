@@ -21,10 +21,12 @@ import ru.falseteam.schedule.R;
 import ru.falseteam.schedule.redraw.Redrawable;
 import ru.falseteam.schedule.redraw.Redrawer;
 import ru.falseteam.schedule.serializable.Pair;
+import ru.falseteam.schedule.serializable.User;
 import ru.falseteam.schedule.socket.Worker;
 import ru.falseteam.schedule.socket.commands.GetPairs;
+import ru.falseteam.schedule.socket.commands.GetUsers;
 
-public class ListOfPairsActivity extends AppCompatActivity implements Redrawable {
+public class ListOfUsersActivity extends AppCompatActivity implements Redrawable {
 
     private PairAdapter pairAdapter;
     private View progressBar;
@@ -34,7 +36,7 @@ public class ListOfPairsActivity extends AppCompatActivity implements Redrawable
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
-        setTitle(R.string.pairs);
+        setTitle(R.string.users);
 
         ListView lv = ((ListView) findViewById(R.id.list));
 
@@ -43,10 +45,7 @@ public class ListOfPairsActivity extends AppCompatActivity implements Redrawable
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(ListOfPairsActivity.this, EditPairActivity.class);
-                Pair pair = (Pair) pairAdapter.getItem(position);
-                intent.putExtra("pair", pair);
-                startActivity(intent);
+                openUserEditor((User) pairAdapter.getItem(position));
             }
         });
         progressBar = findViewById(R.id.progressBar);
@@ -54,7 +53,13 @@ public class ListOfPairsActivity extends AppCompatActivity implements Redrawable
         lv.setEmptyView(findViewById(R.id.emptyView));
         Redrawer.add(this);
         redraw();
-        Worker.get().send(GetPairs.getRequest());
+        Worker.get().send(GetUsers.getRequest());
+    }
+
+    private void openUserEditor(User user) {
+        Intent intent = new Intent(ListOfUsersActivity.this, EditUserActivity.class);
+        intent.putExtra("user", user);
+        startActivity(intent);
     }
 
     @Override
@@ -73,10 +78,7 @@ public class ListOfPairsActivity extends AppCompatActivity implements Redrawable
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add_pair:
-                Intent intent = new Intent(ListOfPairsActivity.this, EditPairActivity.class);
-                Pair pair = Pair.Factory.getDefault();
-                intent.putExtra("pair", pair);
-                startActivity(intent);
+                openUserEditor(User.Factory.getDefault());
                 break;
         }
         return super.onOptionsItemSelected(item);
