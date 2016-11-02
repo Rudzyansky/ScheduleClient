@@ -5,7 +5,7 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/Label2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/textView2"
+        android:layout_toEndOf="@+id/Label2"
         android:text="group" />
 
     <TextView
@@ -33,6 +33,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView6"
-        android:layout_below="@+id/textView2"
+        android:layout_below="@+id/Label2"
         android:layout_alignParentStart="true" />
 </RelativeLayout>
