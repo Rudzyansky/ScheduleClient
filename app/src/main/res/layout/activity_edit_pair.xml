@@ -11,7 +11,7 @@
     tools:context="ru.falseteam.schedule.management.EditPairActivity">
 
     <TextView
-        android:id="@+id/textView7"
+        android:id="@+id/Label1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -22,7 +22,7 @@
         android:id="@+id/id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/textView7"
+        android:layout_alignBottom="@+id/Label1"
         android:layout_alignParentEnd="true"
         android:text="1" />
 
@@ -45,7 +45,7 @@
         android:text="Name" />
 
     <EditText
-        android:id="@+id/audience"
+        android:id="@+id/vkId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -57,8 +57,8 @@
         android:id="@+id/textView11"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/audience"
-        android:layout_alignBottom="@+id/audience"
+        android:layout_alignBaseline="@+id/vkId"
+        android:layout_alignBottom="@+id/vkId"
         android:layout_alignParentStart="true"
         android:text="Audience" />
 
@@ -76,7 +76,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_below="@+id/audience"
+        android:layout_below="@+id/vkId"
         android:ems="10"
         android:inputType="textPersonName" />
 
