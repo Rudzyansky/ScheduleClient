@@ -32,7 +32,7 @@ public class EditPairActivity extends AppCompatActivity implements View.OnClickL
         setTitle(pair.name);
 
         pairName = (TextView) findViewById(R.id.name);
-        pairAudience = (TextView) findViewById(R.id.audience);
+        pairAudience = (TextView) findViewById(R.id.vkId);
         pairTeacher = (TextView) findViewById(R.id.teacher);
         pairLastTask = (TextView) findViewById(R.id.lastTask);
 
@@ -56,7 +56,7 @@ public class EditPairActivity extends AppCompatActivity implements View.OnClickL
                 pair.teacher = pairTeacher.getText().toString();
                 pair.lastTask = pairLastTask.getText().toString();
                 map.clear();
-                map.put("command", "change_pair");
+                map.put("command", "update_pair");
                 map.put("pair", pair);
                 Worker.get().send(map);
                 finish();

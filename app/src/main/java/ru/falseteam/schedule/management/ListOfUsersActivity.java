@@ -28,7 +28,7 @@ import ru.falseteam.schedule.socket.commands.GetUsers;
 
 public class ListOfUsersActivity extends AppCompatActivity implements Redrawable {
 
-    private PairAdapter pairAdapter;
+    private Adapter adapter;
     private View progressBar;
     private TextView textView;
 
@@ -40,12 +40,12 @@ public class ListOfUsersActivity extends AppCompatActivity implements Redrawable
 
         ListView lv = ((ListView) findViewById(R.id.list));
 
-        pairAdapter = new PairAdapter(this);
-        lv.setAdapter(pairAdapter);
+        adapter = new Adapter(this);
+        lv.setAdapter(adapter);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                openUserEditor((User) pairAdapter.getItem(position));
+                openUserEditor((User) adapter.getItem(position));
             }
         });
         progressBar = findViewById(R.id.progressBar);
@@ -89,25 +89,25 @@ public class ListOfUsersActivity extends AppCompatActivity implements Redrawable
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (GetPairs.pairs != null) {
+                if (GetUsers.users != null) {
                     progressBar.setVisibility(View.INVISIBLE);
                     textView.setText(R.string.empty_list);
-                    pairAdapter.setObjects(GetPairs.pairs);
+                    adapter.setObjects(GetUsers.users);
                 }
             }
         });
     }
 
-    private class PairAdapter extends BaseAdapter {
+    private class Adapter extends BaseAdapter {
         private LayoutInflater inflater;
-        private List<Pair> objects;
+        private List<User> objects;
 
-        PairAdapter(Context context) {
+        Adapter(Context context) {
             objects = new ArrayList<>();
             inflater = LayoutInflater.from(context);
         }
 
-        void setObjects(List<Pair> objects) {
+        void setObjects(List<User> objects) {
             this.objects = objects;
             notifyDataSetChanged();
         }
@@ -130,11 +130,11 @@ public class ListOfUsersActivity extends AppCompatActivity implements Redrawable
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null)
-                convertView = inflater.inflate(R.layout.item_pair, parent, false);
-            Pair pair = (Pair) getItem(position);
+                convertView = inflater.inflate(R.layout.item_user, parent, false);
+            User user = (User) getItem(position);
 
-            ((TextView) convertView.findViewById(R.id.name)).setText(pair.name);
-            ((TextView) convertView.findViewById(R.id.audience)).setText(pair.audience);
+            ((TextView) convertView.findViewById(R.id.name)).setText(user.name);
+            ((TextView) convertView.findViewById(R.id.group)).setText(user.group.name());
             return convertView;
         }
     }
