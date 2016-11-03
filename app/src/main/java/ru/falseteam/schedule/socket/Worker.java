@@ -15,6 +15,7 @@ import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.socket.commands.AccessDenied;
 import ru.falseteam.schedule.socket.commands.Auth;
 import ru.falseteam.schedule.socket.commands.GetUsers;
+import ru.falseteam.schedule.socket.commands.Ping;
 import ru.falseteam.schedule.socket.commands.ToastShort;
 import ru.falseteam.schedule.socket.commands.GetPairs;
 
@@ -32,6 +33,7 @@ public class Worker implements Runnable {
         protocols = new HashMap<>();
 
         addCommand(new AccessDenied());
+        addCommand(new Ping());
         addCommand(new Auth());
         addCommand(new GetPairs());
         addCommand(new GetUsers());
