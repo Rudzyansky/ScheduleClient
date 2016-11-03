@@ -51,22 +51,10 @@ public class EditUserActivity extends AppCompatActivity implements View.OnClickL
         groups.add(Groups.admin.name());
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, groups);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        Spinner spinner = (Spinner) findViewById(R.id.group);
-        spinner.setAdapter(adapter);
-        spinner.setPrompt("Группа доступа");
-        spinner.setSelection(groups.indexOf(user.group.name()));
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-
-        userGroup = spinner;
+        userGroup = (Spinner) findViewById(R.id.group);
+        userGroup.setAdapter(adapter);
+        userGroup.setPrompt("Группа доступа");
+        userGroup.setSelection(groups.indexOf(user.group.name()));
 
         findViewById(R.id.btnSave).setOnClickListener(this);
         findViewById(R.id.btnDelete).setOnClickListener(this);
