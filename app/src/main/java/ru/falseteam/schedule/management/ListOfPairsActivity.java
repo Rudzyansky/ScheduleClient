@@ -65,7 +65,7 @@ public class ListOfPairsActivity extends AppCompatActivity implements Redrawable
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_pairs, menu);
+        getMenuInflater().inflate(R.menu.menu_via_add_btn, menu);
         return true;
     }
 
