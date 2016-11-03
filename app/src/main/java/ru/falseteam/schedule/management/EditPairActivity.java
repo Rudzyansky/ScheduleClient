@@ -64,7 +64,7 @@ public class EditPairActivity extends AppCompatActivity implements View.OnClickL
             case R.id.btnDelete:
                 map.clear();
                 map.put("command", "delete_pair");
-                map.put("id", pair.id);
+                map.put("pair", pair);
                 Worker.get().send(map);
                 finish();
                 break;
