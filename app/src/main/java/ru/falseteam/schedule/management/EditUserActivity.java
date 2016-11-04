@@ -3,9 +3,9 @@ package ru.falseteam.schedule.management;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -18,13 +18,14 @@ import ru.falseteam.schedule.R;
 import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.serializable.User;
 import ru.falseteam.schedule.socket.Worker;
-import ru.falseteam.schedule.socket.commands.GetPairs;
+import ru.falseteam.schedule.socket.commands.GetUsers;
 
 public class EditUserActivity extends AppCompatActivity implements View.OnClickListener {
 
     private User user;
 
     private TextView userName;
+    private EditText userVkId;
 
     private List<String> groups;
     private Spinner userGroup;
@@ -40,10 +41,11 @@ public class EditUserActivity extends AppCompatActivity implements View.OnClickL
 
         userName = (TextView) findViewById(R.id.name);
         Button userVkId = (Button) findViewById(R.id.vk);
+        this.userVkId = (EditText) findViewById(R.id.vkId);
 
         ((TextView) findViewById(R.id.id)).setText(String.valueOf(user.id));
         userName.setText(user.name);
-        userVkId.setText(String.valueOf(user.vkId));
+        userVkId.setTag(String.valueOf(user.vkId));
 
         groups = new ArrayList<>();
         groups.add(Groups.unconfirmed.name());
@@ -51,22 +53,13 @@ public class EditUserActivity extends AppCompatActivity implements View.OnClickL
         groups.add(Groups.admin.name());
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, groups);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        Spinner spinner = (Spinner) findViewById(R.id.group);
-        spinner.setAdapter(adapter);
-        spinner.setPrompt("Группа доступа");
-        spinner.setSelection(groups.indexOf(user.group.name()));
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //
-            }
+        userGroup = (Spinner) findViewById(R.id.group);
+        userGroup.setAdapter(adapter);
+        userGroup.setPrompt("Группа доступа");
+        userGroup.setSelection(groups.indexOf(user.group.name()));
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-
-        userGroup = spinner;
+        if (user.exists) this.userVkId.setVisibility(View.INVISIBLE);
+        else userVkId.setVisibility(View.INVISIBLE);
 
         findViewById(R.id.btnSave).setOnClickListener(this);
         findViewById(R.id.btnDelete).setOnClickListener(this);
@@ -79,20 +72,16 @@ public class EditUserActivity extends AppCompatActivity implements View.OnClickL
             case R.id.btnSave:
                 user.name = userName.getText().toString();
                 user.group = Groups.valueOf(groups.get(userGroup.getSelectedItemPosition()));
-                map.clear();
+                if (!user.exists) user.vkId = Integer.parseInt(userVkId.getText().toString());
                 map.put("command", "update_user");
-                map.put("user", user);
-                Worker.get().send(map);
-                finish();
                 break;
             case R.id.btnDelete:
-                map.clear();
                 map.put("command", "delete_user");
-                map.put("user", user);
-                Worker.get().send(map);
-                finish();
                 break;
         }
-        Worker.get().send(GetPairs.getRequest());
+        map.put("user", user);
+        Worker.get().send(map);
+        finish();
+        Worker.get().send(GetUsers.getRequest());
     }
 }
