@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="ru.falseteam.schedule.management.EditPairActivity">
+    tools:context="ru.falseteam.schedule.management.EditLessonActivity">
 
     <TextView
         android:id="@+id/Label1"
@@ -78,6 +78,15 @@
         android:layout_alignBottom="@+id/vk"
         android:layout_alignParentStart="true" />
 
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/vkId"
+        android:layout_alignBottom="@+id/vk"
+        android:layout_alignParentEnd="true" />
+
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -91,7 +100,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Group"
-        android:layout_alignBottom="@+id/group"
-        android:layout_alignParentStart="true" />
+        android:layout_below="@+id/vk"
+        android:layout_alignEnd="@+id/Label2" />
 
 </RelativeLayout>

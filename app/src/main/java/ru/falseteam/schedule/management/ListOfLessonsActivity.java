@@ -20,11 +20,11 @@ import java.util.List;
 import ru.falseteam.schedule.R;
 import ru.falseteam.schedule.redraw.Redrawable;
 import ru.falseteam.schedule.redraw.Redrawer;
-import ru.falseteam.schedule.serializable.Pair;
+import ru.falseteam.schedule.serializable.Lesson;
 import ru.falseteam.schedule.socket.Worker;
-import ru.falseteam.schedule.socket.commands.GetPairs;
+import ru.falseteam.schedule.socket.commands.GetLessons;
 
-public class ListOfPairsActivity extends AppCompatActivity implements Redrawable {
+public class ListOfLessonsActivity extends AppCompatActivity implements Redrawable {
 
     private PairAdapter pairAdapter;
     private View progressBar;
@@ -43,9 +43,9 @@ public class ListOfPairsActivity extends AppCompatActivity implements Redrawable
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(ListOfPairsActivity.this, EditPairActivity.class);
-                Pair pair = (Pair) pairAdapter.getItem(position);
-                intent.putExtra("pair", pair);
+                Intent intent = new Intent(ListOfLessonsActivity.this, EditLessonActivity.class);
+                Lesson lesson = (Lesson) pairAdapter.getItem(position);
+                intent.putExtra("lesson", lesson);
                 startActivity(intent);
             }
         });
@@ -54,7 +54,7 @@ public class ListOfPairsActivity extends AppCompatActivity implements Redrawable
         lv.setEmptyView(findViewById(R.id.emptyView));
         Redrawer.add(this);
         redraw();
-        Worker.get().send(GetPairs.getRequest());
+        Worker.get().send(GetLessons.getRequest());
     }
 
     @Override
@@ -65,7 +65,7 @@ public class ListOfPairsActivity extends AppCompatActivity implements Redrawable
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_pairs, menu);
+        getMenuInflater().inflate(R.menu.menu_via_add_btn, menu);
         return true;
     }
 
@@ -73,9 +73,9 @@ public class ListOfPairsActivity extends AppCompatActivity implements Redrawable
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add_pair:
-                Intent intent = new Intent(ListOfPairsActivity.this, EditPairActivity.class);
-                Pair pair = Pair.Factory.getDefault();
-                intent.putExtra("pair", pair);
+                Intent intent = new Intent(ListOfLessonsActivity.this, EditLessonActivity.class);
+                Lesson lesson = Lesson.Factory.getDefault();
+                intent.putExtra("lesson", lesson);
                 startActivity(intent);
                 break;
         }
@@ -87,10 +87,10 @@ public class ListOfPairsActivity extends AppCompatActivity implements Redrawable
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (GetPairs.pairs != null) {
+                if (GetLessons.lessons != null) {
                     progressBar.setVisibility(View.INVISIBLE);
                     textView.setText(R.string.empty_list);
-                    pairAdapter.setObjects(GetPairs.pairs);
+                    pairAdapter.setObjects(GetLessons.lessons);
                 }
             }
         });
@@ -98,14 +98,14 @@ public class ListOfPairsActivity extends AppCompatActivity implements Redrawable
 
     private class PairAdapter extends BaseAdapter {
         private LayoutInflater inflater;
-        private List<Pair> objects;
+        private List<Lesson> objects;
 
         PairAdapter(Context context) {
             objects = new ArrayList<>();
             inflater = LayoutInflater.from(context);
         }
 
-        void setObjects(List<Pair> objects) {
+        void setObjects(List<Lesson> objects) {
             this.objects = objects;
             notifyDataSetChanged();
         }
@@ -129,10 +129,10 @@ public class ListOfPairsActivity extends AppCompatActivity implements Redrawable
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null)
                 convertView = inflater.inflate(R.layout.item_pair, parent, false);
-            Pair pair = (Pair) getItem(position);
+            Lesson lesson = (Lesson) getItem(position);
 
-            ((TextView) convertView.findViewById(R.id.name)).setText(pair.name);
-            ((TextView) convertView.findViewById(R.id.audience)).setText(pair.audience);
+            ((TextView) convertView.findViewById(R.id.name)).setText(lesson.name);
+            ((TextView) convertView.findViewById(R.id.audience)).setText(lesson.audience);
             return convertView;
         }
     }

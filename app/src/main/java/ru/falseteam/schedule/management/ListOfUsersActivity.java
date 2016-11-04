@@ -20,10 +20,8 @@ import java.util.List;
 import ru.falseteam.schedule.R;
 import ru.falseteam.schedule.redraw.Redrawable;
 import ru.falseteam.schedule.redraw.Redrawer;
-import ru.falseteam.schedule.serializable.Pair;
 import ru.falseteam.schedule.serializable.User;
 import ru.falseteam.schedule.socket.Worker;
-import ru.falseteam.schedule.socket.commands.GetPairs;
 import ru.falseteam.schedule.socket.commands.GetUsers;
 
 public class ListOfUsersActivity extends AppCompatActivity implements Redrawable {
@@ -70,7 +68,7 @@ public class ListOfUsersActivity extends AppCompatActivity implements Redrawable
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_pairs, menu);
+        getMenuInflater().inflate(R.menu.menu_via_add_btn, menu);
         return true;
     }
 
