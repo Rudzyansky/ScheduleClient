@@ -33,8 +33,8 @@
         <activity
             android:name=".UpdateActivity"
             android:theme="@style/AppTheme.Dialog" />
-        <activity android:name=".management.ListOfPairsActivity" />
-        <activity android:name=".management.EditPairActivity" />
+        <activity android:name=".management.ListOfLessonsActivity" />
+        <activity android:name=".management.EditLessonActivity" />
         <activity android:name=".management.ListOfUsersActivity" />
         <activity android:name=".management.EditUserActivity" />
     </application>

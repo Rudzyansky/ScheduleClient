@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="ru.falseteam.schedule.management.ListOfPairsActivity">
+    tools:context="ru.falseteam.schedule.management.ListOfLessonsActivity">
     <item
         android:id="@+id/action_add_pair"
         android:orderInCategory="100"

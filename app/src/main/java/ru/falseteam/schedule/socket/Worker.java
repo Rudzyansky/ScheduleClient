@@ -17,7 +17,7 @@ import ru.falseteam.schedule.socket.commands.Auth;
 import ru.falseteam.schedule.socket.commands.GetUsers;
 import ru.falseteam.schedule.socket.commands.Ping;
 import ru.falseteam.schedule.socket.commands.ToastShort;
-import ru.falseteam.schedule.socket.commands.GetPairs;
+import ru.falseteam.schedule.socket.commands.GetLessons;
 
 public class Worker implements Runnable {
 
@@ -35,7 +35,7 @@ public class Worker implements Runnable {
         addCommand(new AccessDenied());
         addCommand(new Ping());
         addCommand(new Auth());
-        addCommand(new GetPairs());
+        addCommand(new GetLessons());
         addCommand(new GetUsers());
         addCommand(new ToastShort());
     }

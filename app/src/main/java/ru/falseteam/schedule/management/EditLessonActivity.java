@@ -9,13 +9,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ru.falseteam.schedule.R;
-import ru.falseteam.schedule.serializable.Pair;
+import ru.falseteam.schedule.serializable.Lesson;
 import ru.falseteam.schedule.socket.Worker;
-import ru.falseteam.schedule.socket.commands.GetPairs;
+import ru.falseteam.schedule.socket.commands.GetLessons;
 
-public class EditPairActivity extends AppCompatActivity implements View.OnClickListener {
+public class EditLessonActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Pair pair;
+    private Lesson lesson;
 
     private TextView pairName;
     private TextView pairAudience;
@@ -27,20 +27,20 @@ public class EditPairActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_pair);
 
-        pair = (Pair) getIntent().getSerializableExtra("pair");
+        lesson = (Lesson) getIntent().getSerializableExtra("lesson");
 
-        setTitle(pair.name);
+        setTitle(lesson.name);
 
         pairName = (TextView) findViewById(R.id.name);
         pairAudience = (TextView) findViewById(R.id.vkId);
         pairTeacher = (TextView) findViewById(R.id.teacher);
         pairLastTask = (TextView) findViewById(R.id.lastTask);
 
-        ((TextView) findViewById(R.id.id)).setText(String.valueOf(pair.id));
-        pairName.setText(pair.name);
-        pairAudience.setText(pair.audience);
-        pairTeacher.setText(pair.teacher);
-        pairLastTask.setText(pair.lastTask);
+        ((TextView) findViewById(R.id.id)).setText(String.valueOf(lesson.id));
+        pairName.setText(lesson.name);
+        pairAudience.setText(lesson.audience);
+        pairTeacher.setText(lesson.teacher);
+        pairLastTask.setText(lesson.lastTask);
 
         findViewById(R.id.btnSave).setOnClickListener(this);
         findViewById(R.id.btnDelete).setOnClickListener(this);
@@ -51,24 +51,24 @@ public class EditPairActivity extends AppCompatActivity implements View.OnClickL
         Map<String, Object> map = new HashMap<>();
         switch (view.getId()) {
             case R.id.btnSave:
-                pair.name = pairName.getText().toString();
-                pair.audience = pairAudience.getText().toString();
-                pair.teacher = pairTeacher.getText().toString();
-                pair.lastTask = pairLastTask.getText().toString();
+                lesson.name = pairName.getText().toString();
+                lesson.audience = pairAudience.getText().toString();
+                lesson.teacher = pairTeacher.getText().toString();
+                lesson.lastTask = pairLastTask.getText().toString();
                 map.clear();
                 map.put("command", "update_pair");
-                map.put("pair", pair);
+                map.put("lesson", lesson);
                 Worker.get().send(map);
                 finish();
                 break;
             case R.id.btnDelete:
                 map.clear();
                 map.put("command", "delete_pair");
-                map.put("pair", pair);
+                map.put("lesson", lesson);
                 Worker.get().send(map);
                 finish();
                 break;
         }
-        Worker.get().send(GetPairs.getRequest());
+        Worker.get().send(GetLessons.getRequest());
     }
 }

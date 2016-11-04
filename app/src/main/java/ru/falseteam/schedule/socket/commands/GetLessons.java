@@ -1,26 +1,24 @@
 package ru.falseteam.schedule.socket.commands;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import ru.falseteam.schedule.redraw.Redrawer;
+import ru.falseteam.schedule.serializable.Lesson;
 import ru.falseteam.schedule.socket.CommandAbstract;
-import ru.falseteam.schedule.serializable.Pair;
 
-public class GetPairs extends CommandAbstract {
-    public GetPairs() {
+public class GetLessons extends CommandAbstract {
+    public GetLessons() {
         super("get_pairs");
     }
 
-    public static List<Pair> pairs;
+    public static List<Lesson> lessons;
 
     @SuppressWarnings("unchecked")
     @Override
     public void exec(Map<String, Object> map) {
-        pairs = (List<Pair>) map.get("pairs");
+        lessons = (List<Lesson>) map.get("lessons");
         Redrawer.redraw();
     }
 
