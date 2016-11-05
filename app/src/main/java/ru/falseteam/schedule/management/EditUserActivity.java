@@ -80,8 +80,8 @@ public class EditUserActivity extends AppCompatActivity implements View.OnClickL
                 break;
         }
         map.put("user", user);
-        Worker.get().send(map);
+        Worker.sendFromMainThread(map);
         finish();
-        Worker.get().send(GetUsers.getRequest());
+        Worker.sendFromMainThread(GetUsers.getRequest());
     }
 }

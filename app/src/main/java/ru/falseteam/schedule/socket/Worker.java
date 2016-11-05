@@ -90,6 +90,26 @@ public class Worker implements Runnable {
         return true;
     }
 
+    public static boolean sendFromMainThread(final Map<String, Object> map) {
+        final boolean[] output = new boolean[1];
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    // Эта строчка появилась здесь после двух часов мучений
+                    worker.out.reset();
+                    // ----------------------------------------------------
+                    worker.out.writeObject(map);
+                    worker.out.flush();
+                    output[0] = true;
+                } catch (Exception ignore) {
+                    output[0] = false;
+                }
+            }
+        }).start();
+        return output[0];
+    }
+
     private void disconnect() {
         Data.setCurrentGroup(Groups.disconnected);
         try {
@@ -110,7 +130,8 @@ public class Worker implements Runnable {
             String algorithm = KeyManagerFactory.getDefaultAlgorithm();
 
             KeyStore ks = KeyStore.getInstance("BKS");
-            ks.load(context.getResources().openRawResource(R.raw.keystore), Data.getPublicPass().toCharArray());
+            ks.load(context.getResources().openRawResource(R.raw.keystore),
+                    Data.getPublicPass().toCharArray());
 
             TrustManagerFactory tmf = TrustManagerFactory.getInstance(algorithm);
             tmf.init(ks);
