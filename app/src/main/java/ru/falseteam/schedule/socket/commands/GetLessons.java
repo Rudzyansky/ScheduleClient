@@ -10,7 +10,7 @@ import ru.falseteam.schedule.socket.CommandAbstract;
 
 public class GetLessons extends CommandAbstract {
     public GetLessons() {
-        super("get_pairs");
+        super("get_lessons");
     }
 
     public static List<Lesson> lessons;
@@ -24,7 +24,7 @@ public class GetLessons extends CommandAbstract {
 
     public static Map<String, Object> getRequest() {
         Map<String, Object> map = new HashMap<>();
-        map.put("command", "get_pairs");
+        map.put("command", "get_lessons");
         return map;
     }
 }
