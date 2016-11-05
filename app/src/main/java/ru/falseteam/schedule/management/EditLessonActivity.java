@@ -56,14 +56,14 @@ public class EditLessonActivity extends AppCompatActivity implements View.OnClic
                 lesson.teacher = pairTeacher.getText().toString();
                 lesson.lastTask = pairLastTask.getText().toString();
                 map.clear();
-                map.put("command", "update_pair");
+                map.put("command", "update_lesson");
                 map.put("lesson", lesson);
                 Worker.get().send(map);
                 finish();
                 break;
             case R.id.btnDelete:
                 map.clear();
-                map.put("command", "delete_pair");
+                map.put("command", "delete_lesson");
                 map.put("lesson", lesson);
                 Worker.get().send(map);
                 finish();
