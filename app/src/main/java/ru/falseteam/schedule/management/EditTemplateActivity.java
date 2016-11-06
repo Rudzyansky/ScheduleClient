@@ -8,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import ru.falseteam.schedule.R;
-import ru.falseteam.schedule.serializable.Template;
 
 public class EditTemplateActivity extends AppCompatActivity {
     @Override
