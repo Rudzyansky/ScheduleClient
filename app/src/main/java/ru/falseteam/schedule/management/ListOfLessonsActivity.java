@@ -128,7 +128,7 @@ public class ListOfLessonsActivity extends AppCompatActivity implements Redrawab
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null)
-                convertView = inflater.inflate(R.layout.item_pair, parent, false);
+                convertView = inflater.inflate(R.layout.item_lesson, parent, false);
             Lesson lesson = (Lesson) getItem(position);
 
             ((TextView) convertView.findViewById(R.id.name)).setText(lesson.name);
