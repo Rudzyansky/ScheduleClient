@@ -13,6 +13,11 @@ public class Lesson implements Serializable {
     public String teacher;
     public String lastTask;
 
+    @Override
+    public String toString() {
+        return name;
+    }
+
     private Lesson() {
     }
 
