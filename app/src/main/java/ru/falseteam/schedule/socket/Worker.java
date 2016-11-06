@@ -14,6 +14,7 @@ import ru.falseteam.schedule.Data;
 import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.socket.commands.AccessDenied;
 import ru.falseteam.schedule.socket.commands.Auth;
+import ru.falseteam.schedule.socket.commands.GetTemplates;
 import ru.falseteam.schedule.socket.commands.GetUsers;
 import ru.falseteam.schedule.socket.commands.Ping;
 import ru.falseteam.schedule.socket.commands.ToastShort;
@@ -38,6 +39,7 @@ public class Worker implements Runnable {
         addCommand(new GetLessons());
         addCommand(new GetUsers());
         addCommand(new ToastShort());
+        addCommand(new GetTemplates());
     }
 
     public Context getContext() {
