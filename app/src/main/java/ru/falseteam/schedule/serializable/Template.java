@@ -10,19 +10,6 @@ import java.sql.Time;
  * @version 1.0
  */
 public class Template implements Serializable {
-
-    // эти 2 подкласса должны быть публичными, иначе к ним нет доступа. потом сделаю лучше (мб перенесу в serializable)
-    public class WeekDay implements Serializable {
-        public int id;
-        public String name;
-    }
-
-    public class LessonNumber implements Serializable {
-        public int id;
-        public Time begin;
-        public Time end;
-    }
-
     public boolean exists;
     public int id;
     public WeekDay weekDay;
