@@ -7,4 +7,9 @@ public class LessonNumber implements Serializable {
     public int id;
     public Time begin;
     public Time end;
+
+    @Override
+    public String toString() {
+        return id + " " + begin + " " + end;
+    }
 }
