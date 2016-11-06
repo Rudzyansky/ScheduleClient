@@ -2,7 +2,7 @@
 <resources>
     <bool name="debug">true</bool>
 
-    <string name="hostname">31.40.98.246</string>
+    <string name="hostname">192.168.1.200</string>
     <integer name="port_schedule">7101</integer>
     <integer name="port_update">7102</integer>
 
