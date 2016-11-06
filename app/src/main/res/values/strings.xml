@@ -26,4 +26,15 @@
     <string name="update_action_cancel">Отложить</string>
     <string name="about">about</string>
     <string name="about_message">Авторы:\nЕвгений Рудзянский\nВладислав Сумин\n\nВерсия: %s</string>
+    <string name="label_id">ID</string>
+    <string name="label_name">Name</string>
+    <string name="label_audience">Audience</string>
+    <string name="label_teacher">Teacher</string>
+    <string name="label_lasttask">LastTask</string>
+    <string name="btn_save">Save</string>
+    <string name="btn_delete">Delete</string>
+    <string name="label_group">Group</string>
+    <string name="label_vk">VK</string>
+    <string name="btn_vk_page">Перейти на страницу</string>
+    <string name="label_username">Name</string>
 </resources>

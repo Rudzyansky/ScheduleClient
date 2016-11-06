@@ -24,11 +24,11 @@ public class EditUserActivity extends AppCompatActivity implements View.OnClickL
 
     private User user;
 
-    private TextView userName;
-    private EditText userVkId;
+    private TextView name;
+    private EditText vkId;
 
     private List<String> groups;
-    private Spinner userGroup;
+    private Spinner group;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +39,12 @@ public class EditUserActivity extends AppCompatActivity implements View.OnClickL
 
         setTitle(user.name);
 
-        userName = (TextView) findViewById(R.id.name);
+        name = (TextView) findViewById(R.id.name);
         Button userVkId = (Button) findViewById(R.id.vk);
-        this.userVkId = (EditText) findViewById(R.id.vkId);
+        this.vkId = (EditText) findViewById(R.id.vkId);
 
         ((TextView) findViewById(R.id.id)).setText(String.valueOf(user.id));
-        userName.setText(user.name);
+        name.setText(user.name);
         userVkId.setTag(String.valueOf(user.vkId));
 
         groups = new ArrayList<>();
@@ -53,12 +53,12 @@ public class EditUserActivity extends AppCompatActivity implements View.OnClickL
         groups.add(Groups.admin.name());
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, groups);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        userGroup = (Spinner) findViewById(R.id.group);
-        userGroup.setAdapter(adapter);
-        userGroup.setPrompt("Группа доступа");
-        userGroup.setSelection(groups.indexOf(user.group.name()));
+        group = (Spinner) findViewById(R.id.group);
+        group.setAdapter(adapter);
+        group.setPrompt("Группа доступа");
+        group.setSelection(groups.indexOf(user.group.name()));
 
-        if (user.exists) this.userVkId.setVisibility(View.INVISIBLE);
+        if (user.exists) this.vkId.setVisibility(View.INVISIBLE);
         else userVkId.setVisibility(View.INVISIBLE);
 
         findViewById(R.id.btnSave).setOnClickListener(this);
@@ -70,9 +70,9 @@ public class EditUserActivity extends AppCompatActivity implements View.OnClickL
         Map<String, Object> map = new HashMap<>();
         switch (view.getId()) {
             case R.id.btnSave:
-                user.name = userName.getText().toString();
-                user.group = Groups.valueOf(groups.get(userGroup.getSelectedItemPosition()));
-                if (!user.exists) user.vkId = Integer.parseInt(userVkId.getText().toString());
+                user.name = name.getText().toString();
+                user.group = Groups.valueOf(groups.get(group.getSelectedItemPosition()));
+                if (!user.exists) user.vkId = Integer.parseInt(vkId.getText().toString());
                 map.put("command", "update_user");
                 break;
             case R.id.btnDelete:
