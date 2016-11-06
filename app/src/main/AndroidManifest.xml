@@ -37,6 +37,7 @@
         <activity android:name=".management.EditLessonActivity" />
         <activity android:name=".management.ListOfUsersActivity" />
         <activity android:name=".management.EditUserActivity" />
+        <activity android:name=".management.ViewTemplateActivity" />
     </application>
 
 </manifest>
