@@ -10,6 +10,7 @@ import android.widget.Spinner;
 import ru.falseteam.schedule.R;
 import ru.falseteam.schedule.redraw.Redrawable;
 import ru.falseteam.schedule.redraw.Redrawer;
+import ru.falseteam.schedule.serializable.LessonNumber;
 import ru.falseteam.schedule.serializable.WeekDay;
 import ru.falseteam.schedule.socket.Worker;
 import ru.falseteam.schedule.socket.commands.GetLessonNumbers;
@@ -67,8 +68,12 @@ public class EditTemplateActivity extends AppCompatActivity implements Redrawabl
 
         Spinner sp = (Spinner) contentView.findViewById(R.id.day_of_week);
         sp.setAdapter(new ArrayAdapter<>(contentView.getContext(),
-                android.R.layout.simple_spinner_item, (GetWeekDays.weekDays)));
+                android.R.layout.simple_spinner_dropdown_item, GetWeekDays.weekDays));
         sp = (Spinner) contentView.findViewById(R.id.lesson_number);
+        sp.setAdapter(new ArrayAdapter<>(contentView.getContext(),
+                android.R.layout.simple_spinner_dropdown_item, GetLessonNumbers.lessonNumbers));
         sp = (Spinner) contentView.findViewById(R.id.lesson);
+        sp.setAdapter(new ArrayAdapter<>(contentView.getContext(),
+                android.R.layout.simple_spinner_dropdown_item, GetLessons.lessons));
     }
 }
