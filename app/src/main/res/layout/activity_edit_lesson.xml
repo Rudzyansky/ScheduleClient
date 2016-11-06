@@ -11,20 +11,20 @@
     tools:context="ru.falseteam.schedule.management.EditLessonActivity">
 
     <TextView
-        android:id="@+id/Label1"
+        android:id="@+id/labelID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:text="ID" />
+        android:text="@string/label_id" />
 
     <TextView
         android:id="@+id/id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/Label1"
+        android:layout_alignBottom="@+id/labelID"
         android:layout_alignParentEnd="true"
-        android:text="1" />
+        android:text="@string/label_id" />
 
     <EditText
         android:id="@+id/name"
@@ -36,13 +36,13 @@
         android:inputType="textPersonName" />
 
     <TextView
-        android:id="@+id/textView10"
+        android:id="@+id/labelName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/name"
         android:layout_alignBottom="@+id/name"
         android:layout_alignParentStart="true"
-        android:text="Name" />
+        android:text="@string/label_name" />
 
     <EditText
         android:id="@+id/vkId"
@@ -54,22 +54,22 @@
         android:inputType="textPersonName" />
 
     <TextView
-        android:id="@+id/textView11"
+        android:id="@+id/labelAudience"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/vkId"
         android:layout_alignBottom="@+id/vkId"
         android:layout_alignParentStart="true"
-        android:text="Audience" />
+        android:text="@string/label_audience" />
 
     <TextView
-        android:id="@+id/textView12"
+        android:id="@+id/labelTeacher"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/teacher"
         android:layout_alignBottom="@+id/teacher"
         android:layout_alignParentStart="true"
-        android:text="Teacher" />
+        android:text="@string/label_teacher" />
 
     <EditText
         android:id="@+id/teacher"
@@ -81,13 +81,13 @@
         android:inputType="textPersonName" />
 
     <TextView
-        android:id="@+id/textView13"
+        android:id="@+id/labelLastTask"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/lastTask"
         android:layout_alignBottom="@+id/lastTask"
         android:layout_alignParentStart="true"
-        android:text="LastTask" />
+        android:text="@string/label_lasttask" />
 
     <EditText
         android:id="@+id/lastTask"
@@ -104,7 +104,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:text="Save" />
+        android:text="@string/btn_save" />
 
     <Button
         android:id="@+id/btnDelete"
@@ -112,6 +112,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:text="Delete" />
+        android:text="@string/btn_delete" />
 
 </RelativeLayout>
