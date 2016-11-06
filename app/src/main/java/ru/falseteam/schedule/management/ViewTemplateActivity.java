@@ -1,8 +1,11 @@
 package ru.falseteam.schedule.management;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import ru.falseteam.schedule.R;
@@ -33,6 +36,28 @@ public class ViewTemplateActivity extends AppCompatActivity implements Redrawabl
     protected void onDestroy() {
         Redrawer.remove(this);
         super.onDestroy();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_via_add_btn, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_add_pair:
+                openTemplateEditor(Template.Factory.getDefault());
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void openTemplateEditor(Template user) {
+        Intent intent = new Intent(this, EditTemplateActivity.class);
+        intent.putExtra("template", user);
+        startActivity(intent);
     }
 
     @Override
