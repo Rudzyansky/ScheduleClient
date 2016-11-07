@@ -58,8 +58,8 @@ public class EditUserActivity extends AppCompatActivity implements View.OnClickL
         group.setPrompt("Группа доступа");
         group.setSelection(groups.indexOf(user.group.name()));
 
-        if (user.exists) this.vkId.setVisibility(View.INVISIBLE);
-        else userVkId.setVisibility(View.INVISIBLE);
+        if (user.exists) this.vkId.setVisibility(View.GONE);
+        else userVkId.setVisibility(View.GONE);
 
         findViewById(R.id.btnSave).setOnClickListener(this);
         findViewById(R.id.btnDelete).setOnClickListener(this);
@@ -80,8 +80,8 @@ public class EditUserActivity extends AppCompatActivity implements View.OnClickL
                 break;
         }
         map.put("user", user);
-        Worker.get().send(map);
+        Worker.sendFromMainThread(map);
         finish();
-        Worker.get().send(GetUsers.getRequest());
+        Worker.sendFromMainThread(GetUsers.getRequest());
     }
 }

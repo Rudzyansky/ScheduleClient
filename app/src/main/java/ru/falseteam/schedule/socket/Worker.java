@@ -6,22 +6,33 @@ import com.vk.sdk.VKAccessToken;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.Socket;
+import java.security.KeyStore;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+
 import ru.falseteam.schedule.Data;
+import ru.falseteam.schedule.R;
 import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.socket.commands.AccessDenied;
 import ru.falseteam.schedule.socket.commands.Auth;
+import ru.falseteam.schedule.socket.commands.GetLessonNumbers;
+import ru.falseteam.schedule.socket.commands.GetLessons;
+import ru.falseteam.schedule.socket.commands.GetTemplates;
 import ru.falseteam.schedule.socket.commands.GetUsers;
+import ru.falseteam.schedule.socket.commands.GetWeekDays;
 import ru.falseteam.schedule.socket.commands.Ping;
 import ru.falseteam.schedule.socket.commands.ToastShort;
-import ru.falseteam.schedule.socket.commands.GetLessons;
 
 public class Worker implements Runnable {
 
-    private Socket socket;
+    private SSLSocket socket;
     private ObjectOutputStream out;
     private Context context;
 
@@ -38,6 +49,9 @@ public class Worker implements Runnable {
         addCommand(new GetLessons());
         addCommand(new GetUsers());
         addCommand(new ToastShort());
+        addCommand(new GetTemplates());
+        addCommand(new GetWeekDays());
+        addCommand(new GetLessonNumbers());
     }
 
     public Context getContext() {
@@ -71,15 +85,26 @@ public class Worker implements Runnable {
 
     public boolean send(Map<String, Object> map) {
         try {
-            // Эта строчка появилась здесь после двух часов мучений
-            out.reset();
-            // ----------------------------------------------------
-            out.writeObject(map);
-            out.flush();
+            synchronized (worker.out) {
+                // Эта строчка появилась здесь после двух часов мучений
+                out.reset();
+                // ----------------------------------------------------
+                out.writeObject(map);
+                out.flush();
+            }
         } catch (Exception ignore) {
             return false;
         }
         return true;
+    }
+
+    public static void sendFromMainThread(final Map<String, Object> map) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                worker.send(map);
+            }
+        }).start();
     }
 
     private void disconnect() {
@@ -97,12 +122,40 @@ public class Worker implements Runnable {
         }
     }
 
+    private void initSSL() {
+        try {
+            String algorithm = KeyManagerFactory.getDefaultAlgorithm();
+
+            KeyStore ks = KeyStore.getInstance("BKS");
+            ks.load(context.getResources().openRawResource(R.raw.keystore),
+                    Data.getPublicPass().toCharArray());
+
+            TrustManagerFactory tmf = TrustManagerFactory.getInstance(algorithm);
+            tmf.init(ks);
+
+            SSLContext sc = SSLContext.getInstance("TLS");
+            TrustManager[] trustManagers = tmf.getTrustManagers();
+            sc.init(null, trustManagers, null);
+
+            SSLSocketFactory ssf = sc.getSocketFactory();
+            socket = (SSLSocket) ssf.createSocket(Data.getHostname(), Data.getPortSchedule());
+
+            socket.setEnabledCipherSuites(new String[]{"TLS_RSA_WITH_AES_128_CBC_SHA"});
+            socket.setEnabledProtocols(new String[]{"TLSv1.2"});
+            socket.setEnableSessionCreation(true);
+            socket.setUseClientMode(true);
+            socket.startHandshake();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @SuppressWarnings({"InfiniteLoopStatement", "unchecked"})
     @Override
     public void run() {
         while (!interrupt) {
             try {
-                socket = new Socket(Data.getHostname(), Data.getPortSchedule());
+                initSSL();
                 out = new ObjectOutputStream(socket.getOutputStream());
                 ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
                 onConnect();

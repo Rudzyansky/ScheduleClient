@@ -51,7 +51,7 @@ public class ListOfUsersActivity extends AppCompatActivity implements Redrawable
         lv.setEmptyView(findViewById(R.id.emptyView));
         Redrawer.add(this);
         redraw();
-        Worker.get().send(GetUsers.getRequest());
+        Worker.sendFromMainThread(GetUsers.getRequest());
     }
 
     private void openUserEditor(User user) {
@@ -75,7 +75,7 @@ public class ListOfUsersActivity extends AppCompatActivity implements Redrawable
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_add_pair:
+            case R.id.action_add:
                 openUserEditor(User.Factory.getDefault());
                 break;
         }
