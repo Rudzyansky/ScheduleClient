@@ -5,19 +5,33 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 
 import ru.falseteam.schedule.R;
 import ru.falseteam.schedule.redraw.Redrawable;
 import ru.falseteam.schedule.redraw.Redrawer;
+import ru.falseteam.schedule.serializable.Lesson;
+import ru.falseteam.schedule.serializable.LessonNumber;
+import ru.falseteam.schedule.serializable.Template;
+import ru.falseteam.schedule.serializable.WeekDay;
 import ru.falseteam.schedule.socket.Worker;
 import ru.falseteam.schedule.socket.commands.GetLessonNumbers;
 import ru.falseteam.schedule.socket.commands.GetLessons;
+import ru.falseteam.schedule.socket.commands.GetTemplates;
 import ru.falseteam.schedule.socket.commands.GetWeekDays;
+import ru.falseteam.schedule.socket.commands.UpdateTemplate;
 
 public class EditTemplateActivity extends AppCompatActivity implements Redrawable {
     private View emptyView;
     private View contentView;
+
+    private Spinner dayOfWeek;
+    private Spinner lessonNumber;
+    private Spinner evenness;
+    private Spinner lesson;
+
+    private Template template;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -26,6 +40,8 @@ public class EditTemplateActivity extends AppCompatActivity implements Redrawabl
 
         emptyView = findViewById(R.id.emptyView);
         contentView = findViewById(R.id.content);
+
+        template = (Template) getIntent().getSerializableExtra("template");
 
         Redrawer.add(this);
         redraw();
@@ -63,14 +79,35 @@ public class EditTemplateActivity extends AppCompatActivity implements Redrawabl
         if (init) return;
         init = true;
 
-        Spinner sp = (Spinner) contentView.findViewById(R.id.day_of_week);
-        sp.setAdapter(new ArrayAdapter<>(contentView.getContext(),
+        dayOfWeek = (Spinner) contentView.findViewById(R.id.day_of_week);
+        dayOfWeek.setAdapter(new ArrayAdapter<>(contentView.getContext(),
                 android.R.layout.simple_spinner_dropdown_item, GetWeekDays.weekDays));
-        sp = (Spinner) contentView.findViewById(R.id.lesson_number);
-        sp.setAdapter(new ArrayAdapter<>(contentView.getContext(),
+
+        lessonNumber = (Spinner) contentView.findViewById(R.id.lesson_number);
+        lessonNumber.setAdapter(new ArrayAdapter<>(contentView.getContext(),
                 android.R.layout.simple_spinner_dropdown_item, GetLessonNumbers.lessonNumbers));
-        sp = (Spinner) contentView.findViewById(R.id.lesson);
-        sp.setAdapter(new ArrayAdapter<>(contentView.getContext(),
+
+        evenness = (Spinner) contentView.findViewById(R.id.evenness);
+        evenness.setAdapter(new ArrayAdapter<>(contentView.getContext(),
+                android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.evenness)));
+
+        lesson = (Spinner) contentView.findViewById(R.id.lesson);
+        lesson.setAdapter(new ArrayAdapter<>(contentView.getContext(),
                 android.R.layout.simple_spinner_dropdown_item, GetLessons.lessons));
+
+        Button save = (Button) findViewById(R.id.btnSave);
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                template.weekDay = (WeekDay) dayOfWeek.getSelectedItem();
+                template.lessonNumber = (LessonNumber) lessonNumber.getSelectedItem();
+                template.weekEvenness = lessonNumber.getSelectedItemPosition();
+                template.lesson = (Lesson) lesson.getSelectedItem();
+
+                Worker.sendFromMainThread(UpdateTemplate.getRequest(template));
+                Worker.sendFromMainThread(GetTemplates.getRequest());
+                finish();
+            }
+        });
     }
 }

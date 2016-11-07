@@ -75,7 +75,7 @@ public class ListOfUsersActivity extends AppCompatActivity implements Redrawable
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_add_pair:
+            case R.id.action_add:
                 openUserEditor(User.Factory.getDefault());
                 break;
         }
