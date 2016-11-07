@@ -3,6 +3,7 @@ package ru.falseteam.schedule.management;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.HashMap;
@@ -17,10 +18,10 @@ public class EditLessonActivity extends AppCompatActivity implements View.OnClic
 
     private Lesson lesson;
 
-    private TextView name;
-    private TextView audience;
-    private TextView teacher;
-    private TextView lastTask;
+    private EditText name;
+    private EditText audience;
+    private EditText teacher;
+    private EditText lastTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +32,10 @@ public class EditLessonActivity extends AppCompatActivity implements View.OnClic
 
         setTitle(lesson.name);
 
-        name = (TextView) findViewById(R.id.name);
-        audience = (TextView) findViewById(R.id.vkId);
-        teacher = (TextView) findViewById(R.id.teacher);
-        lastTask = (TextView) findViewById(R.id.lastTask);
+        name = (EditText) findViewById(R.id.name);
+        audience = (EditText) findViewById(R.id.audience);
+        teacher = (EditText) findViewById(R.id.teacher);
+        lastTask = (EditText) findViewById(R.id.lastTask);
 
         ((TextView) findViewById(R.id.id)).setText(String.valueOf(lesson.id));
         name.setText(lesson.name);

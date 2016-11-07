@@ -42,7 +42,7 @@
         <activity android:name=".management.EditLessonActivity" />
         <activity android:name=".management.ListOfUsersActivity" />
         <activity android:name=".management.EditUserActivity" />
-        <activity android:name=".management.ViewTemplateActivity" />
+        <activity android:name=".management.ListOfTemplatesActivity" />
         <activity android:name=".management.EditTemplateActivity" />
     </application>
 

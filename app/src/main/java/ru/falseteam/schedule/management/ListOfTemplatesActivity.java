@@ -15,13 +15,13 @@ import ru.falseteam.schedule.serializable.Template;
 import ru.falseteam.schedule.socket.Worker;
 import ru.falseteam.schedule.socket.commands.GetTemplates;
 
-public class ViewTemplateActivity extends AppCompatActivity implements Redrawable {
+public class ListOfTemplatesActivity extends AppCompatActivity implements Redrawable {
     private View emptyView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_template);
+        setContentView(R.layout.activity_list_of_templates);
         setTitle(getString(R.string.edit_template));
 
         emptyView = findViewById(R.id.emptyView);
@@ -29,7 +29,7 @@ public class ViewTemplateActivity extends AppCompatActivity implements Redrawabl
         Redrawer.add(this);
         redraw();
 
-        Worker.get().send(GetTemplates.getRequest());
+        Worker.sendFromMainThread(GetTemplates.getRequest());
     }
 
     @Override

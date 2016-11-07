@@ -10,93 +10,118 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="ru.falseteam.schedule.management.EditLessonActivity">
 
-    <TextView
-        android:id="@+id/labelID"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:text="@string/label_id" />
+    <GridLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:columnCount="2"
+        android:orientation="vertical"
+        android:visibility="visible">
 
-    <TextView
-        android:id="@+id/id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/labelID"
-        android:layout_alignParentEnd="true"
-        android:text="@string/label_id" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/grid_height">
 
-    <EditText
-        android:id="@+id/name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/id"
-        android:ems="10"
-        android:inputType="textPersonName" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center_vertical"
+                android:text="@string/label_id" />
 
-    <TextView
-        android:id="@+id/labelName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/name"
-        android:layout_alignBottom="@+id/name"
-        android:layout_alignParentStart="true"
-        android:text="@string/label_name" />
+            <TextView
+                android:id="@+id/id"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical" />
 
-    <EditText
-        android:id="@+id/vkId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/name"
-        android:ems="10"
-        android:inputType="textPersonName" />
+        </TableRow>
 
-    <TextView
-        android:id="@+id/labelAudience"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/vkId"
-        android:layout_alignBottom="@+id/vkId"
-        android:layout_alignParentStart="true"
-        android:text="@string/label_audience" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/grid_height">
 
-    <TextView
-        android:id="@+id/labelTeacher"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/teacher"
-        android:layout_alignBottom="@+id/teacher"
-        android:layout_alignParentStart="true"
-        android:text="@string/label_teacher" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center_vertical"
+                android:text="@string/label_name" />
 
-    <EditText
-        android:id="@+id/teacher"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/vkId"
-        android:ems="10"
-        android:inputType="textPersonName" />
+            <EditText
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:inputType="textPersonName" />
 
-    <TextView
-        android:id="@+id/labelLastTask"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/lastTask"
-        android:layout_alignBottom="@+id/lastTask"
-        android:layout_alignParentStart="true"
-        android:text="@string/label_lasttask" />
+        </TableRow>
 
-    <EditText
-        android:id="@+id/lastTask"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/teacher"
-        android:ems="10"
-        android:inputType="textPersonName" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/grid_height">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center_vertical"
+                android:text="@string/label_audience" />
+
+            <EditText
+                android:id="@+id/audience"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:inputType="textPersonName" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/grid_height">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center_vertical"
+                android:text="@string/label_teacher" />
+
+            <EditText
+                android:id="@+id/teacher"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:inputType="textPersonName" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/grid_height">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center_vertical"
+                android:text="@string/label_lasttask" />
+
+            <EditText
+                android:id="@+id/lastTask"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:inputType="textPersonName" />
+
+        </TableRow>
+    </GridLayout>
 
     <Button
         android:id="@+id/btnSave"

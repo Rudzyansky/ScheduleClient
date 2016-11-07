@@ -10,8 +10,6 @@ import android.widget.Spinner;
 import ru.falseteam.schedule.R;
 import ru.falseteam.schedule.redraw.Redrawable;
 import ru.falseteam.schedule.redraw.Redrawer;
-import ru.falseteam.schedule.serializable.LessonNumber;
-import ru.falseteam.schedule.serializable.WeekDay;
 import ru.falseteam.schedule.socket.Worker;
 import ru.falseteam.schedule.socket.commands.GetLessonNumbers;
 import ru.falseteam.schedule.socket.commands.GetLessons;
@@ -32,10 +30,9 @@ public class EditTemplateActivity extends AppCompatActivity implements Redrawabl
         Redrawer.add(this);
         redraw();
 
-        Worker worker = Worker.get();
-        worker.send(GetWeekDays.getRequest());
-        worker.send(GetLessonNumbers.getRequest());
-        worker.send(GetLessons.getRequest());
+        Worker.sendFromMainThread(GetWeekDays.getRequest());
+        Worker.sendFromMainThread(GetLessonNumbers.getRequest());
+        Worker.sendFromMainThread(GetLessons.getRequest());
     }
 
     @Override
