@@ -14,14 +14,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 
 import ru.falseteam.schedule.R;
@@ -114,6 +112,12 @@ public class ListOfTemplatesActivity extends AppCompatActivity implements Redraw
         public InnerFragment() {
         }
 
+        private void openTemplateEditor(Template template) {
+            Intent intent = new Intent(getActivity(), EditTemplateActivity.class);
+            intent.putExtra("template", template);
+            startActivity(intent);
+        }
+
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -122,12 +126,19 @@ public class ListOfTemplatesActivity extends AppCompatActivity implements Redraw
             TextView tv = (TextView) root.findViewById(R.id.day_of_week);
             tv.setText(getResources().getStringArray(R.array.week_days)[dayOfWeek]);
 
+            final Adapter adapter = new Adapter(root.getContext(), dayOfWeek);
             ListView list = (ListView) root.findViewById(R.id.list);
+            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    openTemplateEditor(adapter.getItem(position));
+                }
+            });
 
             View view = root.findViewById(R.id.emptyView);
             view.findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
             list.setEmptyView(view);
-            list.setAdapter(new Adapter(root.getContext(), dayOfWeek));
+            list.setAdapter(adapter);
 
             return root;
         }
