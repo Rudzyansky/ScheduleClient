@@ -1,7 +1,7 @@
 package ru.falseteam.schedule.management;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
@@ -57,18 +57,14 @@ public class EditLessonActivity extends AppCompatActivity implements View.OnClic
                 lesson.lastTask = lastTask.getText().toString();
                 map.clear();
                 map.put("command", "update_lesson");
-                map.put("lesson", lesson);
-                Worker.get().send(map);
-                finish();
                 break;
             case R.id.btnDelete:
-                map.clear();
                 map.put("command", "delete_lesson");
-                map.put("lesson", lesson);
-                Worker.get().send(map);
-                finish();
                 break;
         }
-        Worker.get().send(GetLessons.getRequest());
+        map.put("lesson", lesson);
+        Worker.sendFromMainThread(map);
+        finish();
+        Worker.sendFromMainThread(GetLessons.getRequest());
     }
 }
