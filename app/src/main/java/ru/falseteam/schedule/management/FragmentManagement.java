@@ -27,7 +27,7 @@ public class FragmentManagement extends Fragment implements Redrawable, View.OnC
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_management, container, false);
-        rootView.findViewById(R.id.buttonPairs).setOnClickListener(this);
+        rootView.findViewById(R.id.buttonLessons).setOnClickListener(this);
         rootView.findViewById(R.id.buttonUsers).setOnClickListener(this);
         return rootView;
     }
@@ -63,7 +63,7 @@ public class FragmentManagement extends Fragment implements Redrawable, View.OnC
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.buttonPairs:
+            case R.id.buttonLessons:
                 startActivity(new Intent(getActivity(), ListOfLessonsActivity.class));
                 break;
             case R.id.buttonUsers:
