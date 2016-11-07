@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="ru.falseteam.schedule">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.INSTALL_PACKAGES" />
-    <uses-permission android:name="android.permission.DELETE_PACKAGES" />
+    <uses-permission
+        android:name="android.permission.INSTALL_PACKAGES"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission
+        android:name="android.permission.DELETE_PACKAGES"
+        tools:ignore="ProtectedPermissions" />
 
     <application
         android:name=".Application"
@@ -37,6 +42,8 @@
         <activity android:name=".management.EditLessonActivity" />
         <activity android:name=".management.ListOfUsersActivity" />
         <activity android:name=".management.EditUserActivity" />
+        <activity android:name=".management.ListOfTemplatesActivity" />
+        <activity android:name=".management.EditTemplateActivity" />
     </application>
 
 </manifest>

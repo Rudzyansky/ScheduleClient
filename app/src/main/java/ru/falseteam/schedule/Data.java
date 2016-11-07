@@ -17,6 +17,7 @@ import ru.falseteam.schedule.utils.BitmapUtils;
 public class Data {
     private static String clientVersion;
     private static String hostname;
+    private static String publicPass;
     private static int portSchedule;
     private static int portUpdate;
 
@@ -34,6 +35,7 @@ public class Data {
         } catch (Exception ignore) {
         }
         hostname = context.getString(R.string.hostname);
+        publicPass = context.getString(R.string.public_pass);
         portSchedule = context.getResources().getInteger(R.integer.port_schedule);
         portUpdate = context.getResources().getInteger(R.integer.port_update);
 
@@ -60,6 +62,10 @@ public class Data {
 
     public static int getPortUpdate() {
         return portUpdate;
+    }
+
+    public static String getPublicPass() {
+        return publicPass;
     }
 
     public static String getHostname() {

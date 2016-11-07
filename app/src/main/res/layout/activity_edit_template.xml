@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_edit_pair"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="ru.falseteam.schedule.management.EditLessonActivity">
+    android:paddingTop="@dimen/activity_vertical_margin">
+
+    <include
+        layout="@layout/empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <GridLayout
         android:id="@+id/content"
@@ -16,7 +18,7 @@
         android:layout_height="match_parent"
         android:columnCount="2"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="invisible">
 
         <TableRow
             android:layout_width="match_parent"
@@ -27,15 +29,14 @@
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center_vertical"
-                android:text="@string/label_id" />
+                android:text="@string/label_week_day" />
 
-            <TextView
-                android:id="@+id/id"
+            <Spinner
+                android:id="@+id/day_of_week"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center_vertical" />
-
         </TableRow>
 
         <TableRow
@@ -47,16 +48,14 @@
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center_vertical"
-                android:text="@string/label_name" />
+                android:text="@string/label_lesson_number" />
 
-            <EditText
-                android:id="@+id/name"
+            <Spinner
+                android:id="@+id/lesson_number"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:inputType="textPersonName" />
-
+                android:gravity="center_vertical" />
         </TableRow>
 
         <TableRow
@@ -68,16 +67,14 @@
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center_vertical"
-                android:text="@string/label_audience" />
+                android:text="@string/evenness" />
 
-            <EditText
-                android:id="@+id/audience"
+            <Spinner
+                android:id="@+id/evenness"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:inputType="textPersonName" />
-
+                android:gravity="center_vertical" />
         </TableRow>
 
         <TableRow
@@ -89,37 +86,14 @@
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center_vertical"
-                android:text="@string/label_teacher" />
+                android:text="@string/label_lesson" />
 
-            <EditText
-                android:id="@+id/teacher"
+            <Spinner
+                android:id="@+id/lesson"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:inputType="textPersonName" />
-
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/grid_height">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:gravity="center_vertical"
-                android:text="@string/label_lasttask" />
-
-            <EditText
-                android:id="@+id/lastTask"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:inputType="textPersonName" />
-
+                android:gravity="center_vertical" />
         </TableRow>
     </GridLayout>
 
