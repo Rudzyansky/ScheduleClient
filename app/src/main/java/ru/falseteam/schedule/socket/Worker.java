@@ -140,7 +140,7 @@ public class Worker implements Runnable {
             SSLSocketFactory ssf = sc.getSocketFactory();
             socket = (SSLSocket) ssf.createSocket(Data.getHostname(), Data.getPortSchedule());
 
-            socket.setEnabledCipherSuites(new String[]{"TLS_RSA_WITH_AES_256_CBC_SHA"});
+            socket.setEnabledCipherSuites(new String[]{"TLS_RSA_WITH_AES_128_CBC_SHA"});
             socket.setEnabledProtocols(new String[]{"TLSv1.2"});
             socket.setEnableSessionCreation(true);
             socket.setUseClientMode(true);

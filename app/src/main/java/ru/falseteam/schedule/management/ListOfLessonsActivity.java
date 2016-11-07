@@ -72,7 +72,7 @@ public class ListOfLessonsActivity extends AppCompatActivity implements Redrawab
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_add_pair:
+            case R.id.action_add:
                 Intent intent = new Intent(ListOfLessonsActivity.this, EditLessonActivity.class);
                 Lesson lesson = Lesson.Factory.getDefault();
                 intent.putExtra("lesson", lesson);
