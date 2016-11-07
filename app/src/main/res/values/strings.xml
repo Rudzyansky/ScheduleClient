@@ -26,6 +26,7 @@
     <string name="update_action_cancel">Отложить</string>
     <string name="about">about</string>
     <string name="about_message">Авторы:\nЕвгений Рудзянский\nВладислав Сумин\n\nВерсия: %s</string>
+    <string name="edit_template">Редактирование шаблона</string>
     <string name="label_id">ID</string>
     <string name="label_name">Name</string>
     <string name="label_audience">Audience</string>
