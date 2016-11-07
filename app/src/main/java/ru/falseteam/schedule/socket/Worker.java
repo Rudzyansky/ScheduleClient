@@ -23,12 +23,12 @@ import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.socket.commands.AccessDenied;
 import ru.falseteam.schedule.socket.commands.Auth;
 import ru.falseteam.schedule.socket.commands.GetLessonNumbers;
+import ru.falseteam.schedule.socket.commands.GetLessons;
 import ru.falseteam.schedule.socket.commands.GetTemplates;
 import ru.falseteam.schedule.socket.commands.GetUsers;
 import ru.falseteam.schedule.socket.commands.GetWeekDays;
 import ru.falseteam.schedule.socket.commands.Ping;
 import ru.falseteam.schedule.socket.commands.ToastShort;
-import ru.falseteam.schedule.socket.commands.GetLessons;
 
 public class Worker implements Runnable {
 
@@ -85,35 +85,26 @@ public class Worker implements Runnable {
 
     public boolean send(Map<String, Object> map) {
         try {
-            // Эта строчка появилась здесь после двух часов мучений
-            out.reset();
-            // ----------------------------------------------------
-            out.writeObject(map);
-            out.flush();
+            synchronized (worker.out) {
+                // Эта строчка появилась здесь после двух часов мучений
+                out.reset();
+                // ----------------------------------------------------
+                out.writeObject(map);
+                out.flush();
+            }
         } catch (Exception ignore) {
             return false;
         }
         return true;
     }
 
-    public static boolean sendFromMainThread(final Map<String, Object> map) {
-        final boolean[] output = new boolean[1];
+    public static void sendFromMainThread(final Map<String, Object> map) {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    // Эта строчка появилась здесь после двух часов мучений
-                    worker.out.reset();
-                    // ----------------------------------------------------
-                    worker.out.writeObject(map);
-                    worker.out.flush();
-                    output[0] = true;
-                } catch (Exception ignore) {
-                    output[0] = false;
-                }
+                worker.send(map);
             }
         }).start();
-        return output[0];
     }
 
     private void disconnect() {

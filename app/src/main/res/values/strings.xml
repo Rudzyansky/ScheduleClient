@@ -38,4 +38,7 @@
     <string name="label_vk">VK</string>
     <string name="btn_vk_page">Перейти на страницу</string>
     <string name="label_username">Name</string>
+    <string name="label_week_day">День недели</string>
+    <string name="label_lesson_number">Номер пары</string>
+    <string name="label_lesson">Предмет</string>
 </resources>

@@ -71,7 +71,7 @@ public class FragmentManagement extends Fragment implements Redrawable, View.OnC
                 startActivity(new Intent(getActivity(), ListOfUsersActivity.class));
                 break;
             case R.id.buttonTemplate:
-                startActivity(new Intent(getActivity(), ViewTemplateActivity.class));
+                startActivity(new Intent(getActivity(), ListOfTemplatesActivity.class));
                 break;
         }
     }
