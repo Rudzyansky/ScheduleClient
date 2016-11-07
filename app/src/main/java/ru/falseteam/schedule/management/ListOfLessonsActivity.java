@@ -54,7 +54,7 @@ public class ListOfLessonsActivity extends AppCompatActivity implements Redrawab
         lv.setEmptyView(findViewById(R.id.emptyView));
         Redrawer.add(this);
         redraw();
-        Worker.get().send(GetLessons.getRequest());
+        Worker.sendFromMainThread(GetLessons.getRequest());
     }
 
     @Override

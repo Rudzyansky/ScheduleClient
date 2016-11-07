@@ -51,7 +51,7 @@ public class ListOfUsersActivity extends AppCompatActivity implements Redrawable
         lv.setEmptyView(findViewById(R.id.emptyView));
         Redrawer.add(this);
         redraw();
-        Worker.get().send(GetUsers.getRequest());
+        Worker.sendFromMainThread(GetUsers.getRequest());
     }
 
     private void openUserEditor(User user) {
