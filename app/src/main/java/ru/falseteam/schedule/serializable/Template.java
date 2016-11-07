@@ -53,6 +53,8 @@ public class Template implements Serializable {
         public static Template getDefault() {
             Template template = new Template();
             template.exists = false;
+            template.weekDay = new WeekDay();
+            template.lessonNumber = new LessonNumber();
             template.lesson = Lesson.Factory.getDefault();
             return template;
         }
