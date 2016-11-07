@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="ru.falseteam.schedule.management.ListOfLessonsActivity">
     <item
-        android:id="@+id/action_add_pair"
+        android:id="@+id/action_add"
         android:orderInCategory="100"
         android:title="@string/add"
         app:showAsAction="ifRoom" />
