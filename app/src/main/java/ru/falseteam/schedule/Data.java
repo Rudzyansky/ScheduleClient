@@ -10,7 +10,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.net.URL;
 
-import ru.falseteam.schedule.redraw.Redrawer;
+import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.utils.BitmapUtils;
 

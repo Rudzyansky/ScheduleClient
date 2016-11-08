@@ -1,10 +1,8 @@
 package ru.falseteam.schedule;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +11,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import ru.falseteam.schedule.redraw.Redrawable;
-import ru.falseteam.schedule.redraw.Redrawer;
+import ru.falseteam.schedule.listeners.Redrawable;
+import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.Groups;
 
 public class FragmentAccessDenied extends Fragment implements Redrawable {
