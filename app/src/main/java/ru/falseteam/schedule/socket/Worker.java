@@ -1,6 +1,7 @@
 package ru.falseteam.schedule.socket;
 
 import android.content.Context;
+import android.os.Build;
 
 import com.vk.sdk.VKAccessToken;
 
@@ -110,7 +111,6 @@ public class Worker implements Runnable {
 
     private void disconnect() {
         Data.setCurrentGroup(Groups.disconnected);
-        OnChangeGroup.change();
         try {
             socket.close();
         } catch (Exception ignore) {
@@ -143,7 +143,10 @@ public class Worker implements Runnable {
             socket = (SSLSocket) ssf.createSocket(Data.getHostname(), Data.getPortSchedule());
 
             socket.setEnabledCipherSuites(new String[]{"TLS_RSA_WITH_AES_128_CBC_SHA"});
+            //if (Build.VERSION.SDK_INT > 15)
             socket.setEnabledProtocols(new String[]{"TLSv1.2"});
+            //else
+            //    socket.setEnabledProtocols(new String[]{"TLSv1"});
             socket.setEnableSessionCreation(true);
             socket.setUseClientMode(true);
             socket.startHandshake();
@@ -177,7 +180,6 @@ public class Worker implements Runnable {
 
     private void onConnect() {
         Data.setCurrentGroup(Groups.guest);
-        OnChangeGroup.change();
         // авторизуемся на сервере с косты
         send(Auth.getRequest(VKAccessToken.currentToken().accessToken));
     }
