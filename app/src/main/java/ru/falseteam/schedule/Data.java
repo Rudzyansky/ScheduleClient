@@ -5,14 +5,24 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.vk.sdk.api.VKApi;
+import com.vk.sdk.api.VKParameters;
+import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.VKResponse;
+import com.vk.sdk.api.model.VKApiUserFull;
+import com.vk.sdk.api.model.VKList;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.net.URL;
 
-import ru.falseteam.schedule.redraw.Redrawer;
+import ru.falseteam.schedule.listeners.OnChangeGroup;
+import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.utils.BitmapUtils;
+
+import static com.vk.sdk.api.VKApiConst.FIELDS;
 
 public class Data {
     private static String clientVersion;
@@ -56,6 +66,21 @@ public class Data {
         }
     }
 
+    static void vkUpdate(){
+        VKApi.users().get(VKParameters.from(FIELDS, "photo_100")).executeWithListener(new VKRequest.VKRequestListener() {
+            @SuppressWarnings("unchecked")
+            @Override
+            public void onComplete(VKResponse response) {
+                VKList<VKApiUserFull> full = (VKList<VKApiUserFull>) response.parsedModel;
+                for (final VKApiUserFull user : full) {
+                    Data.setName(user.last_name + " " + user.first_name);
+                    Data.setUserIconUrl(user.photo_100);
+                }
+                super.onComplete(response);
+            }
+        });
+    }
+
     public static int getPortSchedule() {
         return portSchedule;
     }
@@ -82,6 +107,7 @@ public class Data {
 
     public static void setCurrentGroup(Groups currentGroup) {
         Data.currentGroup = currentGroup;
+        OnChangeGroup.change();
         Redrawer.redraw();
     }
 

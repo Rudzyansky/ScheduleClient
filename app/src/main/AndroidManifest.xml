@@ -21,6 +21,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/title_fragment_main"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,16 +35,30 @@
             android:theme="@style/VK.Transparent" />
         <activity
             android:name=".LoginActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Dialog" />
         <activity
             android:name=".UpdateActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Dialog" />
-        <activity android:name=".management.ListOfLessonsActivity" />
-        <activity android:name=".management.EditLessonActivity" />
-        <activity android:name=".management.ListOfUsersActivity" />
-        <activity android:name=".management.EditUserActivity" />
-        <activity android:name=".management.ListOfTemplatesActivity" />
-        <activity android:name=".management.EditTemplateActivity" />
+        <activity
+            android:name=".management.ListOfLessonsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".management.EditLessonActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".management.ListOfUsersActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".management.EditUserActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".management.ListOfTemplatesActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".management.EditTemplateActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

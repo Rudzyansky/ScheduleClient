@@ -1,6 +1,7 @@
 package ru.falseteam.schedule.socket;
 
 import android.content.Context;
+import android.os.Build;
 
 import com.vk.sdk.VKAccessToken;
 
@@ -19,6 +20,7 @@ import javax.net.ssl.TrustManagerFactory;
 
 import ru.falseteam.schedule.Data;
 import ru.falseteam.schedule.R;
+import ru.falseteam.schedule.listeners.OnChangeGroup;
 import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.socket.commands.AccessDenied;
 import ru.falseteam.schedule.socket.commands.Auth;
@@ -141,7 +143,10 @@ public class Worker implements Runnable {
             socket = (SSLSocket) ssf.createSocket(Data.getHostname(), Data.getPortSchedule());
 
             socket.setEnabledCipherSuites(new String[]{"TLS_RSA_WITH_AES_128_CBC_SHA"});
+            //if (Build.VERSION.SDK_INT > 15)
             socket.setEnabledProtocols(new String[]{"TLSv1.2"});
+            //else
+            //    socket.setEnabledProtocols(new String[]{"TLSv1"});
             socket.setEnableSessionCreation(true);
             socket.setUseClientMode(true);
             socket.startHandshake();
