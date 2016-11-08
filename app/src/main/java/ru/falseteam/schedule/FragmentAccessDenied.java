@@ -40,14 +40,19 @@ public class FragmentAccessDenied extends Fragment implements Redrawable {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         reasonView = (TextView) view.findViewById(R.id.reason);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         Redrawer.add(this);
         redraw();
     }
 
     @Override
-    public void onDestroyView() {
+    public void onPause() {
         Redrawer.remove(this);
-        super.onDestroyView();
+        super.onPause();
     }
 
     @Override
