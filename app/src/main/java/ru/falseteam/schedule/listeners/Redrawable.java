@@ -1,4 +1,4 @@
-package ru.falseteam.schedule.redraw;
+package ru.falseteam.schedule.listeners;
 
 public interface Redrawable {
     void redraw();

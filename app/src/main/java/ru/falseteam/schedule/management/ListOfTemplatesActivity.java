@@ -23,8 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.falseteam.schedule.R;
-import ru.falseteam.schedule.redraw.Redrawable;
-import ru.falseteam.schedule.redraw.Redrawer;
+import ru.falseteam.schedule.listeners.Redrawable;
+import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.Template;
 import ru.falseteam.schedule.socket.Worker;
 import ru.falseteam.schedule.socket.commands.GetTemplates;
@@ -90,8 +90,11 @@ public class ListOfTemplatesActivity extends AppCompatActivity implements Redraw
         });
     }
 
+    /**
+     * Adapter from page viewer.
+     */
     private class Adapter extends FragmentPagerAdapter {
-        public Adapter(FragmentManager fm) {
+        Adapter(FragmentManager fm) {
             super(fm);
         }
 
@@ -106,6 +109,9 @@ public class ListOfTemplatesActivity extends AppCompatActivity implements Redraw
         }
     }
 
+    /**
+     * Fragment for {@link ListOfTemplatesActivity.Adapter}
+     */
     public static class InnerFragment extends Fragment {
         private int dayOfWeek;
 
@@ -181,8 +187,13 @@ public class ListOfTemplatesActivity extends AppCompatActivity implements Redraw
                             .inflate(R.layout.item_template, parent, false);
                 Template t = getItem(position);
                 ((TextView) convertView.findViewById(R.id.lesson_number)).setText(String.valueOf(t.lessonNumber.id));
-                ((TextView) convertView.findViewById(R.id.begin)).setText(t.lessonNumber.begin.toString());
-                ((TextView) convertView.findViewById(R.id.end)).setText(t.lessonNumber.end.toString());
+                TextView weekEvenness = (TextView) convertView.findViewById(R.id.week_evenness);
+                if (t.weekEvenness > 0) weekEvenness.setVisibility(View.VISIBLE);
+                weekEvenness.setText(t.weekEvenness == 1 ? "II" : "I");
+                ((TextView) convertView.findViewById(R.id.begin))
+                        .setText(t.lessonNumber.begin.toString().substring(0, 5));
+                ((TextView) convertView.findViewById(R.id.end))
+                        .setText(t.lessonNumber.end.toString().substring(0, 5));
                 ((TextView) convertView.findViewById(R.id.name)).setText(t.lesson.name);
                 ((TextView) convertView.findViewById(R.id.audience)).setText(t.lesson.audience);
                 return convertView;
