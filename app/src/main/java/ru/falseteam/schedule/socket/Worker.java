@@ -19,6 +19,7 @@ import javax.net.ssl.TrustManagerFactory;
 
 import ru.falseteam.schedule.Data;
 import ru.falseteam.schedule.R;
+import ru.falseteam.schedule.listeners.OnChangeGroup;
 import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.socket.commands.AccessDenied;
 import ru.falseteam.schedule.socket.commands.Auth;
@@ -109,6 +110,7 @@ public class Worker implements Runnable {
 
     private void disconnect() {
         Data.setCurrentGroup(Groups.disconnected);
+        OnChangeGroup.change();
         try {
             socket.close();
         } catch (Exception ignore) {
@@ -175,6 +177,7 @@ public class Worker implements Runnable {
 
     private void onConnect() {
         Data.setCurrentGroup(Groups.guest);
+        OnChangeGroup.change();
         // авторизуемся на сервере с косты
         send(Auth.getRequest(VKAccessToken.currentToken().accessToken));
     }

@@ -12,8 +12,8 @@ import ru.falseteam.schedule.Data;
 import ru.falseteam.schedule.FragmentAccessDenied;
 import ru.falseteam.schedule.MainActivity;
 import ru.falseteam.schedule.R;
-import ru.falseteam.schedule.redraw.Redrawable;
-import ru.falseteam.schedule.redraw.Redrawer;
+import ru.falseteam.schedule.listeners.Redrawable;
+import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.Groups;
 
 public class FragmentManagement extends Fragment implements Redrawable, View.OnClickListener {

@@ -8,6 +8,7 @@ import java.util.Map;
 import ru.falseteam.schedule.Application;
 import ru.falseteam.schedule.Data;
 import ru.falseteam.schedule.UpdateActivity;
+import ru.falseteam.schedule.listeners.OnChangeGroup;
 import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.socket.CommandAbstract;
 import ru.falseteam.schedule.socket.Worker;
@@ -21,6 +22,7 @@ public class Auth extends CommandAbstract {
     @Override
     public void exec(Map<String, Object> map) {
         Data.setCurrentGroup(Groups.valueOf(map.get("group").toString()));
+        OnChangeGroup.change();
         if (!map.get("version").toString().equals(Data.getClientVersion())) {
             Intent intent = new Intent(Worker.get().getContext(), UpdateActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
