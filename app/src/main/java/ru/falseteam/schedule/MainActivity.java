@@ -1,10 +1,10 @@
 package ru.falseteam.schedule;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -20,7 +20,6 @@ import android.widget.TextView;
 import ru.falseteam.schedule.management.FragmentManagement;
 import ru.falseteam.schedule.redraw.Redrawable;
 import ru.falseteam.schedule.redraw.Redrawer;
-import ru.falseteam.schedule.utils.BitmapUtils;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Redrawable {
@@ -28,6 +27,7 @@ public class MainActivity extends AppCompatActivity
     private Fragment fragmentMain = new FragmentMain();
     private Fragment fragmentManagement = new FragmentManagement();
     private Fragment fragmentDebug = new FragmentDebug();
+    private Fragment fragmentAccessDenied = new FragmentAccessDenied();
     private View navHeader;
 
     @Override
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         navHeader = navigationView.getHeaderView(0);
 
-        getFragmentManager().beginTransaction().replace(R.id.content_main, fragmentMain).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_main, fragmentMain).commit();
         navigationView.setCheckedItem(R.id.nav_main);
 
         Redrawer.add(this);
@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         switch (item.getItemId()) {
             case R.id.nav_main:
                 ft.replace(R.id.content_main, fragmentMain);
@@ -131,5 +131,10 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void setFragment(Fragment fragment) {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content_main, fragment).commit();
     }
 }

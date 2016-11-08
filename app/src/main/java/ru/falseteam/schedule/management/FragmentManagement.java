@@ -1,15 +1,16 @@
 package ru.falseteam.schedule.management;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import ru.falseteam.schedule.Data;
 import ru.falseteam.schedule.FragmentAccessDenied;
+import ru.falseteam.schedule.MainActivity;
 import ru.falseteam.schedule.R;
 import ru.falseteam.schedule.redraw.Redrawable;
 import ru.falseteam.schedule.redraw.Redrawer;
@@ -53,10 +54,10 @@ public class FragmentManagement extends Fragment implements Redrawable, View.OnC
             case admin:
                 break;
             case disconnected:
-                (new FragmentAccessDenied()).init(getActivity(), this, R.string.access_denied_offline, Groups.admin, Groups.developer);
+                ((MainActivity) getActivity()).setFragment(FragmentAccessDenied.init(this, getString(R.string.access_denied_offline), Groups.admin, Groups.developer));
                 return;
             default:
-                (new FragmentAccessDenied()).init(getActivity(), this, R.string.access_denied_not_allowed, Groups.admin, Groups.developer);
+                ((MainActivity) getActivity()).setFragment(FragmentAccessDenied.init(this, getString(R.string.access_denied_not_allowed), Groups.admin, Groups.developer));
                 return;
         }
     }

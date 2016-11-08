@@ -1,9 +1,10 @@
 package ru.falseteam.schedule;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,18 +24,12 @@ public class FragmentAccessDenied extends Fragment implements Redrawable {
     private ArrayList<Groups> groupies = new ArrayList<>();
     private TextView reasonView;
 
-    public void init(Activity activity, Fragment parent, String reason, Groups... groupies) {
-        this.parent = parent;
-        this.reason = reason;
-        Collections.addAll(this.groupies, groupies);
-        activity.getFragmentManager().beginTransaction().replace(R.id.content_main, this).commit();
-    }
-
-    public void init(Activity activity, Fragment parent, int reason, Groups... groupies) {
-        this.parent = parent;
-        this.reason = activity.getString(reason);
-        Collections.addAll(this.groupies, groupies);
-        activity.getFragmentManager().beginTransaction().replace(R.id.content_main, this).commit();
+    public static Fragment init(Fragment parent, String reason, Groups... groupies) {
+        FragmentAccessDenied fragment = new FragmentAccessDenied();
+        fragment.parent = parent;
+        fragment.reason = reason;
+        Collections.addAll(fragment.groupies, groupies);
+        return fragment;
     }
 
     @Nullable
@@ -69,8 +64,7 @@ public class FragmentAccessDenied extends Fragment implements Redrawable {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    getActivity().getFragmentManager().beginTransaction()
-                            .replace(R.id.content_main, parent).commit();
+                    ((MainActivity) getActivity()).setFragment(parent);
                 }
             });
         }
