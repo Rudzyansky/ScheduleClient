@@ -1,14 +1,13 @@
 package ru.falseteam.schedule.socket.commands;
 
 import android.content.Intent;
+import android.os.Build;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import ru.falseteam.schedule.Application;
 import ru.falseteam.schedule.Data;
 import ru.falseteam.schedule.UpdateActivity;
-import ru.falseteam.schedule.listeners.OnChangeGroup;
 import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.socket.CommandAbstract;
 import ru.falseteam.schedule.socket.Worker;
@@ -34,6 +33,8 @@ public class Auth extends CommandAbstract {
         Map<String, Object> map = new HashMap<>();
         map.put("command", "auth");
         map.put("token", token);
+        map.put("app_version", Data.getClientVersion());
+        map.put("sdk_version", Build.VERSION.SDK_INT);
         return map;
     }
 }
