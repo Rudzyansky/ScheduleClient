@@ -1,10 +1,11 @@
 package ru.falseteam.schedule;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -17,10 +18,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.vk.sdk.VKSdk;
+
 import ru.falseteam.schedule.management.FragmentManagement;
-import ru.falseteam.schedule.redraw.Redrawable;
-import ru.falseteam.schedule.redraw.Redrawer;
-import ru.falseteam.schedule.utils.BitmapUtils;
+import ru.falseteam.schedule.listeners.Redrawable;
+import ru.falseteam.schedule.listeners.Redrawer;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Redrawable {
@@ -49,11 +51,22 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         navHeader = navigationView.getHeaderView(0);
 
-        getFragmentManager().beginTransaction().replace(R.id.content_main, fragmentMain).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_main, fragmentMain).commit();
         navigationView.setCheckedItem(R.id.nav_main);
 
         Redrawer.add(this);
         redraw();
+
+        if (!VKSdk.isLoggedIn())
+            VKSdk.login(this);
+        else
+            Data.vkUpdate();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Data.vkUpdate();
     }
 
     @Override
@@ -114,7 +127,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         switch (item.getItemId()) {
             case R.id.nav_main:
                 ft.replace(R.id.content_main, fragmentMain);
@@ -131,5 +144,10 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void setFragment(Fragment fragment) {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content_main, fragment).commit();
     }
 }

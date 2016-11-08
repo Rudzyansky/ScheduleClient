@@ -1,11 +1,10 @@
 package ru.falseteam.schedule.socket.commands;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ru.falseteam.schedule.redraw.Redrawer;
+import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.Template;
 import ru.falseteam.schedule.socket.CommandAbstract;
 

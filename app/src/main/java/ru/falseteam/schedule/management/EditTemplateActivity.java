@@ -10,8 +10,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import ru.falseteam.schedule.R;
-import ru.falseteam.schedule.redraw.Redrawable;
-import ru.falseteam.schedule.redraw.Redrawer;
+import ru.falseteam.schedule.listeners.Redrawable;
+import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.Lesson;
 import ru.falseteam.schedule.serializable.LessonNumber;
 import ru.falseteam.schedule.serializable.Template;
