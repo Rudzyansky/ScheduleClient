@@ -26,7 +26,7 @@ public class OnChangeGroup {
         Groups g = Data.getCurrentGroup();
         for (OnChangeGroupListener onChangeGroupListener : listeners.keySet()) {
             if (listeners.get(onChangeGroupListener).contains(g))
-                onChangeGroupListener.onChangeGroup(g);
+                onChangeGroupListener.onChangeGroup();
         }
     }
 }

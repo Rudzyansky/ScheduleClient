@@ -18,14 +18,17 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.falseteam.schedule.listeners.OnChangeGroup;
+import ru.falseteam.schedule.listeners.OnChangeGroupListener;
 import ru.falseteam.schedule.management.EditTemplateActivity;
 import ru.falseteam.schedule.listeners.Redrawable;
 import ru.falseteam.schedule.listeners.Redrawer;
+import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.serializable.Template;
 import ru.falseteam.schedule.socket.Worker;
 import ru.falseteam.schedule.socket.commands.GetTemplates;
 
-public class FragmentMain extends Fragment implements Redrawable {
+public class FragmentMain extends Fragment implements Redrawable, OnChangeGroupListener {
     private View emptyView;
     private ViewPager viewPager;
 
@@ -44,16 +47,15 @@ public class FragmentMain extends Fragment implements Redrawable {
         viewPager = (ViewPager) rootView.findViewById(R.id.content);
         viewPager.setAdapter(new Adapter(getChildFragmentManager()));
 
+        OnChangeGroup.add(this, Groups.user, Groups.admin, Groups.developer);
         Redrawer.add(this);
         redraw();
-
-        Worker.sendFromMainThread(GetTemplates.getRequest());
-
         return rootView;
     }
 
     @Override
     public void onDestroy() {
+        OnChangeGroup.remove(this);
         Redrawer.remove(this);
         super.onDestroy();
     }
@@ -69,6 +71,11 @@ public class FragmentMain extends Fragment implements Redrawable {
                 }
             }
         });
+    }
+
+    @Override
+    public void onChangeGroup() {
+        Worker.sendFromMainThread(GetTemplates.getRequest());
     }
 
     /**
