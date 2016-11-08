@@ -1,6 +1,7 @@
 package ru.falseteam.schedule.serializable;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 public class User implements Serializable {
     public int id;
@@ -9,6 +10,10 @@ public class User implements Serializable {
     public String vkToken;
     public int vkId;
     public Groups group;
+    public Timestamp register;
+    public Timestamp lastAuth;
+    public int sdkVersion;
+    public String appVersion;
 
     @Override
     public boolean equals(Object o) {
