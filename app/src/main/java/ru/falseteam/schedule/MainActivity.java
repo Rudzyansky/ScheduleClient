@@ -1,5 +1,6 @@
 package ru.falseteam.schedule;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -17,6 +18,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.vk.sdk.VKSdk;
+
 import ru.falseteam.schedule.management.FragmentManagement;
 import ru.falseteam.schedule.listeners.Redrawable;
 import ru.falseteam.schedule.listeners.Redrawer;
@@ -27,7 +30,6 @@ public class MainActivity extends AppCompatActivity
     private Fragment fragmentMain = new FragmentMain();
     private Fragment fragmentManagement = new FragmentManagement();
     private Fragment fragmentDebug = new FragmentDebug();
-    private Fragment fragmentAccessDenied = new FragmentAccessDenied();
     private View navHeader;
 
     @Override
@@ -54,6 +56,17 @@ public class MainActivity extends AppCompatActivity
 
         Redrawer.add(this);
         redraw();
+
+        if (!VKSdk.isLoggedIn())
+            VKSdk.login(this);
+        else
+            Data.vkUpdate();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Data.vkUpdate();
     }
 
     @Override

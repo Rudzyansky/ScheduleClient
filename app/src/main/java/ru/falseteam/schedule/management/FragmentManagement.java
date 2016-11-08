@@ -35,16 +35,16 @@ public class FragmentManagement extends Fragment implements Redrawable, View.OnC
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onResume() {
+        super.onResume();
         Redrawer.add(this);
         redraw();
     }
 
     @Override
-    public void onDestroyView() {
+    public void onPause() {
         Redrawer.remove(this);
-        super.onDestroyView();
+        super.onPause();
     }
 
     @Override
