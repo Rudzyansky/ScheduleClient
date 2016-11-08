@@ -31,6 +31,6 @@ public class LessonNumber implements Serializable {
 
     @Override
     public String toString() {
-        return id + ". " + begin + "-" + end;
+        return id + ". " + begin.toString().substring(0, 5) + " - " + end.toString().substring(0, 5);
     }
 }
