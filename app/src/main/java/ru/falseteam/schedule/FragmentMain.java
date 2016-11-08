@@ -16,13 +16,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import ru.falseteam.schedule.listeners.OnChangeGroup;
 import ru.falseteam.schedule.listeners.OnChangeGroupListener;
-import ru.falseteam.schedule.management.EditTemplateActivity;
 import ru.falseteam.schedule.listeners.Redrawable;
 import ru.falseteam.schedule.listeners.Redrawer;
+import ru.falseteam.schedule.management.EditTemplateActivity;
 import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.serializable.Template;
 import ru.falseteam.schedule.socket.Worker;
@@ -45,7 +47,13 @@ public class FragmentMain extends Fragment implements Redrawable, OnChangeGroupL
 
         emptyView = rootView.findViewById(R.id.emptyView);
         viewPager = (ViewPager) rootView.findViewById(R.id.content);
-        viewPager.setAdapter(new Adapter(getChildFragmentManager()));
+        Adapter adapter = new Adapter(getChildFragmentManager());
+        viewPager.setAdapter(adapter);
+        Calendar c = GregorianCalendar.getInstance();
+        int day = c.get(Calendar.DAY_OF_WEEK) - 2;
+        if (day == -1) day = 7;
+
+        viewPager.setCurrentItem(day);
 
         OnChangeGroup.add(this, Groups.user, Groups.admin, Groups.developer);
         Redrawer.add(this);
@@ -140,8 +148,11 @@ public class FragmentMain extends Fragment implements Redrawable, OnChangeGroupL
 
             public Adapter(Context context, int dayOfWeek) {
                 this.context = context;
+                Calendar c = Calendar.getInstance();
+                int evenness = (c.get(Calendar.WEEK_OF_YEAR) - 1) % 2;
                 for (Template t : GetTemplates.templates)
-                    if (t.weekDay.id == dayOfWeek + 1) templates.add(t);
+                    if (t.weekDay.id == dayOfWeek + 1 && (t.weekEvenness == 0 || t.weekEvenness - 1 == evenness))
+                        templates.add(t);
             }
 
             @Override
@@ -166,9 +177,6 @@ public class FragmentMain extends Fragment implements Redrawable, OnChangeGroupL
                             .inflate(R.layout.item_template, parent, false);
                 Template t = getItem(position);
                 ((TextView) convertView.findViewById(R.id.lesson_number)).setText(String.valueOf(t.lessonNumber.id));
-                TextView weekEvenness = (TextView) convertView.findViewById(R.id.week_evenness);
-                if (t.weekEvenness > 0) weekEvenness.setVisibility(View.VISIBLE);
-                weekEvenness.setText(t.weekEvenness == 1 ? "II" : "I");
                 ((TextView) convertView.findViewById(R.id.begin))
                         .setText(t.lessonNumber.begin.toString().substring(0, 5));
                 ((TextView) convertView.findViewById(R.id.end))
