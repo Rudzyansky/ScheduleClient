@@ -1,4 +1,4 @@
-package ru.falseteam.schedule;
+package ru.falseteam.schedule.management;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,69 +8,78 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 
-import ru.falseteam.schedule.listeners.OnChangeGroup;
-import ru.falseteam.schedule.listeners.OnChangeGroupListener;
+import ru.falseteam.schedule.R;
 import ru.falseteam.schedule.listeners.Redrawable;
 import ru.falseteam.schedule.listeners.Redrawer;
-import ru.falseteam.schedule.management.EditTemplateActivity;
-import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.serializable.Template;
 import ru.falseteam.schedule.socket.Worker;
 import ru.falseteam.schedule.socket.commands.GetTemplates;
 
-public class FragmentMain extends Fragment implements Redrawable, OnChangeGroupListener {
+public class ListOfTemplatesActivity extends AppCompatActivity implements Redrawable {
     private View emptyView;
     private ViewPager viewPager;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setTitle(R.string.app_name);
-    }
+        setContentView(R.layout.activity_list_of_templates);
+        setTitle(getString(R.string.edit_template));
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.activity_list_of_templates, container, false);
+        emptyView = findViewById(R.id.emptyView);
+        viewPager = (ViewPager) findViewById(R.id.content);
+        viewPager.setAdapter(new Adapter(getSupportFragmentManager()));
 
-        emptyView = rootView.findViewById(R.id.emptyView);
-        viewPager = (ViewPager) rootView.findViewById(R.id.content);
-        Adapter adapter = new Adapter(getChildFragmentManager());
-        viewPager.setAdapter(adapter);
-        Calendar c = GregorianCalendar.getInstance();
-        int day = c.get(Calendar.DAY_OF_WEEK) - 2;
-        if (day == -1) day = 7;
-
-        viewPager.setCurrentItem(day);
-
-        OnChangeGroup.add(this, Groups.user, Groups.admin, Groups.developer);
         Redrawer.add(this);
         redraw();
-        return rootView;
+
+        Worker.sendFromMainThread(GetTemplates.getRequest());
     }
 
     @Override
-    public void onDestroy() {
-        OnChangeGroup.remove(this);
+    protected void onDestroy() {
         Redrawer.remove(this);
         super.onDestroy();
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_via_add_btn, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_add:
+                openTemplateEditor(Template.Factory.getDefault());
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void openTemplateEditor(Template template) {
+        Intent intent = new Intent(this, EditTemplateActivity.class);
+        intent.putExtra("template", template);
+        startActivity(intent);
+    }
+
+    @Override
     public void redraw() {
-        getActivity().runOnUiThread(new Runnable() {
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (GetTemplates.templates != null) {
@@ -79,11 +88,6 @@ public class FragmentMain extends Fragment implements Redrawable, OnChangeGroupL
                 }
             }
         });
-    }
-
-    @Override
-    public void onChangeGroup() {
-        Worker.sendFromMainThread(GetTemplates.getRequest());
     }
 
     /**
@@ -105,7 +109,9 @@ public class FragmentMain extends Fragment implements Redrawable, OnChangeGroupL
         }
     }
 
-
+    /**
+     * Fragment for {@link ListOfTemplatesActivity.Adapter}
+     */
     public static class InnerFragment extends Fragment {
         private int dayOfWeek;
 
@@ -128,6 +134,13 @@ public class FragmentMain extends Fragment implements Redrawable, OnChangeGroupL
 
             final Adapter adapter = new Adapter(root.getContext(), dayOfWeek);
             ListView list = (ListView) root.findViewById(R.id.list);
+            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    openTemplateEditor(adapter.getItem(position));
+                }
+            });
+
             View view = root.findViewById(R.id.emptyView);
             view.findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
             list.setEmptyView(view);
@@ -148,11 +161,8 @@ public class FragmentMain extends Fragment implements Redrawable, OnChangeGroupL
 
             public Adapter(Context context, int dayOfWeek) {
                 this.context = context;
-                Calendar c = Calendar.getInstance();
-                int evenness = (c.get(Calendar.WEEK_OF_YEAR) - 1) % 2;
                 for (Template t : GetTemplates.templates)
-                    if (t.weekDay.id == dayOfWeek + 1 && (t.weekEvenness == 0 || t.weekEvenness - 1 == evenness))
-                        templates.add(t);
+                    if (t.weekDay.id == dayOfWeek + 1) templates.add(t);
             }
 
             @Override
@@ -177,6 +187,9 @@ public class FragmentMain extends Fragment implements Redrawable, OnChangeGroupL
                             .inflate(R.layout.item_template, parent, false);
                 Template t = getItem(position);
                 ((TextView) convertView.findViewById(R.id.lesson_number)).setText(String.valueOf(t.lessonNumber.id));
+                TextView weekEvenness = (TextView) convertView.findViewById(R.id.week_evenness);
+                if (t.weekEvenness > 0) weekEvenness.setVisibility(View.VISIBLE);
+                weekEvenness.setText(t.weekEvenness == 1 ? "II" : "I");
                 ((TextView) convertView.findViewById(R.id.begin))
                         .setText(t.lessonNumber.begin.toString().substring(0, 5));
                 ((TextView) convertView.findViewById(R.id.end))

@@ -15,8 +15,15 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.Socket;
 import java.nio.ByteBuffer;
+import java.security.KeyStore;
+
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
 
 public class UpdateActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -81,6 +88,35 @@ public class UpdateActivity extends AppCompatActivity implements View.OnClickLis
             file.delete();
         }
 
+        private SSLSocket initSSL() {
+            try {
+                String algorithm = KeyManagerFactory.getDefaultAlgorithm();
+
+                KeyStore ks = KeyStore.getInstance("BKS");
+                ks.load(getApplicationContext().getResources().openRawResource(R.raw.keystore), Data.getPublicPass().toCharArray());
+
+                TrustManagerFactory tmf = TrustManagerFactory.getInstance(algorithm);
+                tmf.init(ks);
+
+                SSLContext sc = SSLContext.getInstance("TLS");
+                TrustManager[] trustManagers = tmf.getTrustManagers();
+                sc.init(null, trustManagers, null);
+
+                SSLSocketFactory ssf = sc.getSocketFactory();
+                SSLSocket socket = (SSLSocket) ssf.createSocket(Data.getHostname(), Data.getPortUpdate());
+
+                socket.setEnabledCipherSuites(new String[]{"TLS_RSA_WITH_AES_256_CBC_SHA"});
+                socket.setEnabledProtocols(new String[]{"TLSv1.2"});
+                socket.setEnableSessionCreation(true);
+                socket.setUseClientMode(true);
+                socket.startHandshake();
+                return socket;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
         @SuppressWarnings({"ResultOfMethodCallIgnored", "SpellCheckingInspection"})
         @Override
         protected String doInBackground(Void... nothing) {
@@ -92,7 +128,8 @@ public class UpdateActivity extends AppCompatActivity implements View.OnClickLis
                 if (file.exists()) file.delete();
                 if (!file.createNewFile()) throw new Exception("File not created " + path);
                 file.setReadable(true, false);
-                Socket socket = new Socket(Data.getHostname(), Data.getPortUpdate());
+                SSLSocket socket = initSSL();
+                if (socket == null) throw new Exception("SSLSocket is null");
                 InputStream sin = new BufferedInputStream(socket.getInputStream());
                 OutputStream fout = new FileOutputStream(file);
 

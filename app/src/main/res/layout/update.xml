@@ -27,7 +27,7 @@
         android:text="@string/update_string_current" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/labelVK"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -40,7 +40,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/textView3"
+        android:layout_below="@+id/labelVK"
         android:text="@string/update_action_update" />
 
     <Button

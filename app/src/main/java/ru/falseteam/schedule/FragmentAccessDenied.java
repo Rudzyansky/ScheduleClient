@@ -1,9 +1,8 @@
 package ru.falseteam.schedule;
 
-import android.app.Activity;
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +11,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import ru.falseteam.schedule.redraw.Redrawable;
-import ru.falseteam.schedule.redraw.Redrawer;
+import ru.falseteam.schedule.listeners.Redrawable;
+import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.Groups;
 
 public class FragmentAccessDenied extends Fragment implements Redrawable {
@@ -23,18 +22,12 @@ public class FragmentAccessDenied extends Fragment implements Redrawable {
     private ArrayList<Groups> groupies = new ArrayList<>();
     private TextView reasonView;
 
-    public void init(Activity activity, Fragment parent, String reason, Groups... groupies) {
-        this.parent = parent;
-        this.reason = reason;
-        Collections.addAll(this.groupies, groupies);
-        activity.getFragmentManager().beginTransaction().replace(R.id.content_main, this).commit();
-    }
-
-    public void init(Activity activity, Fragment parent, int reason, Groups... groupies) {
-        this.parent = parent;
-        this.reason = activity.getString(reason);
-        Collections.addAll(this.groupies, groupies);
-        activity.getFragmentManager().beginTransaction().replace(R.id.content_main, this).commit();
+    public static Fragment init(Fragment parent, String reason, Groups... groupies) {
+        FragmentAccessDenied fragment = new FragmentAccessDenied();
+        fragment.parent = parent;
+        fragment.reason = reason;
+        Collections.addAll(fragment.groupies, groupies);
+        return fragment;
     }
 
     @Nullable
@@ -47,14 +40,19 @@ public class FragmentAccessDenied extends Fragment implements Redrawable {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         reasonView = (TextView) view.findViewById(R.id.reason);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         Redrawer.add(this);
         redraw();
     }
 
     @Override
-    public void onDestroyView() {
+    public void onPause() {
         Redrawer.remove(this);
-        super.onDestroyView();
+        super.onPause();
     }
 
     @Override
@@ -69,8 +67,7 @@ public class FragmentAccessDenied extends Fragment implements Redrawable {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    getActivity().getFragmentManager().beginTransaction()
-                            .replace(R.id.content_main, parent).commit();
+                    ((MainActivity) getActivity()).setFragment(parent);
                 }
             });
         }

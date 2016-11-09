@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="ru.falseteam.schedule">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.INSTALL_PACKAGES" />
-    <uses-permission android:name="android.permission.DELETE_PACKAGES" />
+    <uses-permission
+        android:name="android.permission.INSTALL_PACKAGES"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission
+        android:name="android.permission.DELETE_PACKAGES"
+        tools:ignore="ProtectedPermissions" />
 
     <application
         android:name=".Application"
@@ -16,6 +21,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/title_fragment_main"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,12 +35,30 @@
             android:theme="@style/VK.Transparent" />
         <activity
             android:name=".LoginActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Dialog" />
         <activity
             android:name=".UpdateActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Dialog" />
-        <activity android:name=".management.ListOfPairsActivity" />
-        <activity android:name=".management.EditPairActivity"></activity>
+        <activity
+            android:name=".management.ListOfLessonsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".management.EditLessonActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".management.ListOfUsersActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".management.EditUserActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".management.ListOfTemplatesActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".management.EditTemplateActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

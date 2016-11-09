@@ -1,4 +1,4 @@
-package ru.falseteam.schedule.redraw;
+package ru.falseteam.schedule.listeners;
 
 import java.util.ArrayList;
 

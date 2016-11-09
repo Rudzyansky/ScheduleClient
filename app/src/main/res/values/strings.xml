@@ -1,18 +1,15 @@
 <resources>
     <string name="app_name">Расписание</string>
 
-    <string name="hostname">31.40.98.246</string>
-    <integer name="port_schedule">7101</integer>
-    <integer name="port_update">7102</integer>
-
-    <integer name="com_vk_sdk_AppId">5682011</integer>
-
     <string name="settings">Настройки</string>
-    <string name="pairs">Предметы</string>
     <string name="add">Добавить</string>
+    <string name="pairs">Предметы</string>
+    <string name="users">Пользователи</string>
+    <string name="empty_list">Список пуст</string>
+    <string name="list_loading">Однако, здравствуйте</string>
 
     <string name="title_fragment_main">Расписание</string>
-    <string name="title_fragment_debug">Наладка</string>
+    <string name="title_fragment_debug">Отладка</string>
     <string name="title_fragment_management">Управление</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -27,5 +24,38 @@
     <string name="update_string_new">Новая версия:</string>
     <string name="update_action_update">Обновить</string>
     <string name="update_action_cancel">Отложить</string>
-    <string name="empty_list">Список пуст</string>
+    <string name="about">about</string>
+    <string name="about_message">Авторы:\nЕвгений Рудзянский\nВладислав Сумин\n\nВерсия: %s</string>
+    <string name="edit_template">Редактирование шаблона</string>
+    <string name="label_id">ID</string>
+    <string name="label_name">Name</string>
+    <string name="label_audience">Audience</string>
+    <string name="label_teacher">Teacher</string>
+    <string name="label_lasttask">LastTask</string>
+    <string name="btn_save">Save</string>
+    <string name="btn_delete">Delete</string>
+    <string name="label_group">Group</string>
+    <string name="label_vk">VK</string>
+    <string name="btn_vk_page">Перейти на страницу</string>
+    <string name="label_username">Name</string>
+    <string name="label_week_day">День недели</string>
+    <string name="label_lesson_number">Номер пары</string>
+    <string name="label_lesson">Предмет</string>
+    <string name="evenness">Четность</string>
+
+    <string-array name="evenness">
+        <item>Каждую неделю</item>
+        <item>По четным</item>
+        <item>По нечетным</item>
+    </string-array>
+
+    <string-array name="week_days">
+        <item>Понедельник</item>
+        <item>Вторник</item>
+        <item>Среда</item>
+        <item>Четверг</item>
+        <item>Пятница</item>
+        <item>Суббота</item>
+        <item>Воскресенье</item>
+    </string-array>
 </resources>
