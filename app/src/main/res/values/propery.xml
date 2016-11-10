@@ -9,7 +9,7 @@
     <integer name="port_schedule">7101</integer>
     <integer name="port_update">7102</integer>
 
-    <integer name="com_vk_sdk_AppId">5682011</integer>
+    <integer name="com_vk_sdk_AppId">5721408</integer>
     <!--<integer name="com_vk_sdk_AppId">5682011</integer>-->
 
 </resources>
