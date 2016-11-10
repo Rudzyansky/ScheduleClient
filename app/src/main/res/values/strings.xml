@@ -1,6 +1,4 @@
 <resources>
-    <string name="app_name">Расписание</string>
-
     <string name="settings">Настройки</string>
     <string name="add">Добавить</string>
     <string name="pairs">Предметы</string>
