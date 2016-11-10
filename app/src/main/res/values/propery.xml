@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">Расписание dev</string>
     <bool name="debug">true</bool>
 
     <string name="hostname">78.107.234.184</string>
@@ -9,5 +10,6 @@
     <integer name="port_update">7102</integer>
 
     <integer name="com_vk_sdk_AppId">5682011</integer>
+    <!--<integer name="com_vk_sdk_AppId">5682011</integer>-->
 
 </resources>
