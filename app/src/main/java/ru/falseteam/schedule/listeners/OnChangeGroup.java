@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ru.falseteam.schedule.Data;
+import ru.falseteam.schedule.data.Data;
 import ru.falseteam.schedule.serializable.Groups;
 
 public class OnChangeGroup {

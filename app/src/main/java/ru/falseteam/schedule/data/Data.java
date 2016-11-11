@@ -1,4 +1,4 @@
-package ru.falseteam.schedule;
+package ru.falseteam.schedule.data;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -18,6 +18,7 @@ import java.io.FileOutputStream;
 import java.lang.ref.WeakReference;
 import java.net.URL;
 
+import ru.falseteam.schedule.R;
 import ru.falseteam.schedule.listeners.OnChangeGroup;
 import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.Groups;
@@ -27,11 +28,7 @@ import ru.falseteam.schedule.utils.BitmapUtils;
 import static com.vk.sdk.api.VKApiConst.FIELDS;
 
 public class Data {
-    private static String clientVersion;
-    private static String hostname;
-    private static String publicPass;
-    private static int portSchedule;
-    private static int portUpdate;
+
 
     private static Groups currentGroup = Groups.disconnected;
     private static String name;
@@ -41,18 +38,9 @@ public class Data {
 
     private static SharedPreferences preferences;
 
-    private static WeakReference<Context> context;
+    static WeakReference<Context> context;
 
-    static void init(Context context) {
-        Data.context = new WeakReference<Context>(context);
-        try {
-            clientVersion = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
-        } catch (Exception ignore) {
-        }
-        hostname = context.getString(R.string.hostname);
-        publicPass = context.getString(R.string.public_pass);
-        portSchedule = context.getResources().getInteger(R.integer.port_schedule);
-        portUpdate = context.getResources().getInteger(R.integer.port_update);
+    public static void init(Context context) {
 
         preferences = context.getSharedPreferences("schedule", Context.MODE_PRIVATE);
         name = preferences.getString("name", "guest");
@@ -72,7 +60,7 @@ public class Data {
         GetTemplates.load();
     }
 
-    static void vkUpdate() {
+    public static void vkUpdate() {
         VKApi.users().get(VKParameters.from(FIELDS, "photo_100")).executeWithListener(new VKRequest.VKRequestListener() {
             @SuppressWarnings("unchecked")
             @Override
@@ -91,25 +79,7 @@ public class Data {
         return context.get();
     }
 
-    public static int getPortSchedule() {
-        return portSchedule;
-    }
 
-    public static int getPortUpdate() {
-        return portUpdate;
-    }
-
-    public static String getPublicPass() {
-        return publicPass;
-    }
-
-    public static String getHostname() {
-        return hostname;
-    }
-
-    public static String getClientVersion() {
-        return clientVersion;
-    }
 
     public static Groups getCurrentGroup() {
         return currentGroup;
@@ -134,7 +104,7 @@ public class Data {
         }
     }
 
-    static Bitmap getUserIcon() {
+    public static Bitmap getUserIcon() {
         return userIcon;
     }
 

@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import ru.falseteam.schedule.data.Data;
+import ru.falseteam.schedule.data.StaticData;
 import ru.falseteam.schedule.listeners.Redrawable;
 import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.Groups;
@@ -62,7 +64,7 @@ public class FragmentDebug extends Fragment implements Redrawable {
             @Override
             public void run() {
                 group.setText(Data.getCurrentGroup().name());
-                version.setText(Data.getClientVersion());
+                version.setText(StaticData.getClientVersion());
             }
         });
     }
