@@ -1,8 +1,8 @@
 package ru.falseteam.schedule;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;

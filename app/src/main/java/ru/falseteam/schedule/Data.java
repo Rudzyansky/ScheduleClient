@@ -15,11 +15,13 @@ import com.vk.sdk.api.model.VKList;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.lang.ref.WeakReference;
 import java.net.URL;
 
 import ru.falseteam.schedule.listeners.OnChangeGroup;
 import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.Groups;
+import ru.falseteam.schedule.socket.commands.GetTemplates;
 import ru.falseteam.schedule.utils.BitmapUtils;
 
 import static com.vk.sdk.api.VKApiConst.FIELDS;
@@ -39,7 +41,10 @@ public class Data {
 
     private static SharedPreferences preferences;
 
+    private static WeakReference<Context> context;
+
     static void init(Context context) {
+        Data.context = new WeakReference<Context>(context);
         try {
             clientVersion = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
         } catch (Exception ignore) {
@@ -64,9 +69,10 @@ public class Data {
             } catch (Exception ignore) {
             }
         }
+        GetTemplates.load();
     }
 
-    static void vkUpdate(){
+    static void vkUpdate() {
         VKApi.users().get(VKParameters.from(FIELDS, "photo_100")).executeWithListener(new VKRequest.VKRequestListener() {
             @SuppressWarnings("unchecked")
             @Override
@@ -79,6 +85,10 @@ public class Data {
                 super.onComplete(response);
             }
         });
+    }
+
+    public static Context getContext() {
+        return context.get();
     }
 
     public static int getPortSchedule() {
