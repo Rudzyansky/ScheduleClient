@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import ru.falseteam.schedule.data.Data;
+import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.data.StaticData;
 import ru.falseteam.schedule.listeners.Redrawable;
 import ru.falseteam.schedule.listeners.Redrawer;
@@ -49,7 +49,7 @@ public class FragmentDebug extends Fragment implements Redrawable {
 
     @Override
     public void redraw() {
-        switch (Data.getCurrentGroup()) {
+        switch (MainData.getCurrentGroup()) {
             case disconnected:
             case developer:
                 break;
@@ -63,7 +63,7 @@ public class FragmentDebug extends Fragment implements Redrawable {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                group.setText(Data.getCurrentGroup().name());
+                group.setText(MainData.getCurrentGroup().name());
                 version.setText(StaticData.getClientVersion());
             }
         });

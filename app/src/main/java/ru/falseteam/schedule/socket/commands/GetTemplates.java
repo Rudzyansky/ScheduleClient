@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ru.falseteam.schedule.data.Data;
+import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.Template;
 import ru.falseteam.schedule.socket.CommandAbstract;
@@ -38,7 +38,7 @@ public class GetTemplates extends CommandAbstract {
 
     private void save() {
         try {
-            File file = new File(Data.getContext().getApplicationInfo().dataDir + "/templates.bin");
+            File file = new File(MainData.getContext().getApplicationInfo().dataDir + "/templates.bin");
             ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file));
             out.writeObject(templates);
             out.flush();
@@ -51,7 +51,7 @@ public class GetTemplates extends CommandAbstract {
     @SuppressWarnings("unchecked")
     public static void load() {
         try {
-            File file = new File(Data.getContext().getApplicationInfo().dataDir + "/templates.bin");
+            File file = new File(MainData.getContext().getApplicationInfo().dataDir + "/templates.bin");
             if (!file.exists()) return;
             ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
             templates = (List<Template>) in.readObject();
