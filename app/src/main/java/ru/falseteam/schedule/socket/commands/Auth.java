@@ -6,7 +6,7 @@ import android.os.Build;
 import java.util.HashMap;
 import java.util.Map;
 
-import ru.falseteam.schedule.data.Data;
+import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.UpdateActivity;
 import ru.falseteam.schedule.data.StaticData;
 import ru.falseteam.schedule.serializable.Groups;
@@ -21,7 +21,7 @@ public class Auth extends CommandAbstract {
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public void exec(Map<String, Object> map) {
-        Data.setCurrentGroup(Groups.valueOf(map.get("group").toString()));
+        MainData.setCurrentGroup(Groups.valueOf(map.get("group").toString()));
         if (!map.get("version").toString().equals(StaticData.getClientVersion())) {
             Intent intent = new Intent(Worker.get().getContext(), UpdateActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);

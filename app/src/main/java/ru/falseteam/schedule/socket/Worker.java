@@ -17,7 +17,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 
-import ru.falseteam.schedule.data.Data;
+import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.R;
 import ru.falseteam.schedule.data.StaticData;
 import ru.falseteam.schedule.serializable.Groups;
@@ -109,7 +109,7 @@ public class Worker implements Runnable {
     }
 
     private void disconnect() {
-        Data.setCurrentGroup(Groups.disconnected);
+        MainData.setCurrentGroup(Groups.disconnected);
         try {
             socket.close();
         } catch (Exception ignore) {
@@ -178,7 +178,7 @@ public class Worker implements Runnable {
     }
 
     private void onConnect() {
-        Data.setCurrentGroup(Groups.guest);
+        MainData.setCurrentGroup(Groups.guest);
         // авторизуемся на сервере с косты
         send(Auth.getRequest(VKAccessToken.currentToken().accessToken));
     }

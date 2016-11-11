@@ -25,7 +25,6 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 
-import ru.falseteam.schedule.data.Data;
 import ru.falseteam.schedule.data.StaticData;
 
 public class UpdateActivity extends AppCompatActivity implements View.OnClickListener {
