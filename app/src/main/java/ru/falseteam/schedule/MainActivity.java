@@ -20,9 +20,9 @@ import android.widget.TextView;
 
 import com.vk.sdk.VKSdk;
 
-import ru.falseteam.schedule.data.Data;
-import ru.falseteam.schedule.data.DataLoader;
+import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.data.StaticData;
+import ru.falseteam.schedule.data.VkData;
 import ru.falseteam.schedule.listeners.Redrawable;
 import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.management.FragmentManagement;
@@ -63,13 +63,13 @@ public class MainActivity extends AppCompatActivity
         if (!VKSdk.isLoggedIn())
             VKSdk.login(this);
         else
-            DataLoader.vkUpdate();
+            VkData.vkUpdate();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        DataLoader.vkUpdate();
+        VkData.vkUpdate();
     }
 
     @Override
@@ -78,9 +78,9 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void run() {
                 // Обновление боковой менюшки
-                ((TextView) navHeader.findViewById(R.id.group)).setText(Data.getCurrentGroup().name());
-                ((TextView) navHeader.findViewById(R.id.name)).setText(Data.getName());
-                ((ImageView) navHeader.findViewById(R.id.userIcon)).setImageBitmap(Data.getUserIcon());
+                ((TextView) navHeader.findViewById(R.id.group)).setText(MainData.getCurrentGroup().name());
+                ((TextView) navHeader.findViewById(R.id.name)).setText(VkData.getName());
+                ((ImageView) navHeader.findViewById(R.id.userIcon)).setImageBitmap(VkData.getUserIcon());
             }
         });
     }

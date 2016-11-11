@@ -3,7 +3,6 @@ package ru.falseteam.schedule;
 
 import com.vk.sdk.VKSdk;
 
-import ru.falseteam.schedule.data.Data;
 import ru.falseteam.schedule.data.DataLoader;
 import ru.falseteam.schedule.socket.Worker;
 
