@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import ru.falseteam.schedule.Data;
+import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.FragmentAccessDenied;
 import ru.falseteam.schedule.MainActivity;
 import ru.falseteam.schedule.R;
@@ -49,7 +49,7 @@ public class FragmentManagement extends Fragment implements Redrawable, View.OnC
 
     @Override
     public void redraw() {
-        switch (Data.getCurrentGroup()) {
+        switch (MainData.getCurrentGroup()) {
             case developer:
             case admin:
                 break;

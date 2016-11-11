@@ -17,8 +17,9 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 
-import ru.falseteam.schedule.Data;
+import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.R;
+import ru.falseteam.schedule.data.StaticData;
 import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.socket.commands.AccessDenied;
 import ru.falseteam.schedule.socket.commands.Auth;
@@ -108,7 +109,7 @@ public class Worker implements Runnable {
     }
 
     private void disconnect() {
-        Data.setCurrentGroup(Groups.disconnected);
+        MainData.setCurrentGroup(Groups.disconnected);
         try {
             socket.close();
         } catch (Exception ignore) {
@@ -128,7 +129,7 @@ public class Worker implements Runnable {
 
             KeyStore ks = KeyStore.getInstance("BKS");
             ks.load(context.getResources().openRawResource(R.raw.keystore),
-                    Data.getPublicPass().toCharArray());
+                    StaticData.getPublicPass().toCharArray());
 
             TrustManagerFactory tmf = TrustManagerFactory.getInstance(algorithm);
             tmf.init(ks);
@@ -138,7 +139,7 @@ public class Worker implements Runnable {
             sc.init(null, trustManagers, null);
 
             SSLSocketFactory ssf = sc.getSocketFactory();
-            socket = (SSLSocket) ssf.createSocket(Data.getHostname(), Data.getPortSchedule());
+            socket = (SSLSocket) ssf.createSocket(StaticData.getHostname(), StaticData.getPortSchedule());
 
             socket.setEnabledCipherSuites(new String[]{"TLS_RSA_WITH_AES_128_CBC_SHA"});
             //if (Build.VERSION.SDK_INT > 15)
@@ -177,7 +178,7 @@ public class Worker implements Runnable {
     }
 
     private void onConnect() {
-        Data.setCurrentGroup(Groups.guest);
+        MainData.setCurrentGroup(Groups.guest);
         // авторизуемся на сервере с косты
         send(Auth.getRequest(VKAccessToken.currentToken().accessToken));
     }
