@@ -20,6 +20,9 @@ import android.widget.TextView;
 
 import com.vk.sdk.VKSdk;
 
+import ru.falseteam.schedule.data.Data;
+import ru.falseteam.schedule.data.DataLoader;
+import ru.falseteam.schedule.data.StaticData;
 import ru.falseteam.schedule.listeners.Redrawable;
 import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.management.FragmentManagement;
@@ -60,13 +63,13 @@ public class MainActivity extends AppCompatActivity
         if (!VKSdk.isLoggedIn())
             VKSdk.login(this);
         else
-            Data.vkUpdate();
+            DataLoader.vkUpdate();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Data.vkUpdate();
+        DataLoader.vkUpdate();
     }
 
     @Override
@@ -118,7 +121,7 @@ public class MainActivity extends AppCompatActivity
     private void showAboutDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.about);
-        builder.setMessage(String.format(getString(R.string.about_message), Data.getClientVersion()));
+        builder.setMessage(String.format(getString(R.string.about_message), StaticData.getClientVersion()));
         builder.setPositiveButton("Ok", null);
 
         builder.show();
