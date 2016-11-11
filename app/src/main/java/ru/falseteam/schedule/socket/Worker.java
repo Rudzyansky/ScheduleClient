@@ -1,7 +1,6 @@
 package ru.falseteam.schedule.socket;
 
 import android.content.Context;
-import android.os.Build;
 
 import com.vk.sdk.VKAccessToken;
 
@@ -20,7 +19,6 @@ import javax.net.ssl.TrustManagerFactory;
 
 import ru.falseteam.schedule.Data;
 import ru.falseteam.schedule.R;
-import ru.falseteam.schedule.listeners.OnChangeGroup;
 import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.socket.commands.AccessDenied;
 import ru.falseteam.schedule.socket.commands.Auth;
