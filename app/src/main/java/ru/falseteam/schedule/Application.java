@@ -3,6 +3,8 @@ package ru.falseteam.schedule;
 
 import com.vk.sdk.VKSdk;
 
+import ru.falseteam.schedule.data.Data;
+import ru.falseteam.schedule.data.DataLoader;
 import ru.falseteam.schedule.socket.Worker;
 
 public class Application extends android.app.Application {
@@ -17,7 +19,8 @@ public class Application extends android.app.Application {
 //            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //            startActivity(intent);
 //        }
-        Data.init(getApplicationContext());
+
+        DataLoader.load(getApplicationContext());
         Worker.init(getApplicationContext());
     }
 
