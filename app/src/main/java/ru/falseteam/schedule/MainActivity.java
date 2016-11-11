@@ -20,9 +20,9 @@ import android.widget.TextView;
 
 import com.vk.sdk.VKSdk;
 
-import ru.falseteam.schedule.management.FragmentManagement;
 import ru.falseteam.schedule.listeners.Redrawable;
 import ru.falseteam.schedule.listeners.Redrawer;
+import ru.falseteam.schedule.management.FragmentManagement;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Redrawable {
