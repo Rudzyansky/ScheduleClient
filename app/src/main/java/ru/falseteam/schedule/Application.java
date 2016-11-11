@@ -21,7 +21,6 @@ public class Application extends android.app.Application {
 //        }
 
         DataLoader.load(getApplicationContext());
-        Data.init(getApplicationContext());
         Worker.init(getApplicationContext());
     }
 
