@@ -2,7 +2,6 @@ package ru.falseteam.schedule.data;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 
 import java.lang.ref.WeakReference;
 
@@ -10,21 +9,23 @@ import ru.falseteam.schedule.listeners.OnChangeGroup;
 import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.Groups;
 
-public class Data {
+public class MainData {
+    
+    private static Groups currentGroup;
+    private static WeakReference<Context> context;
 
+    private static SharedPreferences preferences;
 
-    static Groups currentGroup;
-    static String name;
-    static Bitmap userIcon;
-    static String userIconUrl;
-    static String userIconPath;
+    static void init(Context context) {
+        MainData.context = new WeakReference<>(context);
+        preferences = context.getSharedPreferences("MainData", Context.MODE_PRIVATE);
 
-    static SharedPreferences preferences;
-    static WeakReference<Context> context;
+        currentGroup = Groups.disconnected;
+    }
 
 
     public static void setCurrentGroup(Groups currentGroup) {
-        Data.currentGroup = currentGroup;
+        MainData.currentGroup = currentGroup;
         OnChangeGroup.change();
         Redrawer.redraw();
     }
@@ -37,14 +38,6 @@ public class Data {
 
     public static Groups getCurrentGroup() {
         return currentGroup;
-    }
-
-    public static String getName() {
-        return name;
-    }
-
-    public static Bitmap getUserIcon() {
-        return userIcon;
     }
 
 }
