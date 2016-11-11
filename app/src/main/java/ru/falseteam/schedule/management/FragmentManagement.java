@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import ru.falseteam.schedule.Data;
+import ru.falseteam.schedule.data.Data;
 import ru.falseteam.schedule.FragmentAccessDenied;
 import ru.falseteam.schedule.MainActivity;
 import ru.falseteam.schedule.R;
