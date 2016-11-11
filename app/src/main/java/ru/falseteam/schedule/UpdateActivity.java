@@ -25,6 +25,8 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 
+import ru.falseteam.schedule.data.StaticData;
+
 public class UpdateActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ProgressBar progressBar;
@@ -40,7 +42,7 @@ public class UpdateActivity extends AppCompatActivity implements View.OnClickLis
         actRemind.setOnClickListener(this);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
-        ((TextView) findViewById(R.id.currentVersion)).setText(Data.getClientVersion());
+        ((TextView) findViewById(R.id.currentVersion)).setText(StaticData.getClientVersion());
         ((TextView) findViewById(R.id.newVersion)).setText(getIntent().getStringExtra("version"));
         setFinishOnTouchOutside(false);
     }
@@ -93,7 +95,7 @@ public class UpdateActivity extends AppCompatActivity implements View.OnClickLis
                 String algorithm = KeyManagerFactory.getDefaultAlgorithm();
 
                 KeyStore ks = KeyStore.getInstance("BKS");
-                ks.load(getApplicationContext().getResources().openRawResource(R.raw.keystore), Data.getPublicPass().toCharArray());
+                ks.load(getApplicationContext().getResources().openRawResource(R.raw.keystore), StaticData.getPublicPass().toCharArray());
 
                 TrustManagerFactory tmf = TrustManagerFactory.getInstance(algorithm);
                 tmf.init(ks);
@@ -103,7 +105,7 @@ public class UpdateActivity extends AppCompatActivity implements View.OnClickLis
                 sc.init(null, trustManagers, null);
 
                 SSLSocketFactory ssf = sc.getSocketFactory();
-                SSLSocket socket = (SSLSocket) ssf.createSocket(Data.getHostname(), Data.getPortUpdate());
+                SSLSocket socket = (SSLSocket) ssf.createSocket(StaticData.getHostname(), StaticData.getPortUpdate());
 
                 socket.setEnabledCipherSuites(new String[]{"TLS_RSA_WITH_AES_256_CBC_SHA"});
                 socket.setEnabledProtocols(new String[]{"TLSv1.2"});

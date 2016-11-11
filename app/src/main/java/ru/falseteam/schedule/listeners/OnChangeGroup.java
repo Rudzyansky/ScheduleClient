@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ru.falseteam.schedule.Data;
+import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.serializable.Groups;
 
 public class OnChangeGroup {
@@ -20,7 +20,7 @@ public class OnChangeGroup {
     }
 
     public static void change() {
-        Groups g = Data.getCurrentGroup();
+        Groups g = MainData.getCurrentGroup();
         for (OnChangeGroupListener onChangeGroupListener : listeners.keySet()) {
             if (listeners.get(onChangeGroupListener).contains(g))
                 onChangeGroupListener.onChangeGroup();

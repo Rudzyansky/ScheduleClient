@@ -1,4 +1,4 @@
-package ru.falseteam.schedule;
+package ru.falseteam.schedule.data;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -15,25 +15,15 @@ import com.vk.sdk.api.model.VKList;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.lang.ref.WeakReference;
+import java.io.IOException;
 import java.net.URL;
 
-import ru.falseteam.schedule.listeners.OnChangeGroup;
 import ru.falseteam.schedule.listeners.Redrawer;
-import ru.falseteam.schedule.serializable.Groups;
-import ru.falseteam.schedule.socket.commands.GetTemplates;
 import ru.falseteam.schedule.utils.BitmapUtils;
 
 import static com.vk.sdk.api.VKApiConst.FIELDS;
 
-public class Data {
-    private static String clientVersion;
-    private static String hostname;
-    private static String publicPass;
-    private static int portSchedule;
-    private static int portUpdate;
-
-    private static Groups currentGroup = Groups.disconnected;
+public class VkData {
     private static String name;
     private static Bitmap userIcon;
     private static String userIconUrl;
@@ -41,101 +31,60 @@ public class Data {
 
     private static SharedPreferences preferences;
 
-    private static WeakReference<Context> context;
-
     static void init(Context context) {
-        Data.context = new WeakReference<Context>(context);
-        try {
-            clientVersion = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
-        } catch (Exception ignore) {
-        }
-        hostname = context.getString(R.string.hostname);
-        publicPass = context.getString(R.string.public_pass);
-        portSchedule = context.getResources().getInteger(R.integer.port_schedule);
-        portUpdate = context.getResources().getInteger(R.integer.port_update);
+        preferences = context.getSharedPreferences("VkData", Context.MODE_PRIVATE);
 
-        preferences = context.getSharedPreferences("schedule", Context.MODE_PRIVATE);
         name = preferences.getString("name", "guest");
         userIconUrl = preferences.getString("userIconUrl", "");
-        Redrawer.redraw();
-
         userIconPath = context.getApplicationInfo().dataDir + "/usericon.png";
+
+        loadUserIcon();
+    }
+
+    private static void loadUserIcon() {
         File file = new File(userIconPath);
         if (file.exists()) {
             try {
                 FileInputStream fin = new FileInputStream(file);
                 userIcon = BitmapFactory.decodeStream(fin);
                 fin.close();
-            } catch (Exception ignore) {
+            } catch (IOException ignore) {
             }
         }
-        GetTemplates.load();
     }
 
-    static void vkUpdate() {
+    public static void vkUpdate() {
         VKApi.users().get(VKParameters.from(FIELDS, "photo_100")).executeWithListener(new VKRequest.VKRequestListener() {
             @SuppressWarnings("unchecked")
             @Override
             public void onComplete(VKResponse response) {
                 VKList<VKApiUserFull> full = (VKList<VKApiUserFull>) response.parsedModel;
                 for (final VKApiUserFull user : full) {
-                    Data.setName(user.last_name + " " + user.first_name);
-                    Data.setUserIconUrl(user.photo_100);
+                    setUsername(user.last_name + " " + user.first_name);
+                    setUserIconUrl(user.photo_100);
                 }
                 super.onComplete(response);
             }
         });
     }
 
-    public static Context getContext() {
-        return context.get();
-    }
-
-    public static int getPortSchedule() {
-        return portSchedule;
-    }
-
-    public static int getPortUpdate() {
-        return portUpdate;
-    }
-
-    public static String getPublicPass() {
-        return publicPass;
-    }
-
-    public static String getHostname() {
-        return hostname;
-    }
-
-    public static String getClientVersion() {
-        return clientVersion;
-    }
-
-    public static Groups getCurrentGroup() {
-        return currentGroup;
-    }
-
-    public static void setCurrentGroup(Groups currentGroup) {
-        Data.currentGroup = currentGroup;
-        OnChangeGroup.change();
-        Redrawer.redraw();
-    }
-
-    public static String getName() {
-        return name;
-    }
-
-    public static void setName(String name) {
-        if (!Data.name.equals(name)) {
-            Data.name = name;
+    private static void setUsername(String name) {
+        if (!VkData.name.equals(name)) {
+            VkData.name = name;
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString("name", name).apply();
+
             Redrawer.redraw();
         }
     }
 
-    static Bitmap getUserIcon() {
-        return userIcon;
+    private static void setUserIconUrl(final String userIconUrl) {
+        if (!VkData.userIconUrl.equals(userIconUrl)) {
+            VkData.userIconUrl = userIconUrl;
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("userIconUrl", userIconUrl).apply();
+            setUserIcon();
+        }
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -164,12 +113,12 @@ public class Data {
         }).start();
     }
 
-    public static void setUserIconUrl(final String userIconUrl) {
-        if (!Data.userIconUrl.equals(userIconUrl)) {
-            Data.userIconUrl = userIconUrl;
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putString("userIconUrl", name).apply();
-            setUserIcon();
-        }
+
+    public static String getName() {
+        return name;
+    }
+
+    public static Bitmap getUserIcon() {
+        return userIcon;
     }
 }
