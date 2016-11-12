@@ -16,6 +16,12 @@ import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.serializable.Template;
 
+/**
+ * Содержит основные динамические данные
+ *
+ * @author Sumin Vladislav
+ * @version 1.0
+ */
 public class MainData {
 
     private static Groups currentGroup;
@@ -23,14 +29,12 @@ public class MainData {
 
     private static List<Template> templates;
 
-
     static void init(Context context) {
         MainData.context = new WeakReference<>(context);
         currentGroup = Groups.disconnected;
 
         loadTemplates();
     }
-
 
     public static void setCurrentGroup(Groups currentGroup) {
         MainData.currentGroup = currentGroup;

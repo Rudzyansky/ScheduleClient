@@ -25,6 +25,12 @@ import ru.falseteam.schedule.utils.BitmapUtils;
 import static com.vk.sdk.api.VKApiConst.FIELDS;
 import static ru.falseteam.schedule.data.StaticData.TAG;
 
+/**
+ * Содержит данные полученные от vk.com
+ *
+ * @author Sumin Vladislav
+ * @version 1.0
+ */
 public class VkData {
     private static String name;
     private static Bitmap userIcon;
@@ -133,6 +139,7 @@ public class VkData {
     }
 
 
+    // Гетеры.
     public static String getName() {
         return name;
     }
