@@ -10,7 +10,9 @@ public class DataLoader {
         StaticData.init(context);
         MainData.init(context);
         VkData.init(context);
+
         GetTemplates.load();
+
         Redrawer.redraw();
     }
 
