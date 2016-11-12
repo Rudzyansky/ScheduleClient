@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.falseteam.schedule.R;
+import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.listeners.Redrawable;
 import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.Lesson;
@@ -87,10 +88,10 @@ public class ListOfLessonsActivity extends AppCompatActivity implements Redrawab
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (GetLessons.lessons != null) {
+                if (MainData.getLessons() != null) {
                     progressBar.setVisibility(View.INVISIBLE);
                     textView.setText(R.string.empty_list);
-                    pairAdapter.setObjects(GetLessons.lessons);
+                    pairAdapter.setObjects(MainData.getLessons());
                 }
             }
         });

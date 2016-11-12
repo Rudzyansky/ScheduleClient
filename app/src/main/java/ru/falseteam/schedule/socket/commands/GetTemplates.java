@@ -16,7 +16,6 @@ import ru.falseteam.schedule.serializable.Template;
 import ru.falseteam.schedule.socket.CommandAbstract;
 
 public class GetTemplates extends CommandAbstract {
-    public static List<Template> templates;
 
     public GetTemplates() {
         super("get_templates");
@@ -25,40 +24,12 @@ public class GetTemplates extends CommandAbstract {
     @SuppressWarnings("unchecked")
     @Override
     public void exec(Map<String, Object> map) {
-        templates = (List<Template>) map.get("templates");
-        save();
-        Redrawer.redraw();
+        MainData.setTemplates((List<Template>) map.get("templates"));
     }
 
     public static Map<String, Object> getRequest() {
         Map<String, Object> map = new HashMap<>();
         map.put("command", "get_templates");
         return map;
-    }
-
-    private void save() {
-        try {
-            File file = new File(MainData.getContext().getApplicationInfo().dataDir + "/templates.bin");
-            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file));
-            out.writeObject(templates);
-            out.flush();
-            out.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public static void load() {
-        try {
-            File file = new File(MainData.getContext().getApplicationInfo().dataDir + "/templates.bin");
-            if (!file.exists()) return;
-            ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
-            templates = (List<Template>) in.readObject();
-            in.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException ignore) {
-        }
     }
 }

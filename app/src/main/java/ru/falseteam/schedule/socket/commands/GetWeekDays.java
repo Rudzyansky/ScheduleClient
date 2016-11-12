@@ -4,13 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.WeekDay;
 import ru.falseteam.schedule.socket.CommandAbstract;
 
 public class GetWeekDays extends CommandAbstract {
-    public static List<WeekDay> weekDays;
-
 
     public GetWeekDays() {
         super("get_week_days");
@@ -19,7 +18,7 @@ public class GetWeekDays extends CommandAbstract {
     @SuppressWarnings("unchecked")
     @Override
     public void exec(Map<String, Object> map) {
-        weekDays = (List<WeekDay>) map.get("week_days");
+        MainData.setWeekDays((List<WeekDay>) map.get("week_days"));
         Redrawer.redraw();
     }
 
