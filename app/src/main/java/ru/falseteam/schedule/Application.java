@@ -13,11 +13,6 @@ public class Application extends android.app.Application {
         super.onCreate();
 //        String[] t = VKUtil.getCertificateFingerprint(this, this.getPackageName());
         VKSdk.initialize(this);
-//        if (!VKSdk.isLoggedIn()) {
-//            Intent intent = new Intent(Application.this, LoginActivity.class);
-//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//            startActivity(intent);
-//        }
 
         DataLoader.load(getApplicationContext());
         Worker.init(getApplicationContext());
