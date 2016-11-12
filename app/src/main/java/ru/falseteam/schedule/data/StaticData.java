@@ -6,13 +6,15 @@ import android.content.pm.PackageManager;
 import ru.falseteam.schedule.R;
 
 public class StaticData {
+    public static final String TAG = "schedule_tag";
+
     private static String clientVersion;
     private static String hostname;
     private static String publicPass;
     private static int portSchedule;
     private static int portUpdate;
 
-    static void init(Context context){
+    static void init(Context context) {
         try {
             StaticData.clientVersion = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
         } catch (PackageManager.NameNotFoundException e) {
