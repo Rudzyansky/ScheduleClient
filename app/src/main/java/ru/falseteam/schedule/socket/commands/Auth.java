@@ -6,8 +6,8 @@ import android.os.Build;
 import java.util.HashMap;
 import java.util.Map;
 
-import ru.falseteam.schedule.UpdateActivity;
 import ru.falseteam.schedule.data.MainData;
+import ru.falseteam.schedule.UpdateActivity;
 import ru.falseteam.schedule.data.StaticData;
 import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.socket.CommandAbstract;
