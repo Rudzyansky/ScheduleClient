@@ -20,6 +20,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.listeners.OnChangeGroup;
 import ru.falseteam.schedule.listeners.OnChangeGroupListener;
 import ru.falseteam.schedule.listeners.Redrawable;
@@ -73,7 +74,7 @@ public class FragmentMain extends Fragment implements Redrawable, OnChangeGroupL
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (GetTemplates.templates != null) {
+                if (MainData.getTemplates() != null) {
                     emptyView.setVisibility(View.GONE);
                     viewPager.setVisibility(View.VISIBLE);
                 }
@@ -150,7 +151,7 @@ public class FragmentMain extends Fragment implements Redrawable, OnChangeGroupL
                 this.context = context;
                 Calendar c = Calendar.getInstance();
                 int evenness = (c.get(Calendar.WEEK_OF_YEAR) - 1) % 2;
-                for (Template t : GetTemplates.templates)
+                for (Template t : MainData.getTemplates())
                     if (t.weekDay.id == dayOfWeek + 1 && (t.weekEvenness == 0 || t.weekEvenness - 1 == evenness))
                         templates.add(t);
             }
