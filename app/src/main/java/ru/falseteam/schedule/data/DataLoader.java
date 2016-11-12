@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 import ru.falseteam.schedule.listeners.Redrawer;
 
@@ -49,6 +50,7 @@ public class DataLoader {
         try {
             ObjectOutputStream stream = new ObjectOutputStream(new FileOutputStream(path));
             stream.writeObject(data);
+            stream.flush();
             stream.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
