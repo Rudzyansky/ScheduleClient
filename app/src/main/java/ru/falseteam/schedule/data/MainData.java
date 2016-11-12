@@ -38,14 +38,14 @@ public class MainData {
         Redrawer.redraw();
     }
 
-    //Сетеры.
+    //Сетеры. TODO перенсти в дата лодер.
     public static void setTemplates(List<Template> templates) {
         MainData.templates = templates;
         saveTemplate();
         Redrawer.redraw();
     }
 
-    // Созранянлки в кэш.
+    // Созранянлки в кэш. TODO перенести в дата лодер.
     private static void saveTemplate() {
         try {
             File file = new File(context.get().getApplicationInfo().dataDir + "/templates.bin");
