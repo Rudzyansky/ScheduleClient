@@ -3,6 +3,7 @@ package ru.falseteam.schedule.data;
 import android.content.Context;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.List;
 
 import ru.falseteam.schedule.listeners.OnChangeGroup;
@@ -11,6 +12,8 @@ import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.serializable.Lesson;
 import ru.falseteam.schedule.serializable.LessonNumber;
 import ru.falseteam.schedule.serializable.Template;
+import ru.falseteam.schedule.serializable.User;
+import ru.falseteam.schedule.serializable.WeekDay;
 
 /**
  * Содержит основные динамические данные
@@ -28,7 +31,8 @@ public class MainData {
     private static List<Template> templates;
     private static List<LessonNumber> lessonNumbers;
     private static List<Lesson> lessons;
-
+    private static ArrayList<User> users;
+    private static List<WeekDay> weekDays;
 
 
     static void init(Context context) {
@@ -63,6 +67,16 @@ public class MainData {
         Redrawer.redraw();
     }
 
+    public static void setUsers(ArrayList<User> users) {
+        MainData.users = users;
+        Redrawer.redraw();
+    }
+
+    public static void setWeekDays(List<WeekDay> weekDays) {
+        MainData.weekDays = weekDays;
+        Redrawer.redraw();
+    }
+
     // Гетеры
     public static Context getContext() {
         return context.get();
@@ -82,5 +96,13 @@ public class MainData {
 
     public static List<Lesson> getLessons() {
         return lessons;
+    }
+
+    public static ArrayList<User> getUsers() {
+        return users;
+    }
+
+    public static List<WeekDay> getWeekDays() {
+        return weekDays;
     }
 }
