@@ -26,7 +26,7 @@ public class MainData {
     private static Groups currentGroup;
     private static WeakReference<Context> context;
 
-    private static String dataDir;
+    private static String cacheDir;
 
     private static List<Template> templates;
     private static List<LessonNumber> lessonNumbers;
@@ -37,11 +37,11 @@ public class MainData {
 
     static void init(Context context) {
         MainData.context = new WeakReference<>(context);
-        dataDir = context.getApplicationInfo().dataDir + "/cache/";
+        cacheDir = context.getApplicationInfo().dataDir + "/cache";
 
         currentGroup = Groups.disconnected;
 
-        templates = DataLoader.loadFromBinaryFile(dataDir + "/templates.bin");
+        templates = DataLoader.loadFromBinaryFile(cacheDir + "/templates.bin");
     }
 
     public static void setCurrentGroup(Groups currentGroup) {
@@ -53,7 +53,7 @@ public class MainData {
 
     public static void setTemplates(List<Template> templates) {
         MainData.templates = templates;
-        DataLoader.saveToBinaryFile(templates, dataDir + "/templates.bin");
+        DataLoader.saveToBinaryFile(templates, cacheDir + "/templates.bin");
         Redrawer.redraw();
     }
 

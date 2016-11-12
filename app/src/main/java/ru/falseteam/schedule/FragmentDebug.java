@@ -19,6 +19,7 @@ public class FragmentDebug extends Fragment implements Redrawable {
 
     private TextView group;
     private TextView version;
+    private TextView redrawerCallsCounter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,6 +33,7 @@ public class FragmentDebug extends Fragment implements Redrawable {
         View rootView = inflater.inflate(R.layout.fragment_debug, container, false);
         group = (TextView) rootView.findViewById(R.id.group);
         version = (TextView) rootView.findViewById(R.id.version);
+        redrawerCallsCounter = (TextView) rootView.findViewById(R.id.redrawer_calls_counter);
         return rootView;
     }
 
@@ -50,24 +52,12 @@ public class FragmentDebug extends Fragment implements Redrawable {
 
     @Override
     public void redraw() {
-        //TODO спросить зачем тут вообще это было?
-        switch (MainData.getCurrentGroup()) {
-            case disconnected:
-            case developer:
-                break;
-//            case disconnected:
-//                (new FragmentAccessDenied()).init(getActivity(), this, R.string.access_denied_offline, developer);
-//                return;
-            default:
-                ((MainActivity) getActivity()).setFragment(FragmentAccessDenied.init(this, getString(R.string.access_denied_not_allowed), Groups.developer));
-                return;
-        }
-
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 group.setText(MainData.getCurrentGroup().name());
                 version.setText(StaticData.getClientVersion());
+                redrawerCallsCounter.setText(String.valueOf(Redrawer.getRedrawCounter()));
             }
         });
     }
