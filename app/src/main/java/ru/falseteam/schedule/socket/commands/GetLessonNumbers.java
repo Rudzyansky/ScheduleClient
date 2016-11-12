@@ -4,12 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ru.falseteam.schedule.listeners.Redrawer;
+import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.serializable.LessonNumber;
 import ru.falseteam.schedule.socket.CommandAbstract;
 
 public class GetLessonNumbers extends CommandAbstract {
-    public static List<LessonNumber> lessonNumbers;
 
 
     public GetLessonNumbers() {
@@ -19,8 +18,7 @@ public class GetLessonNumbers extends CommandAbstract {
     @SuppressWarnings("unchecked")
     @Override
     public void exec(Map<String, Object> map) {
-        lessonNumbers = (List<LessonNumber>) map.get("lesson_numbers");
-        Redrawer.redraw();
+        MainData.setLessonNumbers((List<LessonNumber>) map.get("lesson_numbers"));
     }
 
     public static Map<String, Object> getRequest() {

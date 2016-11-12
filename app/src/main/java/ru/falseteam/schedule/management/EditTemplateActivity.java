@@ -10,6 +10,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import ru.falseteam.schedule.R;
+import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.listeners.Redrawable;
 import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.Lesson;
@@ -65,8 +66,8 @@ public class EditTemplateActivity extends AppCompatActivity implements Redrawabl
             @Override
             public void run() {
                 if (GetWeekDays.weekDays != null &&
-                        GetLessonNumbers.lessonNumbers != null &&
-                        GetLessons.lessons != null) {
+                        MainData.getLessonNumbers() != null &&
+                        MainData.getLessons() != null) {
                     emptyView.setVisibility(View.GONE);
                     contentView.setVisibility(View.VISIBLE);
                     initView();
@@ -90,7 +91,7 @@ public class EditTemplateActivity extends AppCompatActivity implements Redrawabl
 
         lessonNumber = (Spinner) contentView.findViewById(R.id.lesson_number);
         lessonNumber.setAdapter(new ArrayAdapter<>(contentView.getContext(),
-                android.R.layout.simple_spinner_dropdown_item, GetLessonNumbers.lessonNumbers));
+                android.R.layout.simple_spinner_dropdown_item, MainData.getLessonNumbers()));
         lessonNumber.setSelection(template.lessonNumber.id - 1);
 
         evenness = (Spinner) contentView.findViewById(R.id.evenness);
@@ -100,7 +101,7 @@ public class EditTemplateActivity extends AppCompatActivity implements Redrawabl
 
         lesson = (Spinner) contentView.findViewById(R.id.lesson);
         lesson.setAdapter(new ArrayAdapter<>(contentView.getContext(),
-                android.R.layout.simple_spinner_dropdown_item, GetLessons.lessons));
+                android.R.layout.simple_spinner_dropdown_item, MainData.getLessons()));
         lesson.setSelection(template.lesson.id - 1);
 
         Button save = (Button) findViewById(R.id.btnSave);
