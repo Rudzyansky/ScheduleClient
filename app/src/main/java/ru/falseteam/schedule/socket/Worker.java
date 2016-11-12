@@ -17,8 +17,8 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 
-import ru.falseteam.schedule.R;
 import ru.falseteam.schedule.data.MainData;
+import ru.falseteam.schedule.R;
 import ru.falseteam.schedule.data.StaticData;
 import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.socket.commands.AccessDenied;
