@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.User;
 import ru.falseteam.schedule.socket.CommandAbstract;
@@ -13,12 +14,10 @@ public class GetUsers extends CommandAbstract {
         super("get_users");
     }
 
-    public static ArrayList<User> users;
-
     @SuppressWarnings("unchecked")
     @Override
     public void exec(Map<String, Object> map) {
-        users = (ArrayList<User>) map.get("users");
+        MainData.setUsers((ArrayList<User>) map.get("users"));
         Redrawer.redraw();
     }
 
