@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity
     private Fragment fragmentMain = new FragmentMain();
     private Fragment fragmentManagement = new FragmentManagement();
     private Fragment fragmentDebug = new FragmentDebug();
+
     private View navHeader;
 
     @Override
