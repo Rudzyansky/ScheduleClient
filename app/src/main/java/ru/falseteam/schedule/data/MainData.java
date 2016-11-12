@@ -37,7 +37,7 @@ public class MainData {
 
     static void init(Context context) {
         MainData.context = new WeakReference<>(context);
-        dataDir = context.getApplicationInfo().dataDir;
+        dataDir = context.getApplicationInfo().dataDir + "/cache/";
 
         currentGroup = Groups.disconnected;
 
