@@ -14,10 +14,11 @@ import ru.falseteam.schedule.listeners.Redrawable;
 import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.Groups;
 
+//TODO ПЕРЕДЕЛАТЬ ЭТОТ ТРЭШАК
 public class FragmentDebug extends Fragment implements Redrawable {
 
-    TextView group;
-    TextView version;
+    private TextView group;
+    private TextView version;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,20 +36,21 @@ public class FragmentDebug extends Fragment implements Redrawable {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onResume() {
+        super.onResume();
         Redrawer.add(this);
         redraw();
     }
 
     @Override
-    public void onDestroyView() {
+    public void onPause() {
         Redrawer.remove(this);
-        super.onDestroyView();
+        super.onPause();
     }
 
     @Override
     public void redraw() {
+        //TODO спросить зачем тут вообще это было?
         switch (MainData.getCurrentGroup()) {
             case disconnected:
             case developer:
@@ -60,6 +62,7 @@ public class FragmentDebug extends Fragment implements Redrawable {
                 ((MainActivity) getActivity()).setFragment(FragmentAccessDenied.init(this, getString(R.string.access_denied_not_allowed), Groups.developer));
                 return;
         }
+
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
