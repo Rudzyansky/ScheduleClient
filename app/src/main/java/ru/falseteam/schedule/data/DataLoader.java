@@ -2,6 +2,12 @@ package ru.falseteam.schedule.data;
 
 import android.content.Context;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 import ru.falseteam.schedule.listeners.Redrawer;
 
 public class DataLoader {
@@ -13,13 +19,40 @@ public class DataLoader {
         Redrawer.redraw();
     }
 
-    static Object loadFromBinaryFile(String path) {
-        //TODO дописать это немного позже когда будет протестировано что дата работает корректно.
-        return null;
+    /**
+     * @param path path to file.
+     * @param <T>  binary file cast to T
+     * @return {T} if successfully read binary file of {null} if not.
+     */
+    @SuppressWarnings("unchecked")
+    static <T> T loadFromBinaryFile(String path) {
+        T data;
+        try {
+            ObjectInputStream stream = new ObjectInputStream(new FileInputStream(path));
+            data = (T) stream.readObject();
+            stream.close();
+        } catch (IOException | ClassNotFoundException e) {
+            return null;
+        }
+        return data;
     }
 
-    static void saveToBinaryFile(Object data, String path) {
 
+    /**
+     * @param data data to save
+     * @param path path to save
+     * @param <T>  type of data
+     * @throws {@link RuntimeException} if can not save file.
+     */
+    @SuppressWarnings("JavaDoc")
+    static <T> void saveToBinaryFile(T data, String path) {
+        try {
+            ObjectOutputStream stream = new ObjectOutputStream(new FileOutputStream(path));
+            stream.writeObject(data);
+            stream.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

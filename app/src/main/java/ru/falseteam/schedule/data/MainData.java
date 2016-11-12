@@ -61,7 +61,7 @@ public class MainData {
     //Загружалки
 
     @SuppressWarnings("unchecked")
-    public static void loadTemplates() {
+    private static void loadTemplates() {
         try {
             File file = new File(context.get().getApplicationInfo().dataDir + "/templates.bin");
             if (!file.exists()) return;
