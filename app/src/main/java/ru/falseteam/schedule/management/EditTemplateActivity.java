@@ -65,7 +65,7 @@ public class EditTemplateActivity extends AppCompatActivity implements Redrawabl
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (GetWeekDays.weekDays != null &&
+                if (MainData.getWeekDays() != null &&
                         MainData.getLessonNumbers() != null &&
                         MainData.getLessons() != null) {
                     emptyView.setVisibility(View.GONE);
@@ -86,7 +86,7 @@ public class EditTemplateActivity extends AppCompatActivity implements Redrawabl
 
         dayOfWeek = (Spinner) contentView.findViewById(R.id.day_of_week);
         dayOfWeek.setAdapter(new ArrayAdapter<>(contentView.getContext(),
-                android.R.layout.simple_spinner_dropdown_item, GetWeekDays.weekDays));
+                android.R.layout.simple_spinner_dropdown_item, MainData.getWeekDays()));
         dayOfWeek.setSelection(template.weekDay.id - 1);
 
         lessonNumber = (Spinner) contentView.findViewById(R.id.lesson_number);

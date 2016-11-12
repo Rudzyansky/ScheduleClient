@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.falseteam.schedule.R;
+import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.listeners.Redrawable;
 import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.User;
@@ -87,10 +88,10 @@ public class ListOfUsersActivity extends AppCompatActivity implements Redrawable
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (GetUsers.users != null) {
+                if (MainData.getUsers() != null) {
                     progressBar.setVisibility(View.INVISIBLE);
                     textView.setText(R.string.empty_list);
-                    adapter.setObjects(GetUsers.users);
+                    adapter.setObjects(MainData.getUsers());
                 }
             }
         });
