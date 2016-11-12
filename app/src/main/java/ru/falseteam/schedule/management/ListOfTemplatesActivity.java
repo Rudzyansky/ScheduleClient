@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.falseteam.schedule.R;
+import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.listeners.Redrawable;
 import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.Template;
@@ -82,7 +83,7 @@ public class ListOfTemplatesActivity extends AppCompatActivity implements Redraw
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (GetTemplates.templates != null) {
+                if (MainData.getTemplates() != null) {
                     emptyView.setVisibility(View.GONE);
                     viewPager.setVisibility(View.VISIBLE);
                 }
@@ -161,7 +162,7 @@ public class ListOfTemplatesActivity extends AppCompatActivity implements Redraw
 
             public Adapter(Context context, int dayOfWeek) {
                 this.context = context;
-                for (Template t : GetTemplates.templates)
+                for (Template t : MainData.getTemplates())
                     if (t.weekDay.id == dayOfWeek + 1) templates.add(t);
             }
 
