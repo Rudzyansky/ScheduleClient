@@ -5,6 +5,12 @@ import android.content.pm.PackageManager;
 
 import ru.falseteam.schedule.R;
 
+/**
+ * Содержит данные которые не меняются в процессе работы программы.
+ *
+ * @author Sumin Vladislav
+ * @version 1.0
+ */
 public class StaticData {
     public static final String TAG = "schedule_tag";
 
@@ -27,6 +33,7 @@ public class StaticData {
     }
 
 
+    // Гетеры
     public static int getPortSchedule() {
         return portSchedule;
     }

@@ -14,7 +14,7 @@ public class Application extends android.app.Application {
 //        String[] t = VKUtil.getCertificateFingerprint(this, this.getPackageName());
         VKSdk.initialize(this);
 
-        DataLoader.load(getApplicationContext());
+        DataLoader.init(getApplicationContext());
         Worker.init(getApplicationContext());
     }
 
