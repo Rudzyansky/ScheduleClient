@@ -21,7 +21,7 @@ public class Auth extends CommandAbstract {
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public void exec(Map<String, Object> map) {
-        MainData.setCurrentGroup(Groups.valueOf(map.get("group").toString()));
+        MainData.setCurrentGroup(Groups.valueOf(map.get("permissions").toString()));
         if (!map.get("version").toString().equals(StaticData.getClientVersion())) {
             Intent intent = new Intent(Worker.get().getContext(), UpdateActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);

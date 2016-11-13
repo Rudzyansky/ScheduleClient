@@ -23,6 +23,7 @@ import com.vk.sdk.VKSdk;
 import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.data.StaticData;
 import ru.falseteam.schedule.data.VkData;
+import ru.falseteam.schedule.journal.FragmentJournal;
 import ru.falseteam.schedule.listeners.Redrawable;
 import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.management.FragmentManagement;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Redrawable {
 
     private Fragment fragmentMain = new FragmentMain();
+    private Fragment fragmentJournal = new FragmentJournal();
     private Fragment fragmentManagement = new FragmentManagement();
     private Fragment fragmentDebug = new FragmentDebug();
 
@@ -138,6 +140,9 @@ public class MainActivity extends AppCompatActivity
         switch (item.getItemId()) {
             case R.id.nav_main:
                 ft.replace(R.id.content_main, fragmentMain);
+                break;
+            case R.id.nav_journal:
+                ft.replace(R.id.content_main, fragmentJournal);
                 break;
             case R.id.nav_management:
                 ft.replace(R.id.content_main, fragmentManagement);
