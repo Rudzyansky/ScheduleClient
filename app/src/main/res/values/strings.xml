@@ -9,6 +9,7 @@
     <string name="title_fragment_main">Расписание</string>
     <string name="title_fragment_debug">Отладка</string>
     <string name="title_fragment_management">Управление</string>
+    <string name="title_fragment_journal">Журнал</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -22,7 +23,7 @@
     <string name="update_string_new">Новая версия:</string>
     <string name="update_action_update">Обновить</string>
     <string name="update_action_cancel">Отложить</string>
-    <string name="about">about</string>
+    <string name="about">О программе</string>
     <string name="about_message">Авторы:\nЕвгений Рудзянский\nВладислав Сумин\n\nВерсия: %s</string>
     <string name="edit_template">Редактирование шаблона</string>
     <string name="label_id">ID</string>

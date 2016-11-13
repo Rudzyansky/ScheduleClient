@@ -56,7 +56,7 @@ public class EditUserActivity extends AppCompatActivity implements View.OnClickL
         group = (Spinner) findViewById(R.id.group);
         group.setAdapter(adapter);
         group.setPrompt("Группа доступа");
-        group.setSelection(groups.indexOf(user.group.name()));
+        group.setSelection(groups.indexOf(user.permissions.name()));
 
         if (user.exists) this.vkId.setVisibility(View.GONE);
         else userVkId.setVisibility(View.GONE);
@@ -71,7 +71,7 @@ public class EditUserActivity extends AppCompatActivity implements View.OnClickL
         switch (view.getId()) {
             case R.id.btnSave:
                 user.name = name.getText().toString();
-                user.group = Groups.valueOf(groups.get(group.getSelectedItemPosition()));
+                user.permissions = Groups.valueOf(groups.get(group.getSelectedItemPosition()));
                 if (!user.exists) user.vkId = Integer.parseInt(vkId.getText().toString());
                 map.put("command", "update_user");
                 break;

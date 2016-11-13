@@ -9,6 +9,7 @@ import java.util.List;
 import ru.falseteam.schedule.listeners.OnChangeGroup;
 import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.Groups;
+import ru.falseteam.schedule.serializable.JournalRecord;
 import ru.falseteam.schedule.serializable.Lesson;
 import ru.falseteam.schedule.serializable.LessonNumber;
 import ru.falseteam.schedule.serializable.Template;
@@ -33,6 +34,7 @@ public class MainData {
     private static List<Lesson> lessons;
     private static ArrayList<User> users;
     private static List<WeekDay> weekDays;
+    private static List<JournalRecord> journal;
 
 
     static void init(Context context) {
@@ -77,7 +79,12 @@ public class MainData {
         Redrawer.redraw();
     }
 
-    // Гетеры
+    public static void setJournal(List<JournalRecord> journal) {
+        MainData.journal = journal;
+        Redrawer.redraw();
+    }
+
+    // Геттеры
     public static Context getContext() {
         return context.get();
     }
@@ -104,5 +111,9 @@ public class MainData {
 
     public static List<WeekDay> getWeekDays() {
         return weekDays;
+    }
+
+    public static List<JournalRecord> getJournal() {
+        return journal;
     }
 }
