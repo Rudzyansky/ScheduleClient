@@ -133,7 +133,7 @@ public class ListOfUsersActivity extends AppCompatActivity implements Redrawable
             User user = (User) getItem(position);
 
             ((TextView) convertView.findViewById(R.id.name)).setText(user.name);
-            ((TextView) convertView.findViewById(R.id.group)).setText(user.group.name());
+            ((TextView) convertView.findViewById(R.id.group)).setText(user.permissions.name());
             return convertView;
         }
     }

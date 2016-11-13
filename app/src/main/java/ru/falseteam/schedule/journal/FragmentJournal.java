@@ -1,4 +1,4 @@
-package ru.falseteam.schedule;
+package ru.falseteam.schedule.journal;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,28 +17,27 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 
+import ru.falseteam.schedule.R;
 import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.listeners.OnChangeGroup;
 import ru.falseteam.schedule.listeners.OnChangeGroupListener;
 import ru.falseteam.schedule.listeners.Redrawable;
 import ru.falseteam.schedule.listeners.Redrawer;
-import ru.falseteam.schedule.management.EditTemplateActivity;
 import ru.falseteam.schedule.serializable.Groups;
-import ru.falseteam.schedule.serializable.Template;
+import ru.falseteam.schedule.serializable.JournalRecord;
 import ru.falseteam.schedule.socket.Worker;
-import ru.falseteam.schedule.socket.commands.GetTemplates;
+import ru.falseteam.schedule.socket.commands.GetJournal;
 
-public class FragmentMain extends Fragment implements Redrawable, OnChangeGroupListener {
+public class FragmentJournal extends Fragment implements Redrawable, OnChangeGroupListener {
     private View emptyView;
     private ViewPager viewPager;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setTitle(R.string.title_fragment_main);
+        getActivity().setTitle(R.string.title_fragment_journal);
     }
 
     @Nullable
@@ -50,11 +49,8 @@ public class FragmentMain extends Fragment implements Redrawable, OnChangeGroupL
         viewPager = (ViewPager) rootView.findViewById(R.id.content);
         Adapter adapter = new Adapter(getChildFragmentManager());
         viewPager.setAdapter(adapter);
-        Calendar c = GregorianCalendar.getInstance();
-        int day = c.get(Calendar.DAY_OF_WEEK) - 2;
-        if (day == -1) day = 7;
 
-        viewPager.setCurrentItem(day);
+        viewPager.setCurrentItem(MainData.getJournal().size());
 
         OnChangeGroup.add(this, Groups.user, Groups.admin, Groups.developer);
         Redrawer.add(this);
@@ -74,7 +70,7 @@ public class FragmentMain extends Fragment implements Redrawable, OnChangeGroupL
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (MainData.getTemplates() != null) {
+                if (MainData.getJournal() != null) {
                     emptyView.setVisibility(View.GONE);
                     viewPager.setVisibility(View.VISIBLE);
                 }
@@ -84,7 +80,7 @@ public class FragmentMain extends Fragment implements Redrawable, OnChangeGroupL
 
     @Override
     public void onChangeGroup() {
-        Worker.sendFromMainThread(GetTemplates.getRequest());
+        Worker.sendFromMainThread(GetJournal.getRequest());
     }
 
     /**
@@ -113,9 +109,9 @@ public class FragmentMain extends Fragment implements Redrawable, OnChangeGroupL
         public InnerFragment() {
         }
 
-        private void openTemplateEditor(Template template) {
-            Intent intent = new Intent(getActivity(), EditTemplateActivity.class);
-            intent.putExtra("template", template);
+        private void openRecordEditor(JournalRecord record) {
+            Intent intent = new Intent(getActivity(), EditRecordActivity.class);
+            intent.putExtra("record", record);
             startActivity(intent);
         }
 
@@ -145,25 +141,24 @@ public class FragmentMain extends Fragment implements Redrawable, OnChangeGroupL
 
         private class Adapter extends BaseAdapter {
             private Context context;
-            private List<Template> templates = new ArrayList<>();
+            private List<JournalRecord> journal = new ArrayList<>();
 
             public Adapter(Context context, int dayOfWeek) {
                 this.context = context;
                 Calendar c = Calendar.getInstance();
-                int evenness = (c.get(Calendar.WEEK_OF_YEAR) - 1) % 2;
-                for (Template t : MainData.getTemplates())
-                    if (t.weekDay.id == dayOfWeek + 1 && (t.weekEvenness == 0 || t.weekEvenness - 1 == evenness))
-                        templates.add(t);
+                for (JournalRecord record : MainData.getJournal())
+                    if (record.weekDay.id == dayOfWeek + 1)
+                        journal.add(record);
             }
 
             @Override
             public int getCount() {
-                return templates.size();
+                return journal.size();
             }
 
             @Override
-            public Template getItem(int position) {
-                return templates.get(position);
+            public JournalRecord getItem(int position) {
+                return journal.get(position);
             }
 
             @Override
@@ -176,14 +171,14 @@ public class FragmentMain extends Fragment implements Redrawable, OnChangeGroupL
                 if (convertView == null)
                     convertView = LayoutInflater.from(context)
                             .inflate(R.layout.item_template, parent, false);
-                Template t = getItem(position);
-                ((TextView) convertView.findViewById(R.id.lesson_number)).setText(String.valueOf(t.lessonNumber.id));
+                JournalRecord record = getItem(position);
+                ((TextView) convertView.findViewById(R.id.lesson_number)).setText(String.valueOf(record.lessonNumber.id));
                 ((TextView) convertView.findViewById(R.id.begin))
-                        .setText(t.lessonNumber.begin.toString().substring(0, 5));
+                        .setText(record.lessonNumber.begin.toString().substring(0, 5));
                 ((TextView) convertView.findViewById(R.id.end))
-                        .setText(t.lessonNumber.end.toString().substring(0, 5));
-                ((TextView) convertView.findViewById(R.id.name)).setText(t.lesson.name);
-                ((TextView) convertView.findViewById(R.id.audience)).setText(t.lesson.audience);
+                        .setText(record.lessonNumber.end.toString().substring(0, 5));
+                ((TextView) convertView.findViewById(R.id.name)).setText(record.lesson.name);
+                ((TextView) convertView.findViewById(R.id.audience)).setText(record.lesson.audience);
                 return convertView;
             }
         }

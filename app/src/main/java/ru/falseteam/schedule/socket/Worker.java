@@ -23,6 +23,7 @@ import ru.falseteam.schedule.data.StaticData;
 import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.socket.commands.AccessDenied;
 import ru.falseteam.schedule.socket.commands.Auth;
+import ru.falseteam.schedule.socket.commands.GetJournal;
 import ru.falseteam.schedule.socket.commands.GetLessonNumbers;
 import ru.falseteam.schedule.socket.commands.GetLessons;
 import ru.falseteam.schedule.socket.commands.GetTemplates;
@@ -53,6 +54,7 @@ public class Worker implements Runnable {
         addCommand(new GetTemplates());
         addCommand(new GetWeekDays());
         addCommand(new GetLessonNumbers());
+        addCommand(new GetJournal());
     }
 
     public Context getContext() {

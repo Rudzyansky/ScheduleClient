@@ -4,7 +4,10 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_main"
-            android:title="@string/app_name" />
+            android:title="@string/title_fragment_main" />
+        <item
+            android:id="@+id/nav_journal"
+            android:title="@string/title_fragment_journal" />
         <item
             android:id="@+id/nav_management"
             android:title="@string/title_fragment_management" />
