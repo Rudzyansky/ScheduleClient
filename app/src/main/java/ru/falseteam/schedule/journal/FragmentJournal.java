@@ -145,7 +145,6 @@ public class FragmentJournal extends Fragment implements Redrawable, OnChangeGro
 
             public Adapter(Context context, int dayOfWeek) {
                 this.context = context;
-                Calendar c = Calendar.getInstance();
                 for (JournalRecord record : MainData.getJournal())
                     if (record.weekDay.id == dayOfWeek + 1)
                         journal.add(record);
