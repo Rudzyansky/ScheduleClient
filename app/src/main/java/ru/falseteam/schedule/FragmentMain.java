@@ -57,6 +57,7 @@ public class FragmentMain extends Fragment implements Redrawable, OnChangeGroupL
         viewPager.setCurrentItem(day);
 
         OnChangeGroup.add(this, Groups.user, Groups.admin, Groups.developer);
+        onChangeGroup();
         Redrawer.add(this);
         redraw();
         return rootView;
