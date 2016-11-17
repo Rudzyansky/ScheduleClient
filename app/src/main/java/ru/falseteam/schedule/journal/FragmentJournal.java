@@ -11,12 +11,13 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import ru.falseteam.schedule.R;
@@ -50,9 +51,10 @@ public class FragmentJournal extends Fragment implements Redrawable, OnChangeGro
         Adapter adapter = new Adapter(getChildFragmentManager());
         viewPager.setAdapter(adapter);
 
-        viewPager.setCurrentItem(MainData.getJournal().size());
+        viewPager.setCurrentItem(MainData.getJournal() == null ? 0 : MainData.getJournal().size());
 
-        OnChangeGroup.add(this, Groups.user, Groups.admin, Groups.developer);
+        OnChangeGroup.add(this, Groups.admin, Groups.developer);
+        onChangeGroup();
         Redrawer.add(this);
         redraw();
         return rootView;
@@ -93,18 +95,18 @@ public class FragmentJournal extends Fragment implements Redrawable, OnChangeGro
 
         @Override
         public Fragment getItem(int position) {
-            return InnerFragment.newInstance(position);
+            return InnerFragment.newInstance(MainData.getJournal().get(position).date);
         }
 
         @Override
         public int getCount() {
-            return 7;
+            return MainData.getJournal() == null ? 0 : MainData.getJournal().size();
         }
     }
 
 
     public static class InnerFragment extends Fragment {
-        private int dayOfWeek;
+        private java.sql.Date date;
 
         public InnerFragment() {
         }
@@ -121,21 +123,28 @@ public class FragmentJournal extends Fragment implements Redrawable, OnChangeGro
             View root = inflater.inflate(R.layout.fragment_templates, container, false);
 
             TextView tv = (TextView) root.findViewById(R.id.day_of_week);
-            tv.setText(getResources().getStringArray(R.array.week_days)[dayOfWeek]);
+            tv.setText(date.toString());
 
-            final Adapter adapter = new Adapter(root.getContext(), dayOfWeek);
+            final Adapter adapter = new Adapter(root.getContext(), new java.sql.Date(new Date().getTime()));
             ListView list = (ListView) root.findViewById(R.id.list);
             View view = root.findViewById(R.id.emptyView);
             view.findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
             list.setEmptyView(view);
             list.setAdapter(adapter);
 
+            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    openRecordEditor(MainData.getJournal().get(position));
+                }
+            });
+
             return root;
         }
 
-        public static InnerFragment newInstance(int dayOfWeek) {
+        public static InnerFragment newInstance(java.sql.Date date) {
             InnerFragment fragment = new InnerFragment();
-            fragment.dayOfWeek = dayOfWeek;
+            fragment.date = date;
             return fragment;
         }
 
@@ -143,10 +152,10 @@ public class FragmentJournal extends Fragment implements Redrawable, OnChangeGro
             private Context context;
             private List<JournalRecord> journal = new ArrayList<>();
 
-            public Adapter(Context context, int dayOfWeek) {
+            Adapter(Context context, java.sql.Date date) {
                 this.context = context;
                 for (JournalRecord record : MainData.getJournal())
-                    if (record.weekDay.id == dayOfWeek + 1)
+                    if (record.date == date)
                         journal.add(record);
             }
 
