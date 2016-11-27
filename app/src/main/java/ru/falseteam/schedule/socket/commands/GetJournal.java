@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import ru.falseteam.schedule.data.MainData;
+import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.JournalRecord;
 import ru.falseteam.schedule.socket.CommandAbstract;
 
@@ -18,6 +19,7 @@ public class GetJournal extends CommandAbstract {
     @Override
     public void exec(Map<String, Object> map) {
         MainData.setJournal((List<JournalRecord>) map.get("journal"));
+        Redrawer.redraw();
     }
 
     public static Map<String, Object> getRequest() {
