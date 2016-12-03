@@ -44,19 +44,23 @@ public class FragmentJournal extends Fragment implements Redrawable, OnChangeGro
                         .setFragment(InnerFragment.newInstance(new java.sql.Date(date.getDate().getTime())));
             }
         });
-
-        OnChangeGroup.add(this, Groups.admin, Groups.developer);
-        onChangeGroup();
-        Redrawer.add(this);
-        redraw();
         return rootView;
     }
 
     @Override
-    public void onDestroy() {
+    public void onResume() {
+        super.onResume();
+        OnChangeGroup.add(this, Groups.admin, Groups.developer);
+        onChangeGroup();
+        Redrawer.add(this);
+        redraw();
+    }
+
+    @Override
+    public void onPause() {
         OnChangeGroup.remove(this);
         Redrawer.remove(this);
-        super.onDestroy();
+        super.onPause();
     }
 
     @Override

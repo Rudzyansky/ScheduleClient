@@ -46,7 +46,7 @@ public class InnerFragment extends Fragment implements Redrawable {
         TextView tv = (TextView) root.findViewById(R.id.day_of_week);
         tv.setText(date.toString());
 
-        adapter = new Adapter(root.getContext(), new java.sql.Date(new Date().getTime()));
+        adapter = new Adapter(root.getContext(), date);
         ListView list = (ListView) root.findViewById(R.id.list);
         View view = root.findViewById(R.id.emptyView);
         view.findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
@@ -56,12 +56,9 @@ public class InnerFragment extends Fragment implements Redrawable {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                openRecordEditor(MainData.getJournal().get(position));
+                openRecordEditor(adapter.journal.get(position));
             }
         });
-
-        Redrawer.add(this);
-        redraw();
 
         Worker.sendFromMainThread(GetJournal.getRequest());
         return root;
@@ -73,9 +70,16 @@ public class InnerFragment extends Fragment implements Redrawable {
     }
 
     @Override
-    public void onDestroy() {
+    public void onResume() {
+        super.onResume();
+        Redrawer.add(this);
+        redraw();
+    }
+
+    @Override
+    public void onPause() {
         Redrawer.remove(this);
-        super.onDestroy();
+        super.onPause();
     }
 
     public static InnerFragment newInstance(java.sql.Date date) {
@@ -87,7 +91,7 @@ public class InnerFragment extends Fragment implements Redrawable {
 
     private class Adapter extends BaseAdapter {
         private Context context;
-        private List<JournalRecord> journal = new ArrayList<>();
+        List<JournalRecord> journal = new ArrayList<>();
         private java.sql.Date date;
 
         Adapter(Context context, java.sql.Date date) {
