@@ -46,18 +46,22 @@ public class EditRecordActivity extends AppCompatActivity implements Redrawable,
 
         template = (Template) getIntent().getSerializableExtra("template");
 
-        Redrawer.add(this);
-        redraw();
-
         Worker.sendFromMainThread(GetWeekDays.getRequest());
         Worker.sendFromMainThread(GetLessonNumbers.getRequest());
         Worker.sendFromMainThread(GetLessons.getRequest());
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onResume() {
+        super.onResume();
+        Redrawer.add(this);
+        redraw();
+    }
+
+    @Override
+    protected void onPause() {
         Redrawer.remove(this);
-        super.onDestroy();
+        super.onPause();
     }
 
     @Override
