@@ -1,6 +1,7 @@
 package ru.falseteam.schedule.serializable;
 
 import java.io.Serializable;
+import java.util.BitSet;
 
 /**
  * Structure contains all information about template.
@@ -14,7 +15,7 @@ public class Template implements Serializable {
     public WeekDay weekDay;
     public LessonNumber lessonNumber;
     public Lesson lesson;
-    public int weekEvenness;
+    public BitSet weeks;
 
     @Override
     public boolean equals(Object o) {
@@ -25,13 +26,12 @@ public class Template implements Serializable {
 
         if (exists != template.exists) return false;
         if (id != template.id) return false;
-        if (weekEvenness != template.weekEvenness) return false;
+        if (weeks != template.weeks) return false;
         if (weekDay != null ? !weekDay.equals(template.weekDay) : template.weekDay != null)
             return false;
         if (lessonNumber != null ? !lessonNumber.equals(template.lessonNumber) : template.lessonNumber != null)
             return false;
         return lesson != null ? lesson.equals(template.lesson) : template.lesson == null;
-
     }
 
     @Override
@@ -41,7 +41,7 @@ public class Template implements Serializable {
         result = 31 * result + (weekDay != null ? weekDay.hashCode() : 0);
         result = 31 * result + (lessonNumber != null ? lessonNumber.hashCode() : 0);
         result = 31 * result + (lesson != null ? lesson.hashCode() : 0);
-        result = 31 * result + weekEvenness;
+        result = 31 * result + weeks.hashCode();
         return result;
     }
 
@@ -56,6 +56,7 @@ public class Template implements Serializable {
             template.weekDay = new WeekDay();
             template.lessonNumber = new LessonNumber();
             template.lesson = Lesson.Factory.getDefault();
+            template.weeks = new BitSet(32);
             return template;
         }
     }

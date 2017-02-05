@@ -80,6 +80,6 @@ public class FragmentJournal extends Fragment implements Redrawable, OnChangeGro
 
     @Override
     public void onChangeGroup() {
-        Worker.sendFromMainThread(GetJournal.getRequest());
+        Worker.get().sendFromMainThread(GetJournal.getRequest());
     }
 }

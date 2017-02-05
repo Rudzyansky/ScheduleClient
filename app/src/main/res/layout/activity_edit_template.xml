@@ -86,7 +86,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center_vertical"
-                android:text="@string/evenness" />
+                android:text="@string/weeks" />
 
             <Spinner
                 android:id="@+id/evenness"
@@ -94,6 +94,27 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center_vertical" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/weeks"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/grid_height"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/total_weeks"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center_vertical"
+                android:text="" />
+
+            <ru.falseteam.schedule.management.MultiSpinner
+                android:id="@+id/choose_weeks"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
         </TableRow>
 
         <TableRow

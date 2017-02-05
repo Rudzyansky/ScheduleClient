@@ -10,17 +10,14 @@ import ru.falseteam.schedule.UpdateActivity;
 import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.data.StaticData;
 import ru.falseteam.schedule.serializable.Groups;
-import ru.falseteam.schedule.socket.CommandAbstract;
 import ru.falseteam.schedule.socket.Worker;
+import ru.falseteam.vframe.socket.ClientProtocolAbstract;
+import ru.falseteam.vframe.socket.ClientSocketWorker;
+import ru.falseteam.vframe.socket.Container;
 
-public class Auth extends CommandAbstract {
-    public Auth() {
-        super("auth");
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
+public class Auth extends ClientProtocolAbstract {
     @Override
-    public void exec(Map<String, Object> map) {
+    public void exec(Map<String, Object> map, ClientSocketWorker worker) {
         MainData.setCurrentGroup(Groups.valueOf(map.get("permissions").toString()));
         if (!map.get("version").toString().equals(StaticData.getClientVersion())) {
             Intent intent = new Intent(Worker.get().getContext(), UpdateActivity.class);
@@ -30,12 +27,12 @@ public class Auth extends CommandAbstract {
         }
     }
 
-    public static Map<String, Object> getRequest(String token) {
+    public static Container getRequest(String token) {
         Map<String, Object> map = new HashMap<>();
         map.put("command", "auth");
         map.put("token", token);
         map.put("app_version", StaticData.getClientVersion());
         map.put("sdk_version", Build.VERSION.SDK_INT);
-        return map;
+        return new Container(Auth.class.getSimpleName(), map);
     }
 }

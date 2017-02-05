@@ -26,6 +26,7 @@
     <string name="about">О программе</string>
     <string name="about_message">Авторы:\nЕвгений Рудзянский\nВладислав Сумин\n\nВерсия: %s</string>
     <string name="edit_template">Редактирование шаблона</string>
+    <string name="choose_weeks">Выбор недель</string>
     <string name="label_id">ID</string>
     <string name="label_name">Name</string>
     <string name="label_audience">Audience</string>
@@ -40,12 +41,14 @@
     <string name="label_week_day">День недели</string>
     <string name="label_lesson_number">Номер пары</string>
     <string name="label_lesson">Предмет</string>
-    <string name="evenness">Четность</string>
+    <string name="weeks">Недели</string>
+    <string name="choose">Выбрать</string>
 
     <string-array name="evenness">
         <item>Каждую неделю</item>
-        <item>По четным</item>
         <item>По нечетным</item>
+        <item>По четным</item>
+        <item>Выбрать вручную</item>
     </string-array>
 
     <string-array name="week_days">

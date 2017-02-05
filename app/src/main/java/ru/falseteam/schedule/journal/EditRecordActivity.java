@@ -46,9 +46,9 @@ public class EditRecordActivity extends AppCompatActivity implements Redrawable,
 
         template = (Template) getIntent().getSerializableExtra("template");
 
-        Worker.sendFromMainThread(GetWeekDays.getRequest());
-        Worker.sendFromMainThread(GetLessonNumbers.getRequest());
-        Worker.sendFromMainThread(GetLessons.getRequest());
+        Worker.get().sendFromMainThread(GetWeekDays.getRequest());
+        Worker.get().sendFromMainThread(GetLessonNumbers.getRequest());
+        Worker.get().sendFromMainThread(GetLessons.getRequest());
     }
 
     @Override
@@ -101,7 +101,8 @@ public class EditRecordActivity extends AppCompatActivity implements Redrawable,
         evenness = (Spinner) contentView.findViewById(R.id.evenness);
         evenness.setAdapter(new ArrayAdapter<>(contentView.getContext(),
                 android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.evenness)));
-        evenness.setSelection(template.weekEvenness);
+        // TODO: 04.02.17
+//        evenness.setSelection(template.weekEvenness);
 
         lesson = (Spinner) contentView.findViewById(R.id.lesson);
         lesson.setAdapter(new ArrayAdapter<>(contentView.getContext(),
@@ -121,15 +122,16 @@ public class EditRecordActivity extends AppCompatActivity implements Redrawable,
             case R.id.btnSave:
                 template.weekDay = (WeekDay) dayOfWeek.getSelectedItem();
                 template.lessonNumber = (LessonNumber) lessonNumber.getSelectedItem();
-                template.weekEvenness = evenness.getSelectedItemPosition();
+                // TODO: 04.02.17
+//                template.weekEvenness = evenness.getSelectedItemPosition();
                 template.lesson = (Lesson) lesson.getSelectedItem();
-                Worker.sendFromMainThread(UpdateTemplate.getRequest(template));
+                Worker.get().sendFromMainThread(UpdateTemplate.getRequest(template));
                 break;
             case R.id.btnDelete:
-                Worker.sendFromMainThread(DeleteTemplate.getRequest(template));
+                Worker.get().sendFromMainThread(DeleteTemplate.getRequest(template));
                 break;
         }
         finish();
-        Worker.sendFromMainThread(GetTemplates.getRequest());
+        Worker.get().sendFromMainThread(GetTemplates.getRequest());
     }
 }
