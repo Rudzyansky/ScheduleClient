@@ -13,6 +13,7 @@ import ru.falseteam.schedule.R;
 import ru.falseteam.schedule.serializable.Lesson;
 import ru.falseteam.schedule.socket.Worker;
 import ru.falseteam.schedule.socket.commands.GetLessons;
+import ru.falseteam.vframe.socket.Container;
 
 public class EditLessonActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -57,15 +58,16 @@ public class EditLessonActivity extends AppCompatActivity implements View.OnClic
                 lesson.teacher = teacher.getText().toString();
                 lesson.lastTask = lastTask.getText().toString();
                 map.clear();
-                map.put("command", "update_lesson");
+                map.put("command", "UpdateLesson");
                 break;
             case R.id.btnDelete:
-                map.put("command", "delete_lesson");
+                map.put("command", "DeleteLesson");
                 break;
         }
         map.put("lesson", lesson);
-        Worker.sendFromMainThread(map);
+        // TODO: 05.02.17 fix it ...
+        Worker.get().sendFromMainThread(new Container(map.get("command").toString(), map));
         finish();
-        Worker.sendFromMainThread(GetLessons.getRequest());
+        Worker.get().sendFromMainThread(GetLessons.getRequest());
     }
 }

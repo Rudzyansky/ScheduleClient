@@ -7,24 +7,21 @@ import java.util.Map;
 import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.WeekDay;
-import ru.falseteam.schedule.socket.CommandAbstract;
+import ru.falseteam.vframe.socket.ClientProtocolAbstract;
+import ru.falseteam.vframe.socket.ClientSocketWorker;
+import ru.falseteam.vframe.socket.Container;
 
-public class GetWeekDays extends CommandAbstract {
-
-    public GetWeekDays() {
-        super("get_week_days");
-    }
-
+public class GetWeekDays extends ClientProtocolAbstract {
     @SuppressWarnings("unchecked")
     @Override
-    public void exec(Map<String, Object> map) {
+    public void exec(Map<String, Object> map, ClientSocketWorker worker) {
         MainData.setWeekDays((List<WeekDay>) map.get("week_days"));
         Redrawer.redraw();
     }
 
-    public static Map<String, Object> getRequest() {
+    public static Container getRequest() {
         Map<String, Object> map = new HashMap<>();
         map.put("command", "get_week_days");
-        return map;
+        return new Container(GetWeekDays.class.getSimpleName(), map);
     }
 }

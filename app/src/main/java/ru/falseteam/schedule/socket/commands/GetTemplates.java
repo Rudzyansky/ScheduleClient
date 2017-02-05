@@ -6,23 +6,21 @@ import java.util.Map;
 
 import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.serializable.Template;
-import ru.falseteam.schedule.socket.CommandAbstract;
+import ru.falseteam.vframe.socket.ClientProtocolAbstract;
+import ru.falseteam.vframe.socket.ClientSocketWorker;
+import ru.falseteam.vframe.socket.Container;
 
-public class GetTemplates extends CommandAbstract {
-
-    public GetTemplates() {
-        super("get_templates");
-    }
+public class GetTemplates extends ClientProtocolAbstract {
 
     @SuppressWarnings("unchecked")
     @Override
-    public void exec(Map<String, Object> map) {
+    public void exec(Map<String, Object> map, ClientSocketWorker worker) {
         MainData.setTemplates((List<Template>) map.get("templates"));
     }
 
-    public static Map<String, Object> getRequest() {
+    public static Container getRequest() {
         Map<String, Object> map = new HashMap<>();
         map.put("command", "get_templates");
-        return map;
+        return new Container(GetTemplates.class.getSimpleName(), map);
     }
 }

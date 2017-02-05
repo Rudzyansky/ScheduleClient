@@ -60,7 +60,7 @@ public class InnerFragment extends Fragment implements Redrawable {
             }
         });
 
-        Worker.sendFromMainThread(GetJournal.getRequest());
+        Worker.get().sendFromMainThread(GetJournal.getRequest());
         return root;
     }
 

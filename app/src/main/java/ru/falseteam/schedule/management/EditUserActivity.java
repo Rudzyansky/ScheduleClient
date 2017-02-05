@@ -19,6 +19,7 @@ import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.serializable.User;
 import ru.falseteam.schedule.socket.Worker;
 import ru.falseteam.schedule.socket.commands.GetUsers;
+import ru.falseteam.vframe.socket.Container;
 
 public class EditUserActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -73,15 +74,16 @@ public class EditUserActivity extends AppCompatActivity implements View.OnClickL
                 user.name = name.getText().toString();
                 user.permissions = Groups.valueOf(groups.get(group.getSelectedItemPosition()));
                 if (!user.exists) user.vkId = Integer.parseInt(vkId.getText().toString());
-                map.put("command", "update_user");
+                map.put("command", "UpdateUser");
                 break;
             case R.id.btnDelete:
-                map.put("command", "delete_user");
+                map.put("command", "DeleteUser");
                 break;
         }
         map.put("user", user);
-        Worker.sendFromMainThread(map);
+        // TODO: 05.02.17 fix it ...
+        Worker.get().sendFromMainThread(new Container(map.get("command").toString(), map));
         finish();
-        Worker.sendFromMainThread(GetUsers.getRequest());
+        Worker.get().sendFromMainThread(GetUsers.getRequest());
     }
 }
