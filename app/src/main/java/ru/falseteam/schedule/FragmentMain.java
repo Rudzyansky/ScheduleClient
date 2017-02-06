@@ -149,7 +149,7 @@ public class FragmentMain extends Fragment implements Redrawable, OnChangeGroupL
                     if (t.weekDay.id == dayOfWeek + 1 && (
                             (t.weeks.get(31) &&
                                     (t.weeks.get(30) || (t.weeks.get(29) && week % 2 == 1) || (!t.weeks.get(29) && week % 2 == 0))
-                            ) || t.weeks.get(week)
+                            ) || t.weeks.get(week - 1)
                     )) templates.add(t);
             }
 
