@@ -24,9 +24,9 @@ import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.data.StaticData;
 import ru.falseteam.schedule.data.VkData;
 import ru.falseteam.schedule.journal.FragmentJournal;
-import ru.falseteam.schedule.listeners.Redrawable;
-import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.management.FragmentManagement;
+import ru.falseteam.vframe.redraw.Redrawable;
+import ru.falseteam.vframe.redraw.Redrawer;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Redrawable {
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity
         getSupportFragmentManager().beginTransaction().replace(R.id.content_main, fragmentMain).commit();
         navigationView.setCheckedItem(R.id.nav_main);
 
-        Redrawer.add(this);
+        Redrawer.addRedrawable(this);
         redraw();
 
         if (!VKSdk.isLoggedIn())
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onDestroy() {
-        Redrawer.remove(this);
+        Redrawer.removeRedrawable(this);
         super.onDestroy();
     }
 

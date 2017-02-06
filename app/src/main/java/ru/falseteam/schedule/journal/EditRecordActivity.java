@@ -11,8 +11,6 @@ import android.widget.TextView;
 
 import ru.falseteam.schedule.R;
 import ru.falseteam.schedule.data.MainData;
-import ru.falseteam.schedule.listeners.Redrawable;
-import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.Lesson;
 import ru.falseteam.schedule.serializable.LessonNumber;
 import ru.falseteam.schedule.serializable.Template;
@@ -24,6 +22,8 @@ import ru.falseteam.schedule.socket.commands.GetLessons;
 import ru.falseteam.schedule.socket.commands.GetTemplates;
 import ru.falseteam.schedule.socket.commands.GetWeekDays;
 import ru.falseteam.schedule.socket.commands.UpdateTemplate;
+import ru.falseteam.vframe.redraw.Redrawable;
+import ru.falseteam.vframe.redraw.Redrawer;
 
 public class EditRecordActivity extends AppCompatActivity implements Redrawable, View.OnClickListener {
     private View emptyView;
@@ -54,13 +54,13 @@ public class EditRecordActivity extends AppCompatActivity implements Redrawable,
     @Override
     protected void onResume() {
         super.onResume();
-        Redrawer.add(this);
+        Redrawer.addRedrawable(this);
         redraw();
     }
 
     @Override
     protected void onPause() {
-        Redrawer.remove(this);
+        Redrawer.removeRedrawable(this);
         super.onPause();
     }
 

@@ -6,14 +6,14 @@ import java.util.Map;
 
 import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.serializable.Lesson;
-import ru.falseteam.vframe.socket.ClientProtocolAbstract;
-import ru.falseteam.vframe.socket.ClientSocketWorker;
 import ru.falseteam.vframe.socket.Container;
+import ru.falseteam.vframe.socket.ProtocolAbstract;
+import ru.falseteam.vframe.socket.SocketWorker;
 
-public class GetLessons extends ClientProtocolAbstract {
+public class GetLessons extends ProtocolAbstract {
     @SuppressWarnings("unchecked")
     @Override
-    public void exec(Map<String, Object> map, ClientSocketWorker worker) {
+    public void exec(Map<String, Object> map, SocketWorker worker) {
         MainData.setLessons((List<Lesson>) map.get("lessons"));
     }
 

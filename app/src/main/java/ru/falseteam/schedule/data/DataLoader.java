@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import ru.falseteam.schedule.listeners.Redrawer;
+import ru.falseteam.vframe.redraw.Redrawer;
 
 public class DataLoader {
     public static void init(Context context) {

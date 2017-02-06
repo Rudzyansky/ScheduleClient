@@ -15,8 +15,6 @@ import java.util.List;
 
 import ru.falseteam.schedule.R;
 import ru.falseteam.schedule.data.MainData;
-import ru.falseteam.schedule.listeners.Redrawable;
-import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.Lesson;
 import ru.falseteam.schedule.serializable.LessonNumber;
 import ru.falseteam.schedule.serializable.Template;
@@ -28,6 +26,8 @@ import ru.falseteam.schedule.socket.commands.GetLessons;
 import ru.falseteam.schedule.socket.commands.GetTemplates;
 import ru.falseteam.schedule.socket.commands.GetWeekDays;
 import ru.falseteam.schedule.socket.commands.UpdateTemplate;
+import ru.falseteam.vframe.redraw.Redrawable;
+import ru.falseteam.vframe.redraw.Redrawer;
 
 public class EditTemplateActivity extends AppCompatActivity implements Redrawable, View.OnClickListener, MultiSpinner.MultiSpinnerListener {
     private View emptyView;
@@ -50,7 +50,7 @@ public class EditTemplateActivity extends AppCompatActivity implements Redrawabl
 
         template = (Template) getIntent().getSerializableExtra("template");
 
-        Redrawer.add(this);
+        Redrawer.addRedrawable(this);
         redraw();
 
         Worker.get().sendFromMainThread(GetWeekDays.getRequest());
@@ -60,7 +60,7 @@ public class EditTemplateActivity extends AppCompatActivity implements Redrawabl
 
     @Override
     protected void onDestroy() {
-        Redrawer.remove(this);
+        Redrawer.removeRedrawable(this);
         super.onDestroy();
     }
 

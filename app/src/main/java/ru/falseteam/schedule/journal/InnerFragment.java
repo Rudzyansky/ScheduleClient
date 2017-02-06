@@ -19,11 +19,11 @@ import java.util.List;
 
 import ru.falseteam.schedule.R;
 import ru.falseteam.schedule.data.MainData;
-import ru.falseteam.schedule.listeners.Redrawable;
-import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.JournalRecord;
 import ru.falseteam.schedule.socket.Worker;
 import ru.falseteam.schedule.socket.commands.GetJournal;
+import ru.falseteam.vframe.redraw.Redrawable;
+import ru.falseteam.vframe.redraw.Redrawer;
 
 public class InnerFragment extends Fragment implements Redrawable {
     private java.sql.Date date;
@@ -72,13 +72,13 @@ public class InnerFragment extends Fragment implements Redrawable {
     @Override
     public void onResume() {
         super.onResume();
-        Redrawer.add(this);
+        Redrawer.addRedrawable(this);
         redraw();
     }
 
     @Override
     public void onPause() {
-        Redrawer.remove(this);
+        Redrawer.removeRedrawable(this);
         super.onPause();
     }
 

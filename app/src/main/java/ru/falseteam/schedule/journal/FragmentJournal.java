@@ -18,11 +18,11 @@ import ru.falseteam.schedule.R;
 import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.listeners.OnChangeGroup;
 import ru.falseteam.schedule.listeners.OnChangeGroupListener;
-import ru.falseteam.schedule.listeners.Redrawable;
-import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.socket.Worker;
 import ru.falseteam.schedule.socket.commands.GetJournal;
+import ru.falseteam.vframe.redraw.Redrawable;
+import ru.falseteam.vframe.redraw.Redrawer;
 
 public class FragmentJournal extends Fragment implements Redrawable, OnChangeGroupListener {
 
@@ -52,14 +52,14 @@ public class FragmentJournal extends Fragment implements Redrawable, OnChangeGro
         super.onResume();
         OnChangeGroup.add(this, Groups.admin, Groups.developer);
         onChangeGroup();
-        Redrawer.add(this);
+        Redrawer.addRedrawable(this);
         redraw();
     }
 
     @Override
     public void onPause() {
         OnChangeGroup.remove(this);
-        Redrawer.remove(this);
+        Redrawer.removeRedrawable(this);
         super.onPause();
     }
 

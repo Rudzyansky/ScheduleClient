@@ -8,12 +8,12 @@ import android.widget.Toast;
 import java.util.Map;
 
 import ru.falseteam.schedule.socket.Worker;
-import ru.falseteam.vframe.socket.ClientProtocolAbstract;
-import ru.falseteam.vframe.socket.ClientSocketWorker;
+import ru.falseteam.vframe.socket.ProtocolAbstract;
+import ru.falseteam.vframe.socket.SocketWorker;
 
-public class ToastShort extends ClientProtocolAbstract {
+public class ToastShort extends ProtocolAbstract {
     @Override
-    public void exec(final Map<String, Object> map, ClientSocketWorker worker) {
+    public void exec(final Map<String, Object> map, SocketWorker worker) {
         new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(Message inputMessage) {
