@@ -5,16 +5,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ru.falseteam.schedule.data.MainData;
-import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.User;
-import ru.falseteam.vframe.socket.ClientProtocolAbstract;
-import ru.falseteam.vframe.socket.ClientSocketWorker;
+import ru.falseteam.vframe.redraw.Redrawer;
 import ru.falseteam.vframe.socket.Container;
+import ru.falseteam.vframe.socket.ProtocolAbstract;
+import ru.falseteam.vframe.socket.SocketWorker;
 
-public class GetUsers extends ClientProtocolAbstract {
+public class GetUsers extends ProtocolAbstract {
     @SuppressWarnings("unchecked")
     @Override
-    public void exec(Map<String, Object> map, ClientSocketWorker worker) {
+    public void exec(Map<String, Object> map, SocketWorker worker) {
         MainData.setUsers((ArrayList<User>) map.get("users"));
         Redrawer.redraw();
     }

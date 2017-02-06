@@ -19,8 +19,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 
-import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.utils.BitmapUtils;
+import ru.falseteam.vframe.redraw.Redrawer;
 
 import static com.vk.sdk.api.VKApiConst.FIELDS;
 import static ru.falseteam.schedule.data.StaticData.TAG;

@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.falseteam.schedule.listeners.OnChangeGroup;
-import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.serializable.JournalRecord;
 import ru.falseteam.schedule.serializable.Lesson;
@@ -15,6 +14,7 @@ import ru.falseteam.schedule.serializable.LessonNumber;
 import ru.falseteam.schedule.serializable.Template;
 import ru.falseteam.schedule.serializable.User;
 import ru.falseteam.schedule.serializable.WeekDay;
+import ru.falseteam.vframe.redraw.Redrawer;
 
 /**
  * Содержит основные динамические данные

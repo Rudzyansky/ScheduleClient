@@ -5,16 +5,16 @@ import java.util.List;
 import java.util.Map;
 
 import ru.falseteam.schedule.data.MainData;
-import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.JournalRecord;
-import ru.falseteam.vframe.socket.ClientProtocolAbstract;
-import ru.falseteam.vframe.socket.ClientSocketWorker;
+import ru.falseteam.vframe.redraw.Redrawer;
 import ru.falseteam.vframe.socket.Container;
+import ru.falseteam.vframe.socket.ProtocolAbstract;
+import ru.falseteam.vframe.socket.SocketWorker;
 
-public class GetJournal extends ClientProtocolAbstract {
+public class GetJournal extends ProtocolAbstract {
     @SuppressWarnings("unchecked")
     @Override
-    public void exec(Map<String, Object> map, ClientSocketWorker worker) {
+    public void exec(Map<String, Object> map, SocketWorker worker) {
         MainData.setJournal((List<JournalRecord>) map.get("journal"));
         Redrawer.redraw();
     }

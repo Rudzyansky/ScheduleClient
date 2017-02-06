@@ -11,13 +11,13 @@ import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.data.StaticData;
 import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.socket.Worker;
-import ru.falseteam.vframe.socket.ClientProtocolAbstract;
-import ru.falseteam.vframe.socket.ClientSocketWorker;
 import ru.falseteam.vframe.socket.Container;
+import ru.falseteam.vframe.socket.ProtocolAbstract;
+import ru.falseteam.vframe.socket.SocketWorker;
 
-public class Auth extends ClientProtocolAbstract {
+public class Auth extends ProtocolAbstract {
     @Override
-    public void exec(Map<String, Object> map, ClientSocketWorker worker) {
+    public void exec(Map<String, Object> map, SocketWorker worker) {
         MainData.setCurrentGroup(Groups.valueOf(map.get("permissions").toString()));
         if (!map.get("version").toString().equals(StaticData.getClientVersion())) {
             Intent intent = new Intent(Worker.get().getContext(), UpdateActivity.class);

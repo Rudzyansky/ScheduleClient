@@ -17,10 +17,10 @@ import ru.falseteam.schedule.socket.commands.GetTemplates;
 import ru.falseteam.schedule.socket.commands.GetUsers;
 import ru.falseteam.schedule.socket.commands.GetWeekDays;
 import ru.falseteam.schedule.socket.commands.ToastShort;
-import ru.falseteam.vframe.socket.ClientSocketWorker;
+import ru.falseteam.vframe.socket.SocketWorker;
 import ru.falseteam.vframe.socket.VFKeystore;
 
-public class Worker extends ClientSocketWorker implements ClientSocketWorker.OnConnectionChangeStateListener{
+public class Worker extends SocketWorker implements SocketWorker.OnConnectionChangeStateListener {
 
     private Context context;
 

@@ -22,12 +22,12 @@ import java.util.List;
 import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.listeners.OnChangeGroup;
 import ru.falseteam.schedule.listeners.OnChangeGroupListener;
-import ru.falseteam.schedule.listeners.Redrawable;
-import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.serializable.Template;
 import ru.falseteam.schedule.socket.Worker;
 import ru.falseteam.schedule.socket.commands.GetTemplates;
+import ru.falseteam.vframe.redraw.Redrawable;
+import ru.falseteam.vframe.redraw.Redrawer;
 
 public class FragmentMain extends Fragment implements Redrawable, OnChangeGroupListener {
     private View emptyView;
@@ -58,7 +58,7 @@ public class FragmentMain extends Fragment implements Redrawable, OnChangeGroupL
 
         OnChangeGroup.add(this, Groups.user, Groups.admin, Groups.developer);
         onChangeGroup();
-        Redrawer.add(this);
+        Redrawer.addRedrawable(this);
         redraw();
         return rootView;
     }
@@ -66,7 +66,7 @@ public class FragmentMain extends Fragment implements Redrawable, OnChangeGroupL
     @Override
     public void onDestroy() {
         OnChangeGroup.remove(this);
-        Redrawer.remove(this);
+        Redrawer.removeRedrawable(this);
         super.onDestroy();
     }
 
