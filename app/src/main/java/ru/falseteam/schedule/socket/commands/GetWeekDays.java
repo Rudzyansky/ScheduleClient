@@ -1,6 +1,5 @@
 package ru.falseteam.schedule.socket.commands;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,8 +19,6 @@ public class GetWeekDays extends ProtocolAbstract {
     }
 
     public static Container getRequest() {
-        Map<String, Object> map = new HashMap<>();
-        map.put("command", "get_week_days");
-        return new Container(GetWeekDays.class.getSimpleName(), map);
+        return new Container(GetWeekDays.class.getSimpleName(), true);
     }
 }

@@ -3,7 +3,6 @@ package ru.falseteam.schedule.socket.commands;
 import android.content.Intent;
 import android.os.Build;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import ru.falseteam.schedule.UpdateActivity;
@@ -28,11 +27,10 @@ public class Auth extends ProtocolAbstract {
     }
 
     public static Container getRequest(String token) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("command", "auth");
-        map.put("token", token);
-        map.put("app_version", StaticData.getClientVersion());
-        map.put("sdk_version", Build.VERSION.SDK_INT);
-        return new Container(Auth.class.getSimpleName(), map);
+        Container c = new Container(Auth.class.getSimpleName(), true);
+        c.data.put("token", token);
+        c.data.put("app_version", StaticData.getClientVersion());
+        c.data.put("sdk_version", Build.VERSION.SDK_INT);
+        return c;
     }
 }

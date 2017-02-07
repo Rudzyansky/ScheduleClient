@@ -17,7 +17,7 @@ public class AccessDenied extends ProtocolAbstract {
         new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(Message inputMessage) {
-                Toast.makeText(Worker.get().getContext(), "Access Denied: \n" + map.get("forbidden"), Toast.LENGTH_LONG).show();
+                Toast.makeText(Worker.get().getContext(), "Access Denied: \n" + map.get("command"), Toast.LENGTH_LONG).show();
             }
         }.obtainMessage().sendToTarget();
     }
