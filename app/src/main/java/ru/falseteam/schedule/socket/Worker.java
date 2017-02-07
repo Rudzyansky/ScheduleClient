@@ -62,6 +62,11 @@ public class Worker extends SocketWorker implements SocketWorker.OnConnectionCha
         if (connected) {
             MainData.setCurrentGroup(Groups.guest);
             // авторизуемся на сервере с косты
+            while (VKAccessToken.currentToken() == null) try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             send(Auth.getRequest(VKAccessToken.currentToken().accessToken));
         }
     }
