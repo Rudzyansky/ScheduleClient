@@ -1,6 +1,5 @@
 package ru.falseteam.schedule.socket.commands;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,8 +18,6 @@ public class GetTemplates extends ProtocolAbstract {
     }
 
     public static Container getRequest() {
-        Map<String, Object> map = new HashMap<>();
-        map.put("command", "get_templates");
-        return new Container(GetTemplates.class.getSimpleName(), map);
+        return new Container(GetTemplates.class.getSimpleName(), true);
     }
 }
