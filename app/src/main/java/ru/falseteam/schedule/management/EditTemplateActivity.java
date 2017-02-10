@@ -15,6 +15,7 @@ import java.util.List;
 
 import ru.falseteam.schedule.R;
 import ru.falseteam.schedule.data.MainData;
+import ru.falseteam.schedule.gui.MultiSpinner;
 import ru.falseteam.schedule.serializable.Lesson;
 import ru.falseteam.schedule.serializable.LessonNumber;
 import ru.falseteam.schedule.serializable.Template;

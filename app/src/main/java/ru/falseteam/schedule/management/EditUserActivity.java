@@ -10,9 +10,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import ru.falseteam.schedule.R;
 import ru.falseteam.schedule.serializable.Groups;
@@ -68,21 +66,26 @@ public class EditUserActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View view) {
-        Map<String, Object> map = new HashMap<>();
+        Container c = null;
+        String newGroup = null;
         switch (view.getId()) {
             case R.id.btnSave:
                 user.name = name.getText().toString();
-                user.permissions = Groups.valueOf(groups.get(group.getSelectedItemPosition()));
+                user.permissions = null;
+                //user.permissions = Groups.valueOf(groups.get(group.getSelectedItemPosition()));
+                newGroup = groups.get(group.getSelectedItemPosition());
                 if (!user.exists) user.vkId = Integer.parseInt(vkId.getText().toString());
-                map.put("command", "UpdateUser");
+                c = new Container("UpdateUser", true);
                 break;
             case R.id.btnDelete:
-                map.put("command", "DeleteUser");
+                c = new Container("DeleteUser", true);
                 break;
         }
-        map.put("user", user);
-        // TODO: 05.02.17 fix it ...
-        Worker.get().sendFromMainThread(new Container(map.get("command").toString(), map));
+        assert c != null;
+        c.data.put("user", user);
+        // TODO: 09.02.17 мегакостыль орундий-256
+        c.data.put("group", newGroup);
+        Worker.get().sendFromMainThread(c);
         finish();
         Worker.get().sendFromMainThread(GetUsers.getRequest());
     }

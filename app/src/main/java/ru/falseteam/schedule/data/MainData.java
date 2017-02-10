@@ -54,6 +54,7 @@ public class MainData {
 
 
     public static void setTemplates(List<Template> templates) {
+        if (templates.equals(MainData.templates)) return;
         MainData.templates = templates;
         DataLoader.saveToBinaryFile(templates, dataDir + "/templates.bin");
         Redrawer.redraw();

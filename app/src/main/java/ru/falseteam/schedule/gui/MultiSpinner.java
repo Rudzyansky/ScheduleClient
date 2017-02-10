@@ -1,4 +1,4 @@
-package ru.falseteam.schedule.management;
+package ru.falseteam.schedule.gui;
 
 
 import android.app.AlertDialog;
