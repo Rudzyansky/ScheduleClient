@@ -34,10 +34,6 @@
             android:label="ServiceActivity"
             android:theme="@style/VK.Transparent" />
         <activity
-            android:name=".LoginActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Dialog" />
-        <activity
             android:name=".UpdateActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Dialog" />
@@ -58,6 +54,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".management.EditTemplateActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".journal.EditRecordActivity"
             android:screenOrientation="portrait" />
     </application>
 

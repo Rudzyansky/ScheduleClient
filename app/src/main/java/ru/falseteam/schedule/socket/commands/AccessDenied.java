@@ -7,20 +7,17 @@ import android.widget.Toast;
 
 import java.util.Map;
 
-import ru.falseteam.schedule.socket.CommandAbstract;
 import ru.falseteam.schedule.socket.Worker;
+import ru.falseteam.vframe.socket.ProtocolAbstract;
+import ru.falseteam.vframe.socket.SocketWorker;
 
-public class AccessDenied extends CommandAbstract {
-    public AccessDenied() {
-        super("forbidden");
-    }
-
+public class AccessDenied extends ProtocolAbstract {
     @Override
-    public void exec(final Map<String, Object> map) {
+    public void exec(final Map<String, Object> map, SocketWorker worker) {
         new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(Message inputMessage) {
-                Toast.makeText(Worker.get().getContext(), "Access Denied: \n" + map.get("forbidden"), Toast.LENGTH_LONG).show();
+                Toast.makeText(Worker.get().getContext(), "Access Denied: \n" + map.get("command"), Toast.LENGTH_LONG).show();
             }
         }.obtainMessage().sendToTarget();
     }

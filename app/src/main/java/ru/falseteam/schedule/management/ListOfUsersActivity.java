@@ -19,11 +19,11 @@ import java.util.List;
 
 import ru.falseteam.schedule.R;
 import ru.falseteam.schedule.data.MainData;
-import ru.falseteam.schedule.listeners.Redrawable;
-import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.User;
 import ru.falseteam.schedule.socket.Worker;
 import ru.falseteam.schedule.socket.commands.GetUsers;
+import ru.falseteam.vframe.redraw.Redrawable;
+import ru.falseteam.vframe.redraw.Redrawer;
 
 public class ListOfUsersActivity extends AppCompatActivity implements Redrawable {
 
@@ -50,9 +50,9 @@ public class ListOfUsersActivity extends AppCompatActivity implements Redrawable
         progressBar = findViewById(R.id.progressBar);
         textView = (TextView) findViewById(R.id.textView);
         lv.setEmptyView(findViewById(R.id.emptyView));
-        Redrawer.add(this);
+        Redrawer.addRedrawable(this);
         redraw();
-        Worker.sendFromMainThread(GetUsers.getRequest());
+        Worker.get().sendFromMainThread(GetUsers.getRequest());
     }
 
     private void openUserEditor(User user) {
@@ -63,7 +63,7 @@ public class ListOfUsersActivity extends AppCompatActivity implements Redrawable
 
     @Override
     protected void onDestroy() {
-        Redrawer.remove(this);
+        Redrawer.removeRedrawable(this);
         super.onDestroy();
     }
 

@@ -1,28 +1,22 @@
 package ru.falseteam.schedule.socket.commands;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.serializable.Lesson;
-import ru.falseteam.schedule.socket.CommandAbstract;
+import ru.falseteam.vframe.socket.Container;
+import ru.falseteam.vframe.socket.ProtocolAbstract;
+import ru.falseteam.vframe.socket.SocketWorker;
 
-public class GetLessons extends CommandAbstract {
-    public GetLessons() {
-        super("get_lessons");
-    }
-
-
+public class GetLessons extends ProtocolAbstract {
     @SuppressWarnings("unchecked")
     @Override
-    public void exec(Map<String, Object> map) {
+    public void exec(Map<String, Object> map, SocketWorker worker) {
         MainData.setLessons((List<Lesson>) map.get("lessons"));
     }
 
-    public static Map<String, Object> getRequest() {
-        Map<String, Object> map = new HashMap<>();
-        map.put("command", "get_lessons");
-        return map;
+    public static Container getRequest() {
+        return new Container(GetLessons.class.getSimpleName(), true);
     }
 }

@@ -24,11 +24,11 @@ import java.util.List;
 
 import ru.falseteam.schedule.R;
 import ru.falseteam.schedule.data.MainData;
-import ru.falseteam.schedule.listeners.Redrawable;
-import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.Template;
 import ru.falseteam.schedule.socket.Worker;
 import ru.falseteam.schedule.socket.commands.GetTemplates;
+import ru.falseteam.vframe.redraw.Redrawable;
+import ru.falseteam.vframe.redraw.Redrawer;
 
 public class ListOfTemplatesActivity extends AppCompatActivity implements Redrawable {
     private View emptyView;
@@ -44,15 +44,15 @@ public class ListOfTemplatesActivity extends AppCompatActivity implements Redraw
         viewPager = (ViewPager) findViewById(R.id.content);
         viewPager.setAdapter(new Adapter(getSupportFragmentManager()));
 
-        Redrawer.add(this);
+        Redrawer.addRedrawable(this);
         redraw();
 
-        Worker.sendFromMainThread(GetTemplates.getRequest());
+        Worker.get().sendFromMainThread(GetTemplates.getRequest());
     }
 
     @Override
     protected void onDestroy() {
-        Redrawer.remove(this);
+        Redrawer.removeRedrawable(this);
         super.onDestroy();
     }
 
@@ -66,7 +66,9 @@ public class ListOfTemplatesActivity extends AppCompatActivity implements Redraw
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add:
-                openTemplateEditor(Template.Factory.getDefault());
+                Template t = Template.Factory.getDefault();
+//                t.weekDay = ;
+                openTemplateEditor(t);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -160,7 +162,7 @@ public class ListOfTemplatesActivity extends AppCompatActivity implements Redraw
             private Context context;
             private List<Template> templates = new ArrayList<>();
 
-            public Adapter(Context context, int dayOfWeek) {
+            Adapter(Context context, int dayOfWeek) {
                 this.context = context;
                 for (Template t : MainData.getTemplates())
                     if (t.weekDay.id == dayOfWeek + 1) templates.add(t);
@@ -189,13 +191,35 @@ public class ListOfTemplatesActivity extends AppCompatActivity implements Redraw
                 Template t = getItem(position);
                 ((TextView) convertView.findViewById(R.id.lesson_number)).setText(String.valueOf(t.lessonNumber.id));
                 TextView weekEvenness = (TextView) convertView.findViewById(R.id.week_evenness);
-                if (t.weekEvenness > 0) weekEvenness.setVisibility(View.VISIBLE);
-                weekEvenness.setText(t.weekEvenness == 1 ? "II" : "I");
+                // максимум 17 недель весна
+                // максимум 18 недель осень
+                // получается, остается 32-18=14 дополнительных битов для флагов
+                // 3 из них под четность. остается 11 подо что угодно
+                // 31-ый бит говорит о шаблонных неделях (четные, нечетные, все)
+                // 0b00000000000000000000000000000001
+                if (t.weeks.get(31)) {
+                    ((TextView) convertView.findViewById(R.id.name)).setText(t.lesson.name);
+                    // 0b00000000000000000000000000000010
+                    // 30-ый бит обозначает принадлежность ко всем неделям, иначе
+                    // 29-ый бит обозначает принадлежность к нечетным неделям, иначе неделя четная
+                    // 0b00000000000000000000000000000100
+                    if (!t.weeks.get(30)) {
+                        // либо нечетные, либо четные
+                        weekEvenness.setVisibility(View.VISIBLE);
+                        weekEvenness.setText(t.weeks.get(29) ? "I" : "II");
+                    }
+                } else {
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(t.lesson.name);
+                    sb.append(" (");
+                    for (int i = 0; i < 18; ++i) if (t.weeks.get(i)) sb.append(i + 1).append(' ');
+                    sb.append("н)");
+                    ((TextView) convertView.findViewById(R.id.name)).setText(sb.toString());
+                }
                 ((TextView) convertView.findViewById(R.id.begin))
                         .setText(t.lessonNumber.begin.toString().substring(0, 5));
                 ((TextView) convertView.findViewById(R.id.end))
                         .setText(t.lessonNumber.end.toString().substring(0, 5));
-                ((TextView) convertView.findViewById(R.id.name)).setText(t.lesson.name);
                 ((TextView) convertView.findViewById(R.id.audience)).setText(t.lesson.audience);
                 return convertView;
             }

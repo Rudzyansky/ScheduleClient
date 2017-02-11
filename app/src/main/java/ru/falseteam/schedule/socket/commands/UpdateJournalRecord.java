@@ -1,15 +1,12 @@
 package ru.falseteam.schedule.socket.commands;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import ru.falseteam.schedule.serializable.JournalRecord;
+import ru.falseteam.vframe.socket.Container;
 
 public class UpdateJournalRecord {
-    public static Map<String, Object> getRequest(JournalRecord record) {
-        Map<String, Object> request = new HashMap<>();
-        request.put("command", "update_journal_record");
-        request.put("record", record);
-        return request;
+    public static Container getRequest(JournalRecord record) {
+        Container c = new Container(UpdateJournalRecord.class.getSimpleName(), true);
+        c.data.put("record", record);
+        return c;
     }
 }

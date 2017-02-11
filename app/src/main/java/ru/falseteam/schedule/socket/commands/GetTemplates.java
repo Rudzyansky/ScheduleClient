@@ -1,35 +1,24 @@
 package ru.falseteam.schedule.socket.commands;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.Template;
-import ru.falseteam.schedule.socket.CommandAbstract;
+import ru.falseteam.vframe.socket.Container;
+import ru.falseteam.vframe.socket.ProtocolAbstract;
+import ru.falseteam.vframe.socket.SocketWorker;
 
-public class GetTemplates extends CommandAbstract {
-
-    public GetTemplates() {
-        super("get_templates");
-    }
+public class GetTemplates extends ProtocolAbstract {
 
     @SuppressWarnings("unchecked")
     @Override
-    public void exec(Map<String, Object> map) {
+    public void exec(Map<String, Object> map, SocketWorker worker) {
         MainData.setTemplates((List<Template>) map.get("templates"));
     }
 
-    public static Map<String, Object> getRequest() {
-        Map<String, Object> map = new HashMap<>();
-        map.put("command", "get_templates");
-        return map;
+    public static Container getRequest() {
+        return new Container(GetTemplates.class.getSimpleName(), true);
     }
 }

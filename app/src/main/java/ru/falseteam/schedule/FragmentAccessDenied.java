@@ -12,9 +12,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import ru.falseteam.schedule.data.MainData;
-import ru.falseteam.schedule.listeners.Redrawable;
-import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.Groups;
+import ru.falseteam.vframe.redraw.Redrawable;
+import ru.falseteam.vframe.redraw.Redrawer;
 
 public class FragmentAccessDenied extends Fragment implements Redrawable {
 
@@ -46,13 +46,13 @@ public class FragmentAccessDenied extends Fragment implements Redrawable {
     @Override
     public void onResume() {
         super.onResume();
-        Redrawer.add(this);
+        Redrawer.addRedrawable(this);
         redraw();
     }
 
     @Override
     public void onPause() {
-        Redrawer.remove(this);
+        Redrawer.removeRedrawable(this);
         super.onPause();
     }
 
