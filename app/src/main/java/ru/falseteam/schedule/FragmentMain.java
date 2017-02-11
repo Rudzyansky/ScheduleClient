@@ -1,7 +1,6 @@
 package ru.falseteam.schedule;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -23,13 +22,12 @@ import java.util.List;
 import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.listeners.OnChangeGroup;
 import ru.falseteam.schedule.listeners.OnChangeGroupListener;
-import ru.falseteam.schedule.listeners.Redrawable;
-import ru.falseteam.schedule.listeners.Redrawer;
-import ru.falseteam.schedule.management.EditTemplateActivity;
 import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.serializable.Template;
 import ru.falseteam.schedule.socket.Worker;
 import ru.falseteam.schedule.socket.commands.GetTemplates;
+import ru.falseteam.vframe.redraw.Redrawable;
+import ru.falseteam.vframe.redraw.Redrawer;
 
 public class FragmentMain extends Fragment implements Redrawable, OnChangeGroupListener {
     private View emptyView;
@@ -54,10 +52,13 @@ public class FragmentMain extends Fragment implements Redrawable, OnChangeGroupL
         int day = c.get(Calendar.DAY_OF_WEEK) - 2;
         if (day == -1) day = 7;
 
+        ((TextView) rootView.findViewById(R.id.week_number)).setText(((Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) - 6) + " неделя"));
+
         viewPager.setCurrentItem(day);
 
         OnChangeGroup.add(this, Groups.user, Groups.admin, Groups.developer);
-        Redrawer.add(this);
+        onChangeGroup();
+        Redrawer.addRedrawable(this);
         redraw();
         return rootView;
     }
@@ -65,7 +66,7 @@ public class FragmentMain extends Fragment implements Redrawable, OnChangeGroupL
     @Override
     public void onDestroy() {
         OnChangeGroup.remove(this);
-        Redrawer.remove(this);
+        Redrawer.removeRedrawable(this);
         super.onDestroy();
     }
 
@@ -84,7 +85,7 @@ public class FragmentMain extends Fragment implements Redrawable, OnChangeGroupL
 
     @Override
     public void onChangeGroup() {
-        Worker.sendFromMainThread(GetTemplates.getRequest());
+        Worker.get().sendFromMainThread(GetTemplates.getRequest());
     }
 
     /**
@@ -111,12 +112,6 @@ public class FragmentMain extends Fragment implements Redrawable, OnChangeGroupL
         private int dayOfWeek;
 
         public InnerFragment() {
-        }
-
-        private void openTemplateEditor(Template template) {
-            Intent intent = new Intent(getActivity(), EditTemplateActivity.class);
-            intent.putExtra("template", template);
-            startActivity(intent);
         }
 
         @Nullable
@@ -147,13 +142,15 @@ public class FragmentMain extends Fragment implements Redrawable, OnChangeGroupL
             private Context context;
             private List<Template> templates = new ArrayList<>();
 
-            public Adapter(Context context, int dayOfWeek) {
+            Adapter(Context context, int dayOfWeek) {
                 this.context = context;
-                Calendar c = Calendar.getInstance();
-                int evenness = (c.get(Calendar.WEEK_OF_YEAR) - 1) % 2;
+                int week = (Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) - 6);
                 for (Template t : MainData.getTemplates())
-                    if (t.weekDay.id == dayOfWeek + 1 && (t.weekEvenness == 0 || t.weekEvenness - 1 == evenness))
-                        templates.add(t);
+                    if (t.weekDay.id == dayOfWeek + 1 && (
+                            (t.weeks.get(31) &&
+                                    (t.weeks.get(30) || (t.weeks.get(29) && week % 2 == 1) || (!t.weeks.get(29) && week % 2 == 0))
+                            ) || t.weeks.get(week - 1)
+                    )) templates.add(t);
             }
 
             @Override

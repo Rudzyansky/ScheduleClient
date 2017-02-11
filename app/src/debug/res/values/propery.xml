@@ -3,10 +3,10 @@
     <string name="app_name">Расписание dev</string>
     <bool name="debug">true</bool>
 
-    <string name="hostname">78.107.234.184</string>
+    <string name="hostname">31.40.98.246</string>
     <string name="public_pass" />
-    <integer name="port_schedule">7101</integer>
-    <integer name="port_update">7102</integer>
+    <integer name="port_schedule">7103</integer>
+    <integer name="port_update">7104</integer>
 
     <integer name="com_vk_sdk_AppId">5721408</integer>
 </resources>

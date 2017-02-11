@@ -10,9 +10,9 @@ import android.widget.TextView;
 
 import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.data.StaticData;
-import ru.falseteam.schedule.listeners.Redrawable;
-import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.Groups;
+import ru.falseteam.vframe.redraw.Redrawable;
+import ru.falseteam.vframe.redraw.Redrawer;
 
 //TODO ПЕРЕДЕЛАТЬ ЭТОТ ТРЭШАК
 public class FragmentDebug extends Fragment implements Redrawable {
@@ -38,13 +38,13 @@ public class FragmentDebug extends Fragment implements Redrawable {
     @Override
     public void onResume() {
         super.onResume();
-        Redrawer.add(this);
+        Redrawer.addRedrawable(this);
         redraw();
     }
 
     @Override
     public void onPause() {
-        Redrawer.remove(this);
+        Redrawer.removeRedrawable(this);
         super.onPause();
     }
 

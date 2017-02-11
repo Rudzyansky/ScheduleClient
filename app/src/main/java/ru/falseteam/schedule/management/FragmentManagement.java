@@ -8,13 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.FragmentAccessDenied;
 import ru.falseteam.schedule.MainActivity;
 import ru.falseteam.schedule.R;
-import ru.falseteam.schedule.listeners.Redrawable;
-import ru.falseteam.schedule.listeners.Redrawer;
+import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.serializable.Groups;
+import ru.falseteam.vframe.redraw.Redrawable;
+import ru.falseteam.vframe.redraw.Redrawer;
 
 public class FragmentManagement extends Fragment implements Redrawable, View.OnClickListener {
 
@@ -37,13 +37,13 @@ public class FragmentManagement extends Fragment implements Redrawable, View.OnC
     @Override
     public void onResume() {
         super.onResume();
-        Redrawer.add(this);
+        Redrawer.addRedrawable(this);
         redraw();
     }
 
     @Override
     public void onPause() {
-        Redrawer.remove(this);
+        Redrawer.removeRedrawable(this);
         super.onPause();
     }
 
