@@ -3,6 +3,9 @@ package ru.falseteam.schedule.journal;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -103,7 +106,12 @@ public class InnerFragment extends Fragment implements Redrawable {
             journal.clear();
             for (JournalRecord record : MainData.getJournal())
                 if (record.date == date) journal.add(record);
-            notifyDataSetChanged();
+            new Handler(Looper.getMainLooper()) {
+                @Override
+                public void handleMessage(Message inputMessage) {
+                    notifyDataSetChanged();
+                }
+            }.obtainMessage().sendToTarget();
         }
 
         @Override

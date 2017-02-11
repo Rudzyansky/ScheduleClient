@@ -7,10 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.prolificinteractive.materialcalendarview.CalendarDay;
-import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
-import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
+import android.widget.CalendarView;
 
 import ru.falseteam.schedule.FragmentAccessDenied;
 import ru.falseteam.schedule.MainActivity;
@@ -36,14 +33,23 @@ public class FragmentJournal extends Fragment implements Redrawable, OnChangeGro
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_calendar, container, false);
-        MaterialCalendarView calendarView = (MaterialCalendarView) rootView.findViewById(R.id.calendarView);
-        calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
+//        MaterialCalendarView calendarView = (MaterialCalendarView) rootView.findViewById(R.id.calendarView);
+        CalendarView calendarView = (CalendarView) rootView.findViewById(R.id.calendarView);
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
-            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 ((MainActivity) getActivity())
-                        .setFragment(InnerFragment.newInstance(new java.sql.Date(date.getDate().getTime())));
+                        .setFragment(InnerFragment.newInstance(new java.sql.Date(year - 1900, month, dayOfMonth)));
+//                        .setFragment(InnerFragment.newInstance(new java.sql.Date(date.getDate().getTime())));
             }
         });
+//        calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
+//            @Override
+//            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+//                ((MainActivity) getActivity())
+//                        .setFragment(InnerFragment.newInstance(new java.sql.Date(date.getDate().getTime())));
+//            }
+//        });
         return rootView;
     }
 

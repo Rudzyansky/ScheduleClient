@@ -1,6 +1,7 @@
 package ru.falseteam.schedule.serializable;
 
 import java.io.Serializable;
+import java.util.BitSet;
 
 /**
  * Structure contains all information about JournalRecord.
@@ -14,7 +15,7 @@ public class JournalRecord implements Serializable {
     public WeekDay weekDay;
     public LessonNumber lessonNumber;
     public Lesson lesson;
-    public int[] was;
+    public BitSet presented;
     public String task;
 
     // Empty private constructor.
