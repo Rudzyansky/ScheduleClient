@@ -44,7 +44,7 @@ public class VkData {
 
         name = preferences.getString("name", "guest");
         userIconUrl = preferences.getString("userIconUrl", "");
-        userIconPath = context.getApplicationInfo().dataDir + "/cache/usericon.png";
+        userIconPath = context.getApplicationInfo().dataDir + "/usericon.png";
 
         loadUserIcon();
     }
