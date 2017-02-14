@@ -24,6 +24,7 @@ import ru.falseteam.schedule.serializable.JournalRecord;
 import ru.falseteam.schedule.serializable.User;
 import ru.falseteam.schedule.socket.Worker;
 import ru.falseteam.schedule.socket.commands.GetJournal;
+import ru.falseteam.schedule.socket.commands.GetUsers;
 import ru.falseteam.schedule.socket.commands.UpdateJournalRecord;
 import ru.falseteam.vframe.redraw.Redrawable;
 import ru.falseteam.vframe.redraw.Redrawer;
@@ -51,6 +52,7 @@ public class EditRecordActivity extends AppCompatActivity implements Redrawable 
         record = (JournalRecord) getIntent().getSerializableExtra("record");
 
         Worker.get().sendFromMainThread(GetJournal.getRequest());
+        Worker.get().sendFromMainThread(GetUsers.getRequest());
     }
 
     @Override
@@ -145,10 +147,10 @@ public class EditRecordActivity extends AppCompatActivity implements Redrawable 
             User u = getItem(position);
             cb = (CheckBox) view;
             cb.setText(u.name);
-            cb.setTag(position);
-            cb.setChecked(record.presented.get(position));
+            cb.setTag(u.atList);
+            cb.setChecked(record.presented.get(u.atList));
             cb.setOnCheckedChangeListener(onCheckedChangeListener);
-            return null;
+            return view;
         }
 
         OnCheckedChangeListener onCheckedChangeListener = new OnCheckedChangeListener() {
