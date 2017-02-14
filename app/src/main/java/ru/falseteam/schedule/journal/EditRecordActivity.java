@@ -45,6 +45,9 @@ public class EditRecordActivity extends AppCompatActivity implements Redrawable 
         emptyView = findViewById(R.id.emptyView);
         contentView = findViewById(R.id.content);
 
+        emptyView.setVisibility(View.VISIBLE);
+        contentView.setVisibility(View.GONE);
+
         record = (JournalRecord) getIntent().getSerializableExtra("record");
 
         Worker.get().sendFromMainThread(GetJournal.getRequest());
@@ -68,7 +71,7 @@ public class EditRecordActivity extends AppCompatActivity implements Redrawable 
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (MainData.getJournal() != null) {
+                if (MainData.getJournal() != null && MainData.getUsers() != null) {
                     emptyView.setVisibility(View.GONE);
                     contentView.setVisibility(View.VISIBLE);
                     initView();
