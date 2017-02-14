@@ -119,6 +119,12 @@ public class MainActivity extends AppCompatActivity
             case R.id.action_about:
                 showAboutDialog();
                 return true;
+            case R.id.action_update:
+                Intent intent = new Intent(this, UpdateActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("version", "");
+                startActivity(intent);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
