@@ -13,6 +13,7 @@ import ru.falseteam.schedule.MainActivity;
 import ru.falseteam.schedule.R;
 import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.serializable.Groups;
+import ru.falseteam.schedule.socket.Worker;
 import ru.falseteam.vframe.redraw.Redrawable;
 import ru.falseteam.vframe.redraw.Redrawer;
 
@@ -49,7 +50,7 @@ public class FragmentManagement extends Fragment implements Redrawable, View.OnC
 
     @Override
     public void redraw() {
-        switch (MainData.getCurrentGroup()) {
+        switch (Worker.get().getCurrentPermission()) {
             case developer:
             case admin:
                 break;

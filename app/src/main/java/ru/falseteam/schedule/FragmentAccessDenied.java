@@ -11,8 +11,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.serializable.Groups;
+import ru.falseteam.schedule.socket.Worker;
 import ru.falseteam.vframe.redraw.Redrawable;
 import ru.falseteam.vframe.redraw.Redrawer;
 
@@ -64,7 +64,7 @@ public class FragmentAccessDenied extends Fragment implements Redrawable {
                 reasonView.setText(reason);
             }
         });
-        if (groupies.contains(MainData.getCurrentGroup())) {
+        if (groupies.contains(Worker.get().getCurrentPermission())) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
