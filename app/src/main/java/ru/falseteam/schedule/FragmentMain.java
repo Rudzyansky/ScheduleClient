@@ -55,19 +55,25 @@ public class FragmentMain extends Fragment implements Redrawable, OnChangeGroupL
         ((TextView) rootView.findViewById(R.id.week_number)).setText(((Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) - 6) + " неделя"));
 
         viewPager.setCurrentItem(day);
-
-        OnChangeGroup.add(this, Groups.user, Groups.admin, Groups.developer);
-        onChangeGroup();
-        Redrawer.addRedrawable(this);
-        redraw();
         return rootView;
     }
 
     @Override
-    public void onDestroy() {
+    public void onResume() {
+        super.onResume();
+        OnChangeGroup.add(this, Groups.user, Groups.admin, Groups.developer);
+        onChangeGroup();
+        Redrawer.addRedrawable(this);
+ //       Worker.get().getSubscriptionManager().subscribe("GetTemplates");
+        redraw();
+    }
+
+    @Override
+    public void onPause() {
+//        Worker.get().getSubscriptionManager().unsubscribe("GetTemplates");
         OnChangeGroup.remove(this);
         Redrawer.removeRedrawable(this);
-        super.onDestroy();
+        super.onPause();
     }
 
     @Override
@@ -76,6 +82,7 @@ public class FragmentMain extends Fragment implements Redrawable, OnChangeGroupL
             @Override
             public void run() {
                 if (MainData.getTemplates() != null) {
+                //if (Worker.get().getSubscriptionManager().getData("GetTemplates") != null) {
                     emptyView.setVisibility(View.GONE);
                     viewPager.setVisibility(View.VISIBLE);
                 }

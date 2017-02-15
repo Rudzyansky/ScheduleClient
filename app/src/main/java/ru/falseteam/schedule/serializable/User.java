@@ -63,6 +63,8 @@ public class User implements Serializable {
             User user = new User();
             user.exists = false;
             user.permissions = Groups.guest;
+            user.register = new Timestamp(System.currentTimeMillis());
+            user.lastAuth = new Timestamp(0);
             return user;
         }
     }
