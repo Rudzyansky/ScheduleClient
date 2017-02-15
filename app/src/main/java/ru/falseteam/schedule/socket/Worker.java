@@ -18,6 +18,7 @@ import ru.falseteam.schedule.socket.commands.GetUsers;
 import ru.falseteam.schedule.socket.commands.GetWeekDays;
 import ru.falseteam.schedule.socket.commands.ToastShort;
 import ru.falseteam.vframe.socket.SocketWorker;
+import ru.falseteam.vframe.socket.SubscriptionManager;
 import ru.falseteam.vframe.socket.VFKeystore;
 
 public class Worker extends SocketWorker implements SocketWorker.OnConnectionChangeStateListener {
@@ -32,7 +33,8 @@ public class Worker extends SocketWorker implements SocketWorker.OnConnectionCha
 
     private Worker(Context context) {
         super(StaticData.getHostname(), StaticData.getPortSchedule(),
-                new VFKeystore(context.getResources().openRawResource(R.raw.keystore), StaticData.getPublicPass()));
+                new VFKeystore(context.getResources().openRawResource(R.raw.keystore), StaticData.getPublicPass()),
+                Groups.class, Groups.disconnected, Groups.guest, new SubscriptionManager());
         this.context = context;
         addProtocol(new AccessDenied());
         addProtocol(new Auth());
