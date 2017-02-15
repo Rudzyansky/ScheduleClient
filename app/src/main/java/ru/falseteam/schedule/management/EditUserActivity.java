@@ -16,7 +16,6 @@ import ru.falseteam.schedule.R;
 import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.serializable.User;
 import ru.falseteam.schedule.socket.Worker;
-import ru.falseteam.schedule.socket.commands.GetUsers;
 import ru.falseteam.vframe.socket.Container;
 
 public class EditUserActivity extends AppCompatActivity implements View.OnClickListener {
