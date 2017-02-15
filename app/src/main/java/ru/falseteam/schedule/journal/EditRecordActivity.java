@@ -45,20 +45,26 @@ public class EditRecordActivity extends AppCompatActivity implements Redrawable 
         emptyView = findViewById(R.id.emptyView);
         contentView = findViewById(R.id.content);
 
+        emptyView.setVisibility(View.VISIBLE);
+        contentView.setVisibility(View.GONE);
+
         record = (JournalRecord) getIntent().getSerializableExtra("record");
 
         Worker.get().sendFromMainThread(GetJournal.getRequest());
+//        Worker.get().sendFromMainThread(GetUsers.getRequest());
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         Redrawer.addRedrawable(this);
+        Worker.get().getSubscriptionManager().subscribe("GetUsers");
         redraw();
     }
 
     @Override
     protected void onPause() {
+        Worker.get().getSubscriptionManager().unsubscribe("GetUsers");
         Redrawer.removeRedrawable(this);
         super.onPause();
     }
@@ -68,7 +74,8 @@ public class EditRecordActivity extends AppCompatActivity implements Redrawable 
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (MainData.getJournal() != null) {
+//                if (MainData.getJournal() != null && MainData.getUsers() != null) {
+                if (MainData.getJournal() != null && Worker.get().getSubscriptionManager().getData("GetUsers") != null) {
                     emptyView.setVisibility(View.GONE);
                     contentView.setVisibility(View.VISIBLE);
                     initView();
@@ -77,19 +84,25 @@ public class EditRecordActivity extends AppCompatActivity implements Redrawable 
         });
     }
 
-    private boolean init = false;
+    ListView list;
 
     private void initView() {
-        if (init) return;
-        init = true;
+        if (list != null) {
+            ((Adapter) list.getAdapter()).notifyDataSetChanged();
+            return;
+        }
 
         ((TextView) contentView.findViewById(R.id.lesson_number)).setText(String.valueOf(record.lessonNumber.id));
         ((TextView) contentView.findViewById(R.id.lesson_name)).setText(String.valueOf(record.lesson.name));
         ((TextView) contentView.findViewById(R.id.lesson_audience)).setText(String.valueOf(record.lesson.audience));
 
-        ListView list = ((ListView) contentView.findViewById(R.id.list));
-        list.setAdapter(new Adapter(this, MainData.getUsers()));
-        for (int i = 0; i < MainData.getUsers().size(); ++i)
+        list = ((ListView) contentView.findViewById(R.id.list));
+//        list.setAdapter(new Adapter(this, MainData.getUsers()));
+        //noinspection unchecked
+        ArrayList<User> users = (ArrayList<User>) Worker.get().getSubscriptionManager().getData("GetUsers").get("users");
+        list.setAdapter(new Adapter(this, users));
+//        for (int i = 0; i < MainData.getUsers().size(); ++i)
+        for (int i = 0; i < users.size(); ++i)
             if (record.presented.get(i)) list.setSelection(i);
 
         Button save = (Button) findViewById(R.id.btnSave);
@@ -107,6 +120,12 @@ public class EditRecordActivity extends AppCompatActivity implements Redrawable 
         Context context;
         LayoutInflater inflater;
         ArrayList<User> objects;
+
+        @Override
+        public void notifyDataSetChanged() {
+            objects = ((ArrayList<User>) Worker.get().getSubscriptionManager().getData("GetUsers").get("users"));
+            super.notifyDataSetChanged();
+        }
 
         Adapter(Context context, ArrayList<User> objects) {
             this.context = context;
@@ -142,10 +161,10 @@ public class EditRecordActivity extends AppCompatActivity implements Redrawable 
             User u = getItem(position);
             cb = (CheckBox) view;
             cb.setText(u.name);
-            cb.setTag(position);
-            cb.setChecked(record.presented.get(position));
+            cb.setTag(u.atList);
+            cb.setChecked(record.presented.get(u.atList));
             cb.setOnCheckedChangeListener(onCheckedChangeListener);
-            return null;
+            return view;
         }
 
         OnCheckedChangeListener onCheckedChangeListener = new OnCheckedChangeListener() {

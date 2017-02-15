@@ -16,7 +16,9 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import ru.falseteam.schedule.R;
@@ -86,10 +88,18 @@ public class InnerFragment extends Fragment implements Redrawable {
 
     public static InnerFragment newInstance(java.sql.Date date) {
         InnerFragment fragment = new InnerFragment();
-        fragment.date = date;
+//        fragment.date = date;
+//        fragment.date = new Date(date.getYear(), date.getMonth(), date.getDay());
+        Calendar cal = Calendar.getInstance(); // locale-specific
+        cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        long time = cal.getTimeInMillis();
+        fragment.date = new Date(time);
         return fragment;
     }
-
 
     private class Adapter extends BaseAdapter {
         private Context context;
@@ -103,9 +113,26 @@ public class InnerFragment extends Fragment implements Redrawable {
         }
 
         void update() {
-            journal.clear();
-            for (JournalRecord record : MainData.getJournal())
-                if (record.date == date) journal.add(record);
+            if (MainData.getJournal() == null) {
+                //
+                return;
+            }
+            journal = new ArrayList<>();
+            for (JournalRecord record : MainData.getJournal()) {
+                Calendar cal = Calendar.getInstance(); // locale-specific
+                cal.setTime(record.date);
+                cal.set(Calendar.HOUR_OF_DAY, 0);
+                cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.SECOND, 0);
+                cal.set(Calendar.MILLISECOND, 0);
+                long time = cal.getTimeInMillis();
+                record.date = new Date(time);
+//                long i = record.date.getTime() / 1000 / 60 / 60 / 24;
+//                long j = date.getTime() / 1000 / 60 / 60 / 24;
+                if (record.date.getTime() == date.getTime()) {
+                    journal.add(record);
+                }
+            }
             new Handler(Looper.getMainLooper()) {
                 @Override
                 public void handleMessage(Message inputMessage) {

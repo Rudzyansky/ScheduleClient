@@ -5,22 +5,17 @@ import android.content.Context;
 import com.vk.sdk.VKAccessToken;
 
 import ru.falseteam.schedule.R;
-import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.data.StaticData;
 import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.socket.commands.AccessDenied;
 import ru.falseteam.schedule.socket.commands.Auth;
 import ru.falseteam.schedule.socket.commands.GetJournal;
-import ru.falseteam.schedule.socket.commands.GetLessonNumbers;
-import ru.falseteam.schedule.socket.commands.GetLessons;
 import ru.falseteam.schedule.socket.commands.GetTemplates;
-import ru.falseteam.schedule.socket.commands.GetUsers;
-import ru.falseteam.schedule.socket.commands.GetWeekDays;
 import ru.falseteam.schedule.socket.commands.ToastShort;
 import ru.falseteam.vframe.socket.SocketWorker;
 import ru.falseteam.vframe.socket.VFKeystore;
 
-public class Worker extends SocketWorker implements SocketWorker.OnConnectionChangeStateListener {
+public class Worker extends SocketWorker<Groups> implements SocketWorker.OnChangePermissionListener<Groups> {
 
     private Context context;
 
@@ -32,16 +27,13 @@ public class Worker extends SocketWorker implements SocketWorker.OnConnectionCha
 
     private Worker(Context context) {
         super(StaticData.getHostname(), StaticData.getPortSchedule(),
-                new VFKeystore(context.getResources().openRawResource(R.raw.keystore), StaticData.getPublicPass()));
+                new VFKeystore(context.getResources().openRawResource(R.raw.keystore),
+                        StaticData.getPublicPass()), Groups.class, Groups.disconnected, Groups.guest);
         this.context = context;
         addProtocol(new AccessDenied());
         addProtocol(new Auth());
-        addProtocol(new GetLessons());
-        addProtocol(new GetUsers());
         addProtocol(new ToastShort());
         addProtocol(new GetTemplates());
-        addProtocol(new GetWeekDays());
-        addProtocol(new GetLessonNumbers());
         addProtocol(new GetJournal());
         worker = this;
         worker.start();
@@ -58,9 +50,8 @@ public class Worker extends SocketWorker implements SocketWorker.OnConnectionCha
     }
 
     @Override
-    public void onConnectionChangeState(boolean connected) {
-        if (connected) {
-            MainData.setCurrentGroup(Groups.guest);
+    public void onChangePermission(Groups permission) {
+        if (permission.equals(Groups.guest)) {
             // авторизуемся на сервере с косты
             while (VKAccessToken.currentToken() == null) try {
                 Thread.sleep(100);

@@ -16,7 +16,6 @@ import ru.falseteam.schedule.R;
 import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.serializable.User;
 import ru.falseteam.schedule.socket.Worker;
-import ru.falseteam.schedule.socket.commands.GetUsers;
 import ru.falseteam.vframe.socket.Container;
 
 public class EditUserActivity extends AppCompatActivity implements View.OnClickListener {
@@ -87,6 +86,6 @@ public class EditUserActivity extends AppCompatActivity implements View.OnClickL
         c.data.put("group", newGroup);
         Worker.get().sendFromMainThread(c);
         finish();
-        Worker.get().sendFromMainThread(GetUsers.getRequest());
+//        Worker.get().sendFromMainThread(GetUsers.getRequest());
     }
 }

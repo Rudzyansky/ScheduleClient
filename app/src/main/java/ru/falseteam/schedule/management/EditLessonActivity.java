@@ -12,7 +12,6 @@ import java.util.Map;
 import ru.falseteam.schedule.R;
 import ru.falseteam.schedule.serializable.Lesson;
 import ru.falseteam.schedule.socket.Worker;
-import ru.falseteam.schedule.socket.commands.GetLessons;
 import ru.falseteam.vframe.socket.Container;
 
 public class EditLessonActivity extends AppCompatActivity implements View.OnClickListener {
@@ -68,6 +67,5 @@ public class EditLessonActivity extends AppCompatActivity implements View.OnClic
         // TODO: 05.02.17 fix it ...
         Worker.get().sendFromMainThread(new Container(map.get("command").toString(), map));
         finish();
-        Worker.get().sendFromMainThread(GetLessons.getRequest());
     }
 }

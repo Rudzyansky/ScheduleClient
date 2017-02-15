@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.falseteam.schedule.R;
-import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.gui.MultiSpinner;
 import ru.falseteam.schedule.serializable.Lesson;
 import ru.falseteam.schedule.serializable.LessonNumber;
@@ -22,10 +21,7 @@ import ru.falseteam.schedule.serializable.Template;
 import ru.falseteam.schedule.serializable.WeekDay;
 import ru.falseteam.schedule.socket.Worker;
 import ru.falseteam.schedule.socket.commands.DeleteTemplate;
-import ru.falseteam.schedule.socket.commands.GetLessonNumbers;
-import ru.falseteam.schedule.socket.commands.GetLessons;
 import ru.falseteam.schedule.socket.commands.GetTemplates;
-import ru.falseteam.schedule.socket.commands.GetWeekDays;
 import ru.falseteam.schedule.socket.commands.UpdateTemplate;
 import ru.falseteam.vframe.redraw.Redrawable;
 import ru.falseteam.vframe.redraw.Redrawer;
@@ -50,19 +46,25 @@ public class EditTemplateActivity extends AppCompatActivity implements Redrawabl
         contentView = findViewById(R.id.content);
 
         template = (Template) getIntent().getSerializableExtra("template");
-
-        Redrawer.addRedrawable(this);
-        redraw();
-
-        Worker.get().sendFromMainThread(GetWeekDays.getRequest());
-        Worker.get().sendFromMainThread(GetLessonNumbers.getRequest());
-        Worker.get().sendFromMainThread(GetLessons.getRequest());
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onResume() {
+        super.onResume();
+        Redrawer.addRedrawable(this);
+        Worker.get().getSubscriptionManager().subscribe("GetWeekDays");
+        Worker.get().getSubscriptionManager().subscribe("GetLessonNumbers");
+        Worker.get().getSubscriptionManager().subscribe("GetLessons");
+        redraw();
+    }
+
+    @Override
+    protected void onPause() {
+        Worker.get().getSubscriptionManager().unsubscribe("GetLessons");
+        Worker.get().getSubscriptionManager().unsubscribe("GetLessonNumbers");
+        Worker.get().getSubscriptionManager().unsubscribe("GetWeekDays");
         Redrawer.removeRedrawable(this);
-        super.onDestroy();
+        super.onPause();
     }
 
     @Override
@@ -70,9 +72,9 @@ public class EditTemplateActivity extends AppCompatActivity implements Redrawabl
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (MainData.getWeekDays() != null &&
-                        MainData.getLessonNumbers() != null &&
-                        MainData.getLessons() != null) {
+                if (Worker.get().getSubscriptionManager().getData("GetWeekDays") != null &&
+                        Worker.get().getSubscriptionManager().getData("GetLessonNumbers") != null &&
+                        Worker.get().getSubscriptionManager().getData("GetLessons") != null) {
                     emptyView.setVisibility(View.GONE);
                     contentView.setVisibility(View.VISIBLE);
                     initView();
@@ -84,19 +86,24 @@ public class EditTemplateActivity extends AppCompatActivity implements Redrawabl
     private boolean init = false;
 
     private void initView() {
-        if (init) return;
+        if (init) {
+            ((ArrayAdapter) lesson.getAdapter()).notifyDataSetChanged();
+            return;
+        }
         init = true;
 
         ((TextView) contentView.findViewById(R.id.id)).setText(String.valueOf(template.id));
 
         dayOfWeek = (Spinner) contentView.findViewById(R.id.day_of_week);
         dayOfWeek.setAdapter(new ArrayAdapter<>(contentView.getContext(),
-                android.R.layout.simple_spinner_dropdown_item, MainData.getWeekDays()));
+                android.R.layout.simple_spinner_dropdown_item,
+                ((List<WeekDay>) Worker.get().getSubscriptionManager().getData("GetWeekDays").get("week_days"))));
         dayOfWeek.setSelection(template.weekDay.id - 1);
 
         lessonNumber = (Spinner) contentView.findViewById(R.id.lesson_number);
         lessonNumber.setAdapter(new ArrayAdapter<>(contentView.getContext(),
-                android.R.layout.simple_spinner_dropdown_item, MainData.getLessonNumbers()));
+                android.R.layout.simple_spinner_dropdown_item,
+                ((List<WeekDay>) Worker.get().getSubscriptionManager().getData("GetLessonNumbers").get("lesson_numbers"))));
         lessonNumber.setSelection(template.lessonNumber.id - 1);
 
         evenness = (Spinner) contentView.findViewById(R.id.evenness);
@@ -124,7 +131,8 @@ public class EditTemplateActivity extends AppCompatActivity implements Redrawabl
 
         lesson = (Spinner) contentView.findViewById(R.id.lesson);
         lesson.setAdapter(new ArrayAdapter<>(contentView.getContext(),
-                android.R.layout.simple_spinner_dropdown_item, MainData.getLessons()));
+                android.R.layout.simple_spinner_dropdown_item,
+                ((List<WeekDay>) Worker.get().getSubscriptionManager().getData("GetLessons").get("lessons"))));
         lesson.setSelection(template.lesson.id - 1);
 
         Button save = (Button) findViewById(R.id.btnSave);
@@ -191,6 +199,5 @@ public class EditTemplateActivity extends AppCompatActivity implements Redrawabl
                 break;
         }
         finish();
-        Worker.get().sendFromMainThread(GetTemplates.getRequest());
     }
 }

@@ -23,16 +23,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.falseteam.schedule.R;
-import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.serializable.Template;
 import ru.falseteam.schedule.socket.Worker;
-import ru.falseteam.schedule.socket.commands.GetTemplates;
 import ru.falseteam.vframe.redraw.Redrawable;
 import ru.falseteam.vframe.redraw.Redrawer;
 
 public class ListOfTemplatesActivity extends AppCompatActivity implements Redrawable {
     private View emptyView;
     private ViewPager viewPager;
+    private Adapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,18 +41,23 @@ public class ListOfTemplatesActivity extends AppCompatActivity implements Redraw
 
         emptyView = findViewById(R.id.emptyView);
         viewPager = (ViewPager) findViewById(R.id.content);
-        viewPager.setAdapter(new Adapter(getSupportFragmentManager()));
-
-        Redrawer.addRedrawable(this);
-        redraw();
-
-        Worker.get().sendFromMainThread(GetTemplates.getRequest());
+        adapter = new Adapter(getSupportFragmentManager());
+        viewPager.setAdapter(adapter);
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onResume() {
+        super.onResume();
+        Redrawer.addRedrawable(this);
+        Worker.get().getSubscriptionManager().subscribe("GetTemplates");
+        redraw();
+    }
+
+    @Override
+    protected void onPause() {
+        Worker.get().getSubscriptionManager().unsubscribe("GetTemplates");
         Redrawer.removeRedrawable(this);
-        super.onDestroy();
+        super.onPause();
     }
 
     @Override
@@ -85,9 +89,11 @@ public class ListOfTemplatesActivity extends AppCompatActivity implements Redraw
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (MainData.getTemplates() != null) {
+                if (Worker.get().getSubscriptionManager().getData("GetTemplates") != null) {
                     emptyView.setVisibility(View.GONE);
                     viewPager.setVisibility(View.VISIBLE);
+                    // TODO: 15.02.17 почему нету изменения данных?
+                    adapter.notifyDataSetChanged();
                 }
             }
         });
@@ -99,6 +105,17 @@ public class ListOfTemplatesActivity extends AppCompatActivity implements Redraw
     private class Adapter extends FragmentPagerAdapter {
         Adapter(FragmentManager fm) {
             super(fm);
+        }
+
+        // TODO: 15.02.17 notify do it //
+
+        // TODO: 15.02.17 убрать костыль
+        @Override
+        public void notifyDataSetChanged() {
+            for (int i = 0; i < getCount(); ++i) {
+                ((InnerFragment) getItem(i)).update();
+            }
+            super.notifyDataSetChanged();
         }
 
         @Override
@@ -127,6 +144,14 @@ public class ListOfTemplatesActivity extends AppCompatActivity implements Redraw
             startActivity(intent);
         }
 
+        ListView list;
+
+        public void update() {
+            // TODO: 15.02.17 переделать костыль. хз, че за костыль. но переделать
+            if (list == null || list.getAdapter() == null) return;
+            ((Adapter) list.getAdapter()).notifyDataSetChanged();
+        }
+
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -136,7 +161,7 @@ public class ListOfTemplatesActivity extends AppCompatActivity implements Redraw
             tv.setText(getResources().getStringArray(R.array.week_days)[dayOfWeek]);
 
             final Adapter adapter = new Adapter(root.getContext(), dayOfWeek);
-            ListView list = (ListView) root.findViewById(R.id.list);
+            list = (ListView) root.findViewById(R.id.list);
             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -164,8 +189,16 @@ public class ListOfTemplatesActivity extends AppCompatActivity implements Redraw
 
             Adapter(Context context, int dayOfWeek) {
                 this.context = context;
-                for (Template t : MainData.getTemplates())
+                for (Template t : ((List<Template>) Worker.get().getSubscriptionManager().getData("GetTemplates").get("templates")))
                     if (t.weekDay.id == dayOfWeek + 1) templates.add(t);
+            }
+
+            @Override
+            public void notifyDataSetChanged() {
+                templates.clear();
+                for (Template t : ((List<Template>) Worker.get().getSubscriptionManager().getData("GetTemplates").get("templates")))
+                    if (t.weekDay.id == dayOfWeek + 1) templates.add(t);
+                super.notifyDataSetChanged();
             }
 
             @Override
