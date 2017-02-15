@@ -20,11 +20,11 @@ import android.widget.TextView;
 
 import com.vk.sdk.VKSdk;
 
-import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.data.StaticData;
 import ru.falseteam.schedule.data.VkData;
 import ru.falseteam.schedule.journal.FragmentJournal;
 import ru.falseteam.schedule.management.FragmentManagement;
+import ru.falseteam.schedule.socket.Worker;
 import ru.falseteam.vframe.redraw.Redrawable;
 import ru.falseteam.vframe.redraw.Redrawer;
 
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void run() {
                 // Обновление боковой менюшки
-                ((TextView) navHeader.findViewById(R.id.group)).setText(MainData.getCurrentGroup().name());
+                ((TextView) navHeader.findViewById(R.id.group)).setText(Worker.get().getCurrentPermission().name());
                 ((TextView) navHeader.findViewById(R.id.name)).setText(VkData.getName());
                 ((ImageView) navHeader.findViewById(R.id.userIcon)).setImageBitmap(VkData.getUserIcon());
             }
@@ -118,6 +118,12 @@ public class MainActivity extends AppCompatActivity
         switch (item.getItemId()) {
             case R.id.action_about:
                 showAboutDialog();
+                return true;
+            case R.id.action_update:
+                Intent intent = new Intent(this, UpdateActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("version", "");
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

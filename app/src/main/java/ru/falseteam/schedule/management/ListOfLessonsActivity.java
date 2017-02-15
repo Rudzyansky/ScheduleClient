@@ -18,10 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.falseteam.schedule.R;
-import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.serializable.Lesson;
 import ru.falseteam.schedule.socket.Worker;
-import ru.falseteam.schedule.socket.commands.GetLessons;
 import ru.falseteam.vframe.redraw.Redrawable;
 import ru.falseteam.vframe.redraw.Redrawer;
 
@@ -53,15 +51,21 @@ public class ListOfLessonsActivity extends AppCompatActivity implements Redrawab
         progressBar = findViewById(R.id.progressBar);
         textView = (TextView) findViewById(R.id.textView);
         lv.setEmptyView(findViewById(R.id.emptyView));
-        Redrawer.addRedrawable(this);
-        redraw();
-        Worker.get().sendFromMainThread(GetLessons.getRequest());
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onResume() {
+        super.onResume();
+        Redrawer.addRedrawable(this);
+        Worker.get().getSubscriptionManager().subscribe("GetLessons");
+        redraw();
+    }
+
+    @Override
+    protected void onPause() {
+        Worker.get().getSubscriptionManager().unsubscribe("GetLessons");
         Redrawer.removeRedrawable(this);
-        super.onDestroy();
+        super.onPause();
     }
 
     @Override
@@ -88,10 +92,10 @@ public class ListOfLessonsActivity extends AppCompatActivity implements Redrawab
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (MainData.getLessons() != null) {
+                if (Worker.get().getSubscriptionManager().getData("GetLessons") != null) {
                     progressBar.setVisibility(View.INVISIBLE);
                     textView.setText(R.string.empty_list);
-                    pairAdapter.setObjects(MainData.getLessons());
+                    pairAdapter.setObjects((List<Lesson>) Worker.get().getSubscriptionManager().getData("GetLessons").get("lessons"));
                 }
             }
         });

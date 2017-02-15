@@ -18,10 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.falseteam.schedule.R;
-import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.serializable.User;
 import ru.falseteam.schedule.socket.Worker;
-import ru.falseteam.schedule.socket.commands.GetUsers;
 import ru.falseteam.vframe.redraw.Redrawable;
 import ru.falseteam.vframe.redraw.Redrawer;
 
@@ -50,9 +48,7 @@ public class ListOfUsersActivity extends AppCompatActivity implements Redrawable
         progressBar = findViewById(R.id.progressBar);
         textView = (TextView) findViewById(R.id.textView);
         lv.setEmptyView(findViewById(R.id.emptyView));
-        Redrawer.addRedrawable(this);
-        redraw();
-        Worker.get().sendFromMainThread(GetUsers.getRequest());
+//        Worker.get().sendFromMainThread(GetUsers.getRequest());
     }
 
     private void openUserEditor(User user) {
@@ -62,9 +58,18 @@ public class ListOfUsersActivity extends AppCompatActivity implements Redrawable
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onResume() {
+        super.onResume();
+        Redrawer.addRedrawable(this);
+        Worker.get().getSubscriptionManager().subscribe("GetUsers");
+        redraw();
+    }
+
+    @Override
+    protected void onPause() {
+        Worker.get().getSubscriptionManager().unsubscribe("GetUsers");
         Redrawer.removeRedrawable(this);
-        super.onDestroy();
+        super.onPause();
     }
 
     @Override
@@ -88,10 +93,12 @@ public class ListOfUsersActivity extends AppCompatActivity implements Redrawable
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (MainData.getUsers() != null) {
+//                if (MainData.getUsers() != null) {
+                if (Worker.get().getSubscriptionManager().getData("GetUsers") != null) {
                     progressBar.setVisibility(View.INVISIBLE);
                     textView.setText(R.string.empty_list);
-                    adapter.setObjects(MainData.getUsers());
+//                    adapter.setObjects(MainData.getUsers());
+                    adapter.setObjects((List<User>) Worker.get().getSubscriptionManager().getData("GetUsers").get("users"));
                 }
             }
         });

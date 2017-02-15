@@ -5,10 +5,10 @@ android {
     buildToolsVersion '25.0.2'
     defaultConfig {
         applicationId "ru.falseteam.schedule"
-        minSdkVersion 21
+        minSdkVersion 14
         targetSdkVersion 25
         versionCode 1
-        versionName "2.0.0.1b"
+        versionName "2.0.0.5b"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 //        jackOptions {
 //            enabled true

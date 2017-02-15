@@ -5,10 +5,8 @@ import android.os.Build;
 
 import java.util.Map;
 
-import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.UpdateActivity;
 import ru.falseteam.schedule.data.StaticData;
-import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.socket.Worker;
 import ru.falseteam.vframe.socket.Container;
 import ru.falseteam.vframe.socket.ProtocolAbstract;
@@ -17,7 +15,6 @@ import ru.falseteam.vframe.socket.SocketWorker;
 public class Auth extends ProtocolAbstract {
     @Override
     public void exec(Map<String, Object> map, SocketWorker worker) {
-        MainData.setCurrentGroup(Groups.valueOf(map.get("permissions").toString()));
         if (!map.get("version").toString().equals(StaticData.getClientVersion())) {
             Intent intent = new Intent(Worker.get().getContext(), UpdateActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
