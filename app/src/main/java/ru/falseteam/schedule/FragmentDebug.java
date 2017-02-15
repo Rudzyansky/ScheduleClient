@@ -8,9 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.data.StaticData;
 import ru.falseteam.schedule.serializable.Groups;
+import ru.falseteam.schedule.socket.Worker;
 import ru.falseteam.vframe.redraw.Redrawable;
 import ru.falseteam.vframe.redraw.Redrawer;
 
@@ -51,7 +51,7 @@ public class FragmentDebug extends Fragment implements Redrawable {
     @Override
     public void redraw() {
         //TODO спросить зачем тут вообще это было?
-        switch (MainData.getCurrentGroup()) {
+        switch (Worker.get().getCurrentPermission()) {
             case disconnected:
             case developer:
                 break;
@@ -66,7 +66,7 @@ public class FragmentDebug extends Fragment implements Redrawable {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                group.setText(MainData.getCurrentGroup().name());
+                group.setText(Worker.get().getCurrentPermission().name());
                 version.setText(StaticData.getClientVersion());
             }
         });
