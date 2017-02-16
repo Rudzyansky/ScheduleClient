@@ -86,6 +86,5 @@ public class EditUserActivity extends AppCompatActivity implements View.OnClickL
         c.data.put("group", newGroup);
         Worker.get().sendFromMainThread(c);
         finish();
-//        Worker.get().sendFromMainThread(GetUsers.getRequest());
     }
 }

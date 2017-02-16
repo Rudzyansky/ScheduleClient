@@ -3,9 +3,6 @@ package ru.falseteam.schedule.journal;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -22,6 +19,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import ru.falseteam.schedule.R;
+import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.serializable.JournalRecord;
 import ru.falseteam.schedule.socket.Worker;
 import ru.falseteam.vframe.redraw.Redrawable;
@@ -66,22 +64,21 @@ public class InnerFragment extends Fragment implements Redrawable {
 
     @Override
     public void redraw() {
-        // TODO: 16.02.17 костыли на костылях. пофиксить
-        if (Worker.get().getSubscriptionManager().getData("GetJournal") != null) {
-            new Handler(Looper.getMainLooper()) {
+        if (Worker.get().getSubscriptionManager().getData("GetJournal") != null)
+            getActivity().runOnUiThread(new Runnable() {
                 @Override
-                public void handleMessage(Message inputMessage) {
+                public void run() {
                     adapter.notifyDataSetChanged();
                 }
-            }.obtainMessage().sendToTarget();
-        }
+            });
     }
 
     @Override
     public void onResume() {
         super.onResume();
         Redrawer.addRedrawable(this);
-        Worker.get().getSubscriptionManager().subscribe("GetJournal");
+        Worker.get().getSubscriptionManager().subscribe("GetJournal",
+                MainData.getCacheDir() + "journal.bin");
         redraw();
     }
 
@@ -116,8 +113,7 @@ public class InnerFragment extends Fragment implements Redrawable {
             this.context = context;
             this.date = date;
             journal = new ArrayList<>();
-            // TODO: 16.02.17 тут тоже костыли
-            try {
+            if (Worker.get().getSubscriptionManager().getData("GetJournal") != null)
                 for (JournalRecord record : ((List<JournalRecord>) Worker.get().getSubscriptionManager().getData("GetJournal").get("journal"))) {
                     Calendar cal = Calendar.getInstance(); // locale-specific
                     cal.setTime(record.date);
@@ -133,8 +129,6 @@ public class InnerFragment extends Fragment implements Redrawable {
                         journal.add(record);
                     }
                 }
-            } catch (Exception ignore) {
-            }
         }
 
         @Override
