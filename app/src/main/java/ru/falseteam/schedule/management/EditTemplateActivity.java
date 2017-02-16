@@ -21,7 +21,6 @@ import ru.falseteam.schedule.serializable.Template;
 import ru.falseteam.schedule.serializable.WeekDay;
 import ru.falseteam.schedule.socket.Worker;
 import ru.falseteam.schedule.socket.commands.DeleteTemplate;
-import ru.falseteam.schedule.socket.commands.GetTemplates;
 import ru.falseteam.schedule.socket.commands.UpdateTemplate;
 import ru.falseteam.vframe.redraw.Redrawable;
 import ru.falseteam.vframe.redraw.Redrawer;

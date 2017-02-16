@@ -19,11 +19,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import ru.falseteam.schedule.R;
-import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.serializable.JournalRecord;
 import ru.falseteam.schedule.serializable.User;
 import ru.falseteam.schedule.socket.Worker;
-import ru.falseteam.schedule.socket.commands.GetJournal;
 import ru.falseteam.schedule.socket.commands.UpdateJournalRecord;
 import ru.falseteam.vframe.redraw.Redrawable;
 import ru.falseteam.vframe.redraw.Redrawer;
@@ -49,9 +47,6 @@ public class EditRecordActivity extends AppCompatActivity implements Redrawable 
         contentView.setVisibility(View.GONE);
 
         record = (JournalRecord) getIntent().getSerializableExtra("record");
-
-        Worker.get().sendFromMainThread(GetJournal.getRequest());
-//        Worker.get().sendFromMainThread(GetUsers.getRequest());
     }
 
     @Override
@@ -74,8 +69,7 @@ public class EditRecordActivity extends AppCompatActivity implements Redrawable 
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-//                if (MainData.getJournal() != null && MainData.getUsers() != null) {
-                if (MainData.getJournal() != null && Worker.get().getSubscriptionManager().getData("GetUsers") != null) {
+                if (Worker.get().getSubscriptionManager().getData("GetUsers") != null) {
                     emptyView.setVisibility(View.GONE);
                     contentView.setVisibility(View.VISIBLE);
                     initView();
@@ -97,11 +91,9 @@ public class EditRecordActivity extends AppCompatActivity implements Redrawable 
         ((TextView) contentView.findViewById(R.id.lesson_audience)).setText(String.valueOf(record.lesson.audience));
 
         list = ((ListView) contentView.findViewById(R.id.list));
-//        list.setAdapter(new Adapter(this, MainData.getUsers()));
         //noinspection unchecked
         ArrayList<User> users = (ArrayList<User>) Worker.get().getSubscriptionManager().getData("GetUsers").get("users");
         list.setAdapter(new Adapter(this, users));
-//        for (int i = 0; i < MainData.getUsers().size(); ++i)
         for (int i = 0; i < users.size(); ++i)
             if (record.presented.get(i)) list.setSelection(i);
 
@@ -111,7 +103,6 @@ public class EditRecordActivity extends AppCompatActivity implements Redrawable 
             public void onClick(View v) {
                 Worker.get().sendFromMainThread(UpdateJournalRecord.getRequest(record));
                 finish();
-                Worker.get().sendFromMainThread(GetJournal.getRequest());
             }
         });
     }

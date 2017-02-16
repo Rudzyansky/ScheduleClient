@@ -22,10 +22,8 @@ import java.util.Calendar;
 import java.util.List;
 
 import ru.falseteam.schedule.R;
-import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.serializable.JournalRecord;
 import ru.falseteam.schedule.socket.Worker;
-import ru.falseteam.schedule.socket.commands.GetJournal;
 import ru.falseteam.vframe.redraw.Redrawable;
 import ru.falseteam.vframe.redraw.Redrawer;
 
@@ -63,25 +61,33 @@ public class InnerFragment extends Fragment implements Redrawable {
                 openRecordEditor(adapter.journal.get(position));
             }
         });
-
-        Worker.get().sendFromMainThread(GetJournal.getRequest());
         return root;
     }
 
     @Override
     public void redraw() {
-        adapter.update();
+        // TODO: 16.02.17 костыли на костылях. пофиксить
+        if (Worker.get().getSubscriptionManager().getData("GetJournal") != null) {
+            new Handler(Looper.getMainLooper()) {
+                @Override
+                public void handleMessage(Message inputMessage) {
+                    adapter.notifyDataSetChanged();
+                }
+            }.obtainMessage().sendToTarget();
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
         Redrawer.addRedrawable(this);
+        Worker.get().getSubscriptionManager().subscribe("GetJournal");
         redraw();
     }
 
     @Override
     public void onPause() {
+        Worker.get().getSubscriptionManager().unsubscribe("GetJournal");
         Redrawer.removeRedrawable(this);
         super.onPause();
     }
@@ -109,16 +115,32 @@ public class InnerFragment extends Fragment implements Redrawable {
         Adapter(Context context, java.sql.Date date) {
             this.context = context;
             this.date = date;
-            update();
+            journal = new ArrayList<>();
+            // TODO: 16.02.17 тут тоже костыли
+            try {
+                for (JournalRecord record : ((List<JournalRecord>) Worker.get().getSubscriptionManager().getData("GetJournal").get("journal"))) {
+                    Calendar cal = Calendar.getInstance(); // locale-specific
+                    cal.setTime(record.date);
+                    cal.set(Calendar.HOUR_OF_DAY, 0);
+                    cal.set(Calendar.MINUTE, 0);
+                    cal.set(Calendar.SECOND, 0);
+                    cal.set(Calendar.MILLISECOND, 0);
+                    long time = cal.getTimeInMillis();
+                    record.date = new Date(time);
+//                long i = record.date.getTime() / 1000 / 60 / 60 / 24;
+//                long j = date.getTime() / 1000 / 60 / 60 / 24;
+                    if (record.date.getTime() == date.getTime()) {
+                        journal.add(record);
+                    }
+                }
+            } catch (Exception ignore) {
+            }
         }
 
-        void update() {
-            if (MainData.getJournal() == null) {
-                //
-                return;
-            }
+        @Override
+        public void notifyDataSetChanged() {
             journal = new ArrayList<>();
-            for (JournalRecord record : MainData.getJournal()) {
+            for (JournalRecord record : ((List<JournalRecord>) Worker.get().getSubscriptionManager().getData("GetJournal").get("journal"))) {
                 Calendar cal = Calendar.getInstance(); // locale-specific
                 cal.setTime(record.date);
                 cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -133,12 +155,7 @@ public class InnerFragment extends Fragment implements Redrawable {
                     journal.add(record);
                 }
             }
-            new Handler(Looper.getMainLooper()) {
-                @Override
-                public void handleMessage(Message inputMessage) {
-                    notifyDataSetChanged();
-                }
-            }.obtainMessage().sendToTarget();
+            super.notifyDataSetChanged();
         }
 
         @Override
