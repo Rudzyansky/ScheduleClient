@@ -17,8 +17,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ru.falseteam.schedule.R;
+import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.serializable.JournalRecord;
 import ru.falseteam.schedule.serializable.User;
 import ru.falseteam.schedule.socket.Worker;
@@ -91,8 +93,14 @@ public class EditRecordActivity extends AppCompatActivity implements Redrawable 
         ((TextView) contentView.findViewById(R.id.lesson_audience)).setText(String.valueOf(record.lesson.audience));
 
         list = ((ListView) contentView.findViewById(R.id.list));
+        ArrayList<User> users = new ArrayList<>();
         //noinspection unchecked
-        ArrayList<User> users = (ArrayList<User>) Worker.get().getSubscriptionManager().getData("GetUsers").get("users");
+        for (User u : (List<User>) Worker.get().getSubscriptionManager().getData("GetUsers").get("users")) {
+            if (u.permissions.equals(Groups.developer) ||
+                    u.permissions.equals(Groups.admin) ||
+                    u.permissions.equals(Groups.user))
+                users.add(u);
+        }
         list.setAdapter(new Adapter(this, users));
         for (int i = 0; i < users.size(); ++i)
             if (record.presented.get(i)) list.setSelection(i);
