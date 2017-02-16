@@ -64,7 +64,6 @@ public class EditLessonActivity extends AppCompatActivity implements View.OnClic
                 break;
         }
         map.put("lesson", lesson);
-        // TODO: 05.02.17 fix it ...
         Worker.get().sendFromMainThread(new Container(map.get("command").toString(), map));
         finish();
     }
