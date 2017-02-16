@@ -12,7 +12,7 @@ import ru.falseteam.schedule.R;
  * @version 1.0
  */
 public class StaticData {
-    public static final String TAG = "schedule_tag";
+    static final String TAG = "schedule_tag";
 
     private static String clientVersion;
     private static String hostname;
@@ -32,8 +32,7 @@ public class StaticData {
         StaticData.portUpdate = context.getResources().getInteger(R.integer.port_update);
     }
 
-
-    // Гетеры
+    // Геттеры
     public static int getPortSchedule() {
         return portSchedule;
     }

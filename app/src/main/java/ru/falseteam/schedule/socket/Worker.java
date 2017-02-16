@@ -9,8 +9,6 @@ import ru.falseteam.schedule.data.StaticData;
 import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.socket.commands.AccessDenied;
 import ru.falseteam.schedule.socket.commands.Auth;
-import ru.falseteam.schedule.socket.commands.GetJournal;
-import ru.falseteam.schedule.socket.commands.GetTemplates;
 import ru.falseteam.schedule.socket.commands.ToastShort;
 import ru.falseteam.vframe.socket.SocketWorker;
 import ru.falseteam.vframe.socket.VFKeystore;
@@ -33,8 +31,6 @@ public class Worker extends SocketWorker<Groups> implements SocketWorker.OnChang
         addProtocol(new AccessDenied());
         addProtocol(new Auth());
         addProtocol(new ToastShort());
-        addProtocol(new GetTemplates());
-        addProtocol(new GetJournal());
         worker = this;
         worker.start();
         worker.addOnConnectionChangeStateListener(this);
