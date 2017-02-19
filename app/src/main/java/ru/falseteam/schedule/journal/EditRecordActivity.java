@@ -103,7 +103,8 @@ public class EditRecordActivity extends AppCompatActivity implements Redrawable 
         }
         list.setAdapter(new Adapter(this, users));
         for (int i = 0; i < users.size(); ++i)
-            if (record.presented.get(i)) list.setSelection(i);
+            if (users.get(i).permissions.equals(Groups.developer) || users.get(i).permissions.equals(Groups.admin) || record.presented.get(i))
+                list.setSelection(i);
 
         Button save = (Button) findViewById(R.id.btnSave);
         save.setOnClickListener(new View.OnClickListener() {
