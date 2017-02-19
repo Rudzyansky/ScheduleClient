@@ -136,7 +136,6 @@ public class ListOfTemplatesActivity extends AppCompatActivity implements Redraw
         ListView list;
 
         public void update() {
-            // TODO: 15.02.17 переделать костыль. хз, че за костыль. но переделать
             if (list == null || list.getAdapter() == null) return;
             ((Adapter) list.getAdapter()).notifyDataSetChanged();
         }
