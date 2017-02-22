@@ -33,12 +33,9 @@ public class FragmentJournal extends Fragment implements Redrawable, Worker.OnCh
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                ((MainActivity) getActivity())
-                        .setFragment(InnerFragment.newInstance(new java.sql.Date(year - 1900, month, dayOfMonth)));
-//                getActivity().getSupportFragmentManager().putFragment(getArguments(), "key", InnerFragment.newInstance(new java.sql.Date(year - 1900, month, dayOfMonth)));
+                ((MainActivity) getActivity()).setFragmentWithStack(InnerFragment.newInstance(new java.sql.Date(year - 1900, month, dayOfMonth)));
             }
         });
-        // TODO: 19.02.17 запилить стэк фрагментов
         return rootView;
     }
 

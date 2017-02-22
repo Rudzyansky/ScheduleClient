@@ -19,7 +19,6 @@ import java.util.Calendar;
 import java.util.List;
 
 import ru.falseteam.schedule.R;
-import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.serializable.JournalRecord;
 import ru.falseteam.schedule.socket.Worker;
 import ru.falseteam.vframe.redraw.Redrawable;
@@ -77,8 +76,7 @@ public class InnerFragment extends Fragment implements Redrawable {
     public void onResume() {
         super.onResume();
         Redrawer.addRedrawable(this);
-        Worker.get().getSubscriptionManager().subscribe("GetJournal",
-                MainData.getCacheDir() + "journal.bin");
+        Worker.get().getSubscriptionManager().subscribeWithCache("GetJournal");
         redraw();
     }
 

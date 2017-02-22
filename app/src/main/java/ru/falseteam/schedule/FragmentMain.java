@@ -19,7 +19,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import ru.falseteam.schedule.data.MainData;
 import ru.falseteam.schedule.serializable.Template;
 import ru.falseteam.schedule.socket.Worker;
 import ru.falseteam.vframe.redraw.Redrawable;
@@ -58,8 +57,7 @@ public class FragmentMain extends Fragment implements Redrawable {
     public void onResume() {
         super.onResume();
         Redrawer.addRedrawable(this);
-        Worker.get().getSubscriptionManager().subscribe("GetTemplates",
-                MainData.getCacheDir() + "templates.bin");
+        Worker.get().getSubscriptionManager().subscribeWithCache("GetTemplates");
         redraw();
     }
 
