@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity
     private Fragment fragmentMain = new FragmentMain();
     private Fragment fragmentJournal = new FragmentJournal();
     private Fragment fragmentManagement = new FragmentManagement();
+    private Fragment fragmentNotPresented = new FragmentNotPresented();
     private Fragment fragmentDebug = new FragmentDebug();
 
     private View navHeader;
@@ -103,9 +104,9 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            if (getSupportFragmentManager().getBackStackEntryCount() > 1)
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0)
                 getSupportFragmentManager().popBackStack();
-            super.onBackPressed();
+            else super.onBackPressed();
         }
     }
 
@@ -144,6 +145,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        while (getSupportFragmentManager().popBackStackImmediate()) ;
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         switch (item.getItemId()) {
             case R.id.nav_main:
@@ -154,6 +156,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_management:
                 ft.replace(R.id.content_main, fragmentManagement);
+                break;
+            case R.id.nav_not_presented:
+                ft.replace(R.id.content_main, fragmentNotPresented);
                 break;
             case R.id.nav_debug:
                 ft.replace(R.id.content_main, fragmentDebug);
@@ -169,5 +174,10 @@ public class MainActivity extends AppCompatActivity
     public void setFragment(Fragment fragment) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content_main, fragment).commit();
+    }
+
+    public void setFragmentWithStack(Fragment fragment) {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.addToBackStack(null).replace(R.id.content_main, fragment).commit();
     }
 }
