@@ -24,6 +24,7 @@ import ru.falseteam.schedule.data.StaticData;
 import ru.falseteam.schedule.data.VkData;
 import ru.falseteam.schedule.journal.FragmentJournal;
 import ru.falseteam.schedule.management.FragmentManagement;
+import ru.falseteam.schedule.schedule.FragmentSchedule;
 import ru.falseteam.schedule.socket.Worker;
 import ru.falseteam.vframe.redraw.Redrawable;
 import ru.falseteam.vframe.redraw.Redrawer;
@@ -31,7 +32,7 @@ import ru.falseteam.vframe.redraw.Redrawer;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Redrawable {
 
-    private Fragment fragmentMain = new FragmentMain();
+    private Fragment fragmentSchedule = new FragmentSchedule();
     private Fragment fragmentJournal = new FragmentJournal();
     private Fragment fragmentManagement = new FragmentManagement();
     private Fragment fragmentNotPresented = new FragmentNotPresented();
@@ -61,8 +62,8 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         navHeader = navigationView.getHeaderView(0);
         // set default selected fragment
-        getSupportFragmentManager().beginTransaction().replace(R.id.content_main, fragmentMain).commit();
-        navigationView.setCheckedItem(R.id.nav_main);
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_main, fragmentSchedule).commit();
+        navigationView.setCheckedItem(R.id.nav_schedule);
 
         Redrawer.addRedrawable(this);
         redraw();
@@ -148,8 +149,11 @@ public class MainActivity extends AppCompatActivity
         while (getSupportFragmentManager().popBackStackImmediate()) ;
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         switch (item.getItemId()) {
-            case R.id.nav_main:
-                ft.replace(R.id.content_main, fragmentMain);
+//            case R.id.nav_main:
+//                ft.replace(R.id.content_main, fragmentMain);
+//                break;
+            case R.id.nav_schedule:
+                ft.replace(R.id.content_main, fragmentSchedule);
                 break;
             case R.id.nav_journal:
                 ft.replace(R.id.content_main, fragmentJournal);
