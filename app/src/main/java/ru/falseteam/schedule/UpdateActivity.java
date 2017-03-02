@@ -23,7 +23,7 @@ import ru.falseteam.schedule.data.StaticData;
 import ru.falseteam.vframe.socket.VFKeystore;
 
 public class UpdateActivity extends AppCompatActivity implements View.OnClickListener {
-
+    // TODO: 02.03.17 сделать чтоб при нажатии "отложить" останавливалась загрузка
     private ProgressBar progressBar;
     private Button actUpdate;
 

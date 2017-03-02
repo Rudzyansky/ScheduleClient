@@ -12,7 +12,7 @@ import java.util.BitSet;
 public class Template implements Serializable {
     public boolean exists;
     public int id;
-    public WeekDay weekDay;
+    public WeekDay weekDay; // понедельник ....
     public LessonNumber lessonNumber;
     public Lesson lesson;
     public BitSet weeks;

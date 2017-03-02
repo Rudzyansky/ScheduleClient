@@ -8,8 +8,8 @@ android {
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 1
-        versionName "1.0.2"
-//        versionName "2.0.0.7b"
+        versionName "1.0.5"
+//        versionName "2.0.0.9b"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 //        jackOptions {
 //            enabled true
