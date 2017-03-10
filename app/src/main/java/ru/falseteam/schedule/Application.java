@@ -6,7 +6,6 @@ import android.content.Intent;
 import com.vk.sdk.VKSdk;
 
 import ru.falseteam.schedule.data.DataLoader;
-import ru.falseteam.schedule.notification.MyNotificationManager;
 import ru.falseteam.schedule.service.ScheduleService;
 import ru.falseteam.schedule.socket.Worker;
 import ru.falseteam.vframe.VFrame;

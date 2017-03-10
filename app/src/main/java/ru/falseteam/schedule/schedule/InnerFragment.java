@@ -48,6 +48,19 @@ public class InnerFragment extends Fragment implements Redrawable {
         return root;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Redrawer.addRedrawable(this);
+        redraw();
+    }
+
+    @Override
+    public void onPause() {
+        Redrawer.removeRedrawable(this);
+        super.onPause();
+    }
+
     public static InnerFragment newInstance(int week, int dayOfWeek) {
         InnerFragment fragment = new InnerFragment();
         fragment.week = week;
@@ -74,12 +87,12 @@ public class InnerFragment extends Fragment implements Redrawable {
 
         Adapter(Context context) {
             this.context = context;
-            for (Template t : ((List<Template>) Worker.get().getSubscriptionManager().getData("GetTemplates").get("templates")))
-                if (t.weekDay.id == dayOfWeek + 1 && (
-                        (t.weeks.get(31) &&
-                                (t.weeks.get(30) || (t.weeks.get(29) && week % 2 == 0) || (!t.weeks.get(29) && week % 2 == 1))
-                        ) || t.weeks.get(week)
-                )) templates.add(t);
+//            for (Template t : ((List<Template>) Worker.get().getSubscriptionManager().getData("GetTemplates").get("templates")))
+//                if (t.weekDay.id == dayOfWeek + 1 && (
+//                        (t.weeks.get(31) &&
+//                                (t.weeks.get(30) || (t.weeks.get(29) && week % 2 == 0) || (!t.weeks.get(29) && week % 2 == 1))
+//                        ) || t.weeks.get(week)
+//                )) templates.add(t);
         }
 
         @Override
