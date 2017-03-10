@@ -86,17 +86,17 @@ public class ListOfTemplatesActivity extends AppCompatActivity implements Redraw
 
     @Override
     public void redraw() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (Worker.get().getSubscriptionManager().getData("GetTemplates") != null) {
+        if (Worker.get().getSubscriptionManager().getData("GetTemplates") != null)
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
                     emptyView.setVisibility(View.GONE);
                     viewPager.setVisibility(View.VISIBLE);
-                    // TODO: 15.02.17 почему нету изменения данных?
-                    adapter.notifyDataSetChanged();
+                    for (int i = 0; i < adapter.getCount(); ++i) {
+                        ((InnerFragment) adapter.getItem(i)).update();
+                    }
                 }
-            }
-        });
+            });
     }
 
     /**
@@ -105,17 +105,6 @@ public class ListOfTemplatesActivity extends AppCompatActivity implements Redraw
     private class Adapter extends FragmentPagerAdapter {
         Adapter(FragmentManager fm) {
             super(fm);
-        }
-
-        // TODO: 15.02.17 notify do it //
-
-        // TODO: 15.02.17 убрать костыль
-        @Override
-        public void notifyDataSetChanged() {
-            for (int i = 0; i < getCount(); ++i) {
-                ((InnerFragment) getItem(i)).update();
-            }
-            super.notifyDataSetChanged();
         }
 
         @Override
@@ -147,7 +136,6 @@ public class ListOfTemplatesActivity extends AppCompatActivity implements Redraw
         ListView list;
 
         public void update() {
-            // TODO: 15.02.17 переделать костыль. хз, че за костыль. но переделать
             if (list == null || list.getAdapter() == null) return;
             ((Adapter) list.getAdapter()).notifyDataSetChanged();
         }

@@ -14,7 +14,6 @@ import ru.falseteam.schedule.socket.Worker;
 import ru.falseteam.vframe.redraw.Redrawable;
 import ru.falseteam.vframe.redraw.Redrawer;
 
-//TODO ПЕРЕДЕЛАТЬ ЭТОТ ТРЭШАК
 public class FragmentDebug extends Fragment implements Redrawable {
 
     private TextView group;
@@ -50,16 +49,13 @@ public class FragmentDebug extends Fragment implements Redrawable {
 
     @Override
     public void redraw() {
-        //TODO спросить зачем тут вообще это было?
         switch (Worker.get().getCurrentPermission()) {
             case disconnected:
+            case admin:
             case developer:
                 break;
-//            case disconnected:
-//                (new FragmentAccessDenied()).init(getActivity(), this, R.string.access_denied_offline, developer);
-//                return;
             default:
-                ((MainActivity) getActivity()).setFragment(FragmentAccessDenied.init(this, getString(R.string.access_denied_not_allowed), Groups.developer));
+                ((MainActivity) getActivity()).setFragment(FragmentAccessDenied.init(this, getString(R.string.access_denied_not_allowed), Groups.developer, Groups.admin, Groups.disconnected));
                 return;
         }
 
