@@ -15,7 +15,7 @@
             android:id="@+id/nav_management"
             android:title="@string/title_fragment_management" />
         <item
-            android:id="@+id/nav_not_presented"
+            android:id="@+id/nav_statistics"
             android:title="@string/title_fragment_not_presented" />
         <item
             android:id="@+id/nav_debug"

@@ -26,6 +26,7 @@ import ru.falseteam.schedule.journal.FragmentJournal;
 import ru.falseteam.schedule.management.FragmentManagement;
 import ru.falseteam.schedule.schedule.FragmentSchedule;
 import ru.falseteam.schedule.socket.Worker;
+import ru.falseteam.schedule.statistics.FragmentStatistics;
 import ru.falseteam.vframe.redraw.Redrawable;
 import ru.falseteam.vframe.redraw.Redrawer;
 
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity
     private Fragment fragmentSchedule = new FragmentSchedule();
     private Fragment fragmentJournal = new FragmentJournal();
     private Fragment fragmentManagement = new FragmentManagement();
-    private Fragment fragmentNotPresented = new FragmentNotPresented();
+    private Fragment fragmentStatistics = new FragmentStatistics();
     private Fragment fragmentDebug = new FragmentDebug();
 
     private View navHeader;
@@ -149,9 +150,6 @@ public class MainActivity extends AppCompatActivity
         while (getSupportFragmentManager().popBackStackImmediate()) ;
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         switch (item.getItemId()) {
-//            case R.id.nav_main:
-//                ft.replace(R.id.content_main, fragmentMain);
-//                break;
             case R.id.nav_schedule:
                 ft.replace(R.id.content_main, fragmentSchedule);
                 break;
@@ -161,8 +159,8 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_management:
                 ft.replace(R.id.content_main, fragmentManagement);
                 break;
-            case R.id.nav_not_presented:
-                ft.replace(R.id.content_main, fragmentNotPresented);
+            case R.id.nav_statistics:
+                ft.replace(R.id.content_main, fragmentStatistics);
                 break;
             case R.id.nav_debug:
                 ft.replace(R.id.content_main, fragmentDebug);
