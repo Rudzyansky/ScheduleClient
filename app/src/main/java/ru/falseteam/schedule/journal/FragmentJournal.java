@@ -14,7 +14,6 @@ import ru.falseteam.schedule.MainActivity;
 import ru.falseteam.schedule.R;
 import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.socket.Worker;
-import ru.falseteam.schedule.socket.commands.GetJournal;
 import ru.falseteam.vframe.redraw.Redrawable;
 import ru.falseteam.vframe.redraw.Redrawer;
 
@@ -30,23 +29,13 @@ public class FragmentJournal extends Fragment implements Redrawable, Worker.OnCh
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_calendar, container, false);
-//        MaterialCalendarView calendarView = (MaterialCalendarView) rootView.findViewById(R.id.calendarView);
         CalendarView calendarView = (CalendarView) rootView.findViewById(R.id.calendarView);
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                ((MainActivity) getActivity())
-                        .setFragment(InnerFragment.newInstance(new java.sql.Date(year - 1900, month, dayOfMonth)));
-//                        .setFragment(InnerFragment.newInstance(new java.sql.Date(date.getDate().getTime())));
+                ((MainActivity) getActivity()).setFragmentWithStack(InnerFragment.newInstance(new java.sql.Date(year - 1900, month, dayOfMonth)));
             }
         });
-//        calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
-//            @Override
-//            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-//                ((MainActivity) getActivity())
-//                        .setFragment(InnerFragment.newInstance(new java.sql.Date(date.getDate().getTime())));
-//            }
-//        });
         return rootView;
     }
 
@@ -82,6 +71,5 @@ public class FragmentJournal extends Fragment implements Redrawable, Worker.OnCh
 
     @Override
     public void onChangePermission(Groups permission) {
-        Worker.get().sendFromMainThread(GetJournal.getRequest());
     }
 }

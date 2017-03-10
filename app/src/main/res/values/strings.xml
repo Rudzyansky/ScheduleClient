@@ -6,8 +6,10 @@
     <string name="empty_list">Список пуст</string>
     <string name="list_loading">Однако, здравствуйте</string>
 
-    <string name="title_fragment_main">Расписание</string>
+    <string name="title_fragment_main">Main Fragment</string>
+    <string name="title_fragment_schedule">Расписание</string>
     <string name="title_fragment_debug">Отладка</string>
+    <string name="title_fragment_not_presented">Стата за неделю</string>
     <string name="title_fragment_management">Управление</string>
     <string name="title_fragment_journal">Журнал</string>
 

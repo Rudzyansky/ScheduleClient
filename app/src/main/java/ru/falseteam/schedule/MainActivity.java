@@ -24,16 +24,19 @@ import ru.falseteam.schedule.data.StaticData;
 import ru.falseteam.schedule.data.VkData;
 import ru.falseteam.schedule.journal.FragmentJournal;
 import ru.falseteam.schedule.management.FragmentManagement;
+import ru.falseteam.schedule.schedule.FragmentSchedule;
 import ru.falseteam.schedule.socket.Worker;
+import ru.falseteam.schedule.statistics.FragmentStatistics;
 import ru.falseteam.vframe.redraw.Redrawable;
 import ru.falseteam.vframe.redraw.Redrawer;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Redrawable {
 
-    private Fragment fragmentMain = new FragmentMain();
+    private Fragment fragmentSchedule = new FragmentSchedule();
     private Fragment fragmentJournal = new FragmentJournal();
     private Fragment fragmentManagement = new FragmentManagement();
+    private Fragment fragmentStatistics = new FragmentStatistics();
     private Fragment fragmentDebug = new FragmentDebug();
 
     private View navHeader;
@@ -60,8 +63,8 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         navHeader = navigationView.getHeaderView(0);
         // set default selected fragment
-        getSupportFragmentManager().beginTransaction().replace(R.id.content_main, fragmentMain).commit();
-        navigationView.setCheckedItem(R.id.nav_main);
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_main, fragmentSchedule).commit();
+        navigationView.setCheckedItem(R.id.nav_schedule);
 
         Redrawer.addRedrawable(this);
         redraw();
@@ -103,7 +106,9 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0)
+                getSupportFragmentManager().popBackStack();
+            else super.onBackPressed();
         }
     }
 
@@ -142,16 +147,20 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        while (getSupportFragmentManager().popBackStackImmediate()) ;
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         switch (item.getItemId()) {
-            case R.id.nav_main:
-                ft.replace(R.id.content_main, fragmentMain);
+            case R.id.nav_schedule:
+                ft.replace(R.id.content_main, fragmentSchedule);
                 break;
             case R.id.nav_journal:
                 ft.replace(R.id.content_main, fragmentJournal);
                 break;
             case R.id.nav_management:
                 ft.replace(R.id.content_main, fragmentManagement);
+                break;
+            case R.id.nav_statistics:
+                ft.replace(R.id.content_main, fragmentStatistics);
                 break;
             case R.id.nav_debug:
                 ft.replace(R.id.content_main, fragmentDebug);
@@ -167,5 +176,10 @@ public class MainActivity extends AppCompatActivity
     public void setFragment(Fragment fragment) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content_main, fragment).commit();
+    }
+
+    public void setFragmentWithStack(Fragment fragment) {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.addToBackStack(null).replace(R.id.content_main, fragment).commit();
     }
 }
