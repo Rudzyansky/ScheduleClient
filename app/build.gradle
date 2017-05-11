@@ -8,8 +8,8 @@ android {
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 1
-//        versionName "1.0.8a"
-        versionName "2.0.0.10a"
+        versionName "1.0.8a"
+//        versionName "2.0.0.10a"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 //        jackOptions {
 //            enabled true
@@ -35,10 +35,10 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile files('/home/admin/workspace/VFrame/VFrame-client.jar')
-//    compile files('/home/admin/workspace/VFrame/VFrame-client-sources.jar')
-    compile 'com.android.support:appcompat-v7:25.1.1'
-    compile 'com.android.support:design:25.1.1'
+    compile files('/home/admin/workspace/IdeaProjects/VFrame/VFrame-client.jar')
+//    compile files('/home/admin/workspace/IdeaProjects/VFrame/VFrame-client-sources.jar')
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:design:25.3.1'
     compile 'com.vk:androidsdk:1.6.7'
     compile 'com.prolificinteractive:material-calendarview:1.4.2'
     testCompile 'junit:junit:4.12'
