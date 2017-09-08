@@ -20,25 +20,37 @@ import android.widget.TextView;
 
 import com.vk.sdk.VKSdk;
 
+import ru.falseteam.schedule.data.StaticData;
+import ru.falseteam.schedule.data.VkData;
+import ru.falseteam.schedule.journal.FragmentJournal;
 import ru.falseteam.schedule.management.FragmentManagement;
-import ru.falseteam.schedule.listeners.Redrawable;
-import ru.falseteam.schedule.listeners.Redrawer;
+import ru.falseteam.schedule.schedule.FragmentSchedule;
+import ru.falseteam.schedule.socket.Worker;
+import ru.falseteam.schedule.statistics.FragmentStatistics;
+import ru.falseteam.vframe.redraw.Redrawable;
+import ru.falseteam.vframe.redraw.Redrawer;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Redrawable {
 
-    private Fragment fragmentMain = new FragmentMain();
+    private Fragment fragmentSchedule = new FragmentSchedule();
+    private Fragment fragmentJournal = new FragmentJournal();
     private Fragment fragmentManagement = new FragmentManagement();
+    private Fragment fragmentStatistics = new FragmentStatistics();
     private Fragment fragmentDebug = new FragmentDebug();
+
     private View navHeader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // init toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // init drawer
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -50,23 +62,23 @@ public class MainActivity extends AppCompatActivity
             navigationView.getMenu().removeItem(R.id.nav_debug);
         navigationView.setNavigationItemSelectedListener(this);
         navHeader = navigationView.getHeaderView(0);
+        // set default selected fragment
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_main, fragmentSchedule).commit();
+        navigationView.setCheckedItem(R.id.nav_schedule);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.content_main, fragmentMain).commit();
-        navigationView.setCheckedItem(R.id.nav_main);
-
-        Redrawer.add(this);
+        Redrawer.addRedrawable(this);
         redraw();
 
         if (!VKSdk.isLoggedIn())
             VKSdk.login(this);
         else
-            Data.vkUpdate();
+            VkData.vkUpdate();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Data.vkUpdate();
+        VkData.vkUpdate();
     }
 
     @Override
@@ -75,16 +87,16 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void run() {
                 // Обновление боковой менюшки
-                ((TextView) navHeader.findViewById(R.id.group)).setText(Data.getCurrentGroup().name());
-                ((TextView) navHeader.findViewById(R.id.name)).setText(Data.getName());
-                ((ImageView) navHeader.findViewById(R.id.userIcon)).setImageBitmap(Data.getUserIcon());
+                ((TextView) navHeader.findViewById(R.id.group)).setText(Worker.get().getCurrentPermission().name());
+                ((TextView) navHeader.findViewById(R.id.name)).setText(VkData.getName());
+                ((ImageView) navHeader.findViewById(R.id.userIcon)).setImageBitmap(VkData.getUserIcon());
             }
         });
     }
 
     @Override
     protected void onDestroy() {
-        Redrawer.remove(this);
+        Redrawer.removeRedrawable(this);
         super.onDestroy();
     }
 
@@ -94,7 +106,9 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0)
+                getSupportFragmentManager().popBackStack();
+            else super.onBackPressed();
         }
     }
 
@@ -110,6 +124,12 @@ public class MainActivity extends AppCompatActivity
             case R.id.action_about:
                 showAboutDialog();
                 return true;
+            case R.id.action_update:
+                Intent intent = new Intent(this, UpdateActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("version", "");
+                startActivity(intent);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -118,7 +138,7 @@ public class MainActivity extends AppCompatActivity
     private void showAboutDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.about);
-        builder.setMessage(String.format(getString(R.string.about_message), Data.getClientVersion()));
+        builder.setMessage(String.format(getString(R.string.about_message), StaticData.getClientVersion()));
         builder.setPositiveButton("Ok", null);
 
         builder.show();
@@ -127,13 +147,20 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        while (getSupportFragmentManager().popBackStackImmediate()) ;
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         switch (item.getItemId()) {
-            case R.id.nav_main:
-                ft.replace(R.id.content_main, fragmentMain);
+            case R.id.nav_schedule:
+                ft.replace(R.id.content_main, fragmentSchedule);
+                break;
+            case R.id.nav_journal:
+                ft.replace(R.id.content_main, fragmentJournal);
                 break;
             case R.id.nav_management:
                 ft.replace(R.id.content_main, fragmentManagement);
+                break;
+            case R.id.nav_statistics:
+                ft.replace(R.id.content_main, fragmentStatistics);
                 break;
             case R.id.nav_debug:
                 ft.replace(R.id.content_main, fragmentDebug);
@@ -149,5 +176,10 @@ public class MainActivity extends AppCompatActivity
     public void setFragment(Fragment fragment) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content_main, fragment).commit();
+    }
+
+    public void setFragmentWithStack(Fragment fragment) {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.addToBackStack(null).replace(R.id.content_main, fragment).commit();
     }
 }

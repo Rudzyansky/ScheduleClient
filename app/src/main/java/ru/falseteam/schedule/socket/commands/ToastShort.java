@@ -7,16 +7,13 @@ import android.widget.Toast;
 
 import java.util.Map;
 
-import ru.falseteam.schedule.socket.CommandAbstract;
 import ru.falseteam.schedule.socket.Worker;
+import ru.falseteam.vframe.socket.ProtocolAbstract;
+import ru.falseteam.vframe.socket.SocketWorker;
 
-public class ToastShort extends CommandAbstract {
-    public ToastShort() {
-        super("toast_short");
-    }
-
+public class ToastShort extends ProtocolAbstract {
     @Override
-    public void exec(final Map<String, Object> map) {
+    public void exec(final Map<String, Object> map, SocketWorker worker) {
         new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(Message inputMessage) {

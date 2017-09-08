@@ -18,11 +18,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.falseteam.schedule.R;
-import ru.falseteam.schedule.listeners.Redrawable;
-import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.Lesson;
 import ru.falseteam.schedule.socket.Worker;
-import ru.falseteam.schedule.socket.commands.GetLessons;
+import ru.falseteam.vframe.redraw.Redrawable;
+import ru.falseteam.vframe.redraw.Redrawer;
 
 public class ListOfLessonsActivity extends AppCompatActivity implements Redrawable {
 
@@ -52,15 +51,21 @@ public class ListOfLessonsActivity extends AppCompatActivity implements Redrawab
         progressBar = findViewById(R.id.progressBar);
         textView = (TextView) findViewById(R.id.textView);
         lv.setEmptyView(findViewById(R.id.emptyView));
-        Redrawer.add(this);
-        redraw();
-        Worker.sendFromMainThread(GetLessons.getRequest());
     }
 
     @Override
-    protected void onDestroy() {
-        Redrawer.remove(this);
-        super.onDestroy();
+    protected void onResume() {
+        super.onResume();
+        Redrawer.addRedrawable(this);
+        Worker.get().getSubscriptionManager().subscribe("GetLessons");
+        redraw();
+    }
+
+    @Override
+    protected void onPause() {
+        Worker.get().getSubscriptionManager().unsubscribe("GetLessons");
+        Redrawer.removeRedrawable(this);
+        super.onPause();
     }
 
     @Override
@@ -87,10 +92,10 @@ public class ListOfLessonsActivity extends AppCompatActivity implements Redrawab
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (GetLessons.lessons != null) {
+                if (Worker.get().getSubscriptionManager().getData("GetLessons") != null) {
                     progressBar.setVisibility(View.INVISIBLE);
                     textView.setText(R.string.empty_list);
-                    pairAdapter.setObjects(GetLessons.lessons);
+                    pairAdapter.setObjects((List<Lesson>) Worker.get().getSubscriptionManager().getData("GetLessons").get("lessons"));
                 }
             }
         });

@@ -6,4 +6,9 @@
         android:orderInCategory="50"
         android:title="@string/about"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_update"
+        android:orderInCategory="50"
+        android:title="@string/update"
+        app:showAsAction="never" />
 </menu>

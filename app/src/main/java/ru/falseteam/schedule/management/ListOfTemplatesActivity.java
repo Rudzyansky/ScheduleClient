@@ -23,15 +23,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.falseteam.schedule.R;
-import ru.falseteam.schedule.listeners.Redrawable;
-import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.Template;
 import ru.falseteam.schedule.socket.Worker;
-import ru.falseteam.schedule.socket.commands.GetTemplates;
+import ru.falseteam.vframe.redraw.Redrawable;
+import ru.falseteam.vframe.redraw.Redrawer;
 
 public class ListOfTemplatesActivity extends AppCompatActivity implements Redrawable {
     private View emptyView;
     private ViewPager viewPager;
+    private Adapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,18 +41,23 @@ public class ListOfTemplatesActivity extends AppCompatActivity implements Redraw
 
         emptyView = findViewById(R.id.emptyView);
         viewPager = (ViewPager) findViewById(R.id.content);
-        viewPager.setAdapter(new Adapter(getSupportFragmentManager()));
-
-        Redrawer.add(this);
-        redraw();
-
-        Worker.sendFromMainThread(GetTemplates.getRequest());
+        adapter = new Adapter(getSupportFragmentManager());
+        viewPager.setAdapter(adapter);
     }
 
     @Override
-    protected void onDestroy() {
-        Redrawer.remove(this);
-        super.onDestroy();
+    protected void onResume() {
+        super.onResume();
+        Redrawer.addRedrawable(this);
+        Worker.get().getSubscriptionManager().subscribe("GetTemplates");
+        redraw();
+    }
+
+    @Override
+    protected void onPause() {
+        Worker.get().getSubscriptionManager().unsubscribe("GetTemplates");
+        Redrawer.removeRedrawable(this);
+        super.onPause();
     }
 
     @Override
@@ -65,7 +70,9 @@ public class ListOfTemplatesActivity extends AppCompatActivity implements Redraw
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add:
-                openTemplateEditor(Template.Factory.getDefault());
+                Template t = Template.Factory.getDefault();
+//                t.weekDay = ;
+                openTemplateEditor(t);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -79,15 +86,17 @@ public class ListOfTemplatesActivity extends AppCompatActivity implements Redraw
 
     @Override
     public void redraw() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (GetTemplates.templates != null) {
+        if (Worker.get().getSubscriptionManager().getData("GetTemplates") != null)
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
                     emptyView.setVisibility(View.GONE);
                     viewPager.setVisibility(View.VISIBLE);
+                    for (int i = 0; i < adapter.getCount(); ++i) {
+                        ((InnerFragment) adapter.getItem(i)).update();
+                    }
                 }
-            }
-        });
+            });
     }
 
     /**
@@ -124,6 +133,13 @@ public class ListOfTemplatesActivity extends AppCompatActivity implements Redraw
             startActivity(intent);
         }
 
+        ListView list;
+
+        public void update() {
+            if (list == null || list.getAdapter() == null) return;
+            ((Adapter) list.getAdapter()).notifyDataSetChanged();
+        }
+
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -133,7 +149,7 @@ public class ListOfTemplatesActivity extends AppCompatActivity implements Redraw
             tv.setText(getResources().getStringArray(R.array.week_days)[dayOfWeek]);
 
             final Adapter adapter = new Adapter(root.getContext(), dayOfWeek);
-            ListView list = (ListView) root.findViewById(R.id.list);
+            list = (ListView) root.findViewById(R.id.list);
             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -159,10 +175,18 @@ public class ListOfTemplatesActivity extends AppCompatActivity implements Redraw
             private Context context;
             private List<Template> templates = new ArrayList<>();
 
-            public Adapter(Context context, int dayOfWeek) {
+            Adapter(Context context, int dayOfWeek) {
                 this.context = context;
-                for (Template t : GetTemplates.templates)
+                for (Template t : ((List<Template>) Worker.get().getSubscriptionManager().getData("GetTemplates").get("templates")))
                     if (t.weekDay.id == dayOfWeek + 1) templates.add(t);
+            }
+
+            @Override
+            public void notifyDataSetChanged() {
+                templates.clear();
+                for (Template t : ((List<Template>) Worker.get().getSubscriptionManager().getData("GetTemplates").get("templates")))
+                    if (t.weekDay.id == dayOfWeek + 1) templates.add(t);
+                super.notifyDataSetChanged();
             }
 
             @Override
@@ -188,13 +212,35 @@ public class ListOfTemplatesActivity extends AppCompatActivity implements Redraw
                 Template t = getItem(position);
                 ((TextView) convertView.findViewById(R.id.lesson_number)).setText(String.valueOf(t.lessonNumber.id));
                 TextView weekEvenness = (TextView) convertView.findViewById(R.id.week_evenness);
-                if (t.weekEvenness > 0) weekEvenness.setVisibility(View.VISIBLE);
-                weekEvenness.setText(t.weekEvenness == 1 ? "II" : "I");
+                // максимум 17 недель весна
+                // максимум 18 недель осень
+                // получается, остается 32-18=14 дополнительных битов для флагов
+                // 3 из них под четность. остается 11 подо что угодно
+                // 31-ый бит говорит о шаблонных неделях (четные, нечетные, все)
+                // 0b00000000000000000000000000000001
+                if (t.weeks.get(31)) {
+                    ((TextView) convertView.findViewById(R.id.name)).setText(t.lesson.name);
+                    // 0b00000000000000000000000000000010
+                    // 30-ый бит обозначает принадлежность ко всем неделям, иначе
+                    // 29-ый бит обозначает принадлежность к нечетным неделям, иначе неделя четная
+                    // 0b00000000000000000000000000000100
+                    if (!t.weeks.get(30)) {
+                        // либо нечетные, либо четные
+                        weekEvenness.setVisibility(View.VISIBLE);
+                        weekEvenness.setText(t.weeks.get(29) ? "I" : "II");
+                    }
+                } else {
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(t.lesson.name);
+                    sb.append(" (");
+                    for (int i = 0; i < 18; ++i) if (t.weeks.get(i)) sb.append(i + 1).append(' ');
+                    sb.append("н)");
+                    ((TextView) convertView.findViewById(R.id.name)).setText(sb.toString());
+                }
                 ((TextView) convertView.findViewById(R.id.begin))
                         .setText(t.lessonNumber.begin.toString().substring(0, 5));
                 ((TextView) convertView.findViewById(R.id.end))
                         .setText(t.lessonNumber.end.toString().substring(0, 5));
-                ((TextView) convertView.findViewById(R.id.name)).setText(t.lesson.name);
                 ((TextView) convertView.findViewById(R.id.audience)).setText(t.lesson.audience);
                 return convertView;
             }

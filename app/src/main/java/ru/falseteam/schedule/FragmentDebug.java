@@ -8,14 +8,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import ru.falseteam.schedule.listeners.Redrawable;
-import ru.falseteam.schedule.listeners.Redrawer;
+import ru.falseteam.schedule.data.StaticData;
 import ru.falseteam.schedule.serializable.Groups;
+import ru.falseteam.schedule.socket.Worker;
+import ru.falseteam.vframe.redraw.Redrawable;
+import ru.falseteam.vframe.redraw.Redrawer;
 
 public class FragmentDebug extends Fragment implements Redrawable {
 
-    TextView group;
-    TextView version;
+    private TextView group;
+    private TextView version;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,36 +35,35 @@ public class FragmentDebug extends Fragment implements Redrawable {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        Redrawer.add(this);
+    public void onResume() {
+        super.onResume();
+        Redrawer.addRedrawable(this);
         redraw();
     }
 
     @Override
-    public void onDestroyView() {
-        Redrawer.remove(this);
-        super.onDestroyView();
+    public void onPause() {
+        Redrawer.removeRedrawable(this);
+        super.onPause();
     }
 
     @Override
     public void redraw() {
-        switch (Data.getCurrentGroup()) {
+        switch (Worker.get().getCurrentPermission()) {
             case disconnected:
+            case admin:
             case developer:
                 break;
-//            case disconnected:
-//                (new FragmentAccessDenied()).init(getActivity(), this, R.string.access_denied_offline, developer);
-//                return;
             default:
-                ((MainActivity) getActivity()).setFragment(FragmentAccessDenied.init(this, getString(R.string.access_denied_not_allowed), Groups.developer));
+                ((MainActivity) getActivity()).setFragment(FragmentAccessDenied.init(this, getString(R.string.access_denied_not_allowed), Groups.developer, Groups.admin, Groups.disconnected));
                 return;
         }
+
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                group.setText(Data.getCurrentGroup().name());
-                version.setText(Data.getClientVersion());
+                group.setText(Worker.get().getCurrentPermission().name());
+                version.setText(StaticData.getClientVersion());
             }
         });
     }

@@ -18,11 +18,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.falseteam.schedule.R;
-import ru.falseteam.schedule.listeners.Redrawable;
-import ru.falseteam.schedule.listeners.Redrawer;
 import ru.falseteam.schedule.serializable.User;
 import ru.falseteam.schedule.socket.Worker;
-import ru.falseteam.schedule.socket.commands.GetUsers;
+import ru.falseteam.vframe.redraw.Redrawable;
+import ru.falseteam.vframe.redraw.Redrawer;
 
 public class ListOfUsersActivity extends AppCompatActivity implements Redrawable {
 
@@ -49,9 +48,7 @@ public class ListOfUsersActivity extends AppCompatActivity implements Redrawable
         progressBar = findViewById(R.id.progressBar);
         textView = (TextView) findViewById(R.id.textView);
         lv.setEmptyView(findViewById(R.id.emptyView));
-        Redrawer.add(this);
-        redraw();
-        Worker.sendFromMainThread(GetUsers.getRequest());
+//        Worker.get().sendFromMainThread(GetUsers.getRequest());
     }
 
     private void openUserEditor(User user) {
@@ -61,9 +58,18 @@ public class ListOfUsersActivity extends AppCompatActivity implements Redrawable
     }
 
     @Override
-    protected void onDestroy() {
-        Redrawer.remove(this);
-        super.onDestroy();
+    protected void onResume() {
+        super.onResume();
+        Redrawer.addRedrawable(this);
+        Worker.get().getSubscriptionManager().subscribe("GetUsers");
+        redraw();
+    }
+
+    @Override
+    protected void onPause() {
+        Worker.get().getSubscriptionManager().unsubscribe("GetUsers");
+        Redrawer.removeRedrawable(this);
+        super.onPause();
     }
 
     @Override
@@ -87,10 +93,12 @@ public class ListOfUsersActivity extends AppCompatActivity implements Redrawable
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (GetUsers.users != null) {
+//                if (MainData.getUsers() != null) {
+                if (Worker.get().getSubscriptionManager().getData("GetUsers") != null) {
                     progressBar.setVisibility(View.INVISIBLE);
                     textView.setText(R.string.empty_list);
-                    adapter.setObjects(GetUsers.users);
+//                    adapter.setObjects(MainData.getUsers());
+                    adapter.setObjects((List<User>) Worker.get().getSubscriptionManager().getData("GetUsers").get("users"));
                 }
             }
         });
@@ -132,7 +140,7 @@ public class ListOfUsersActivity extends AppCompatActivity implements Redrawable
             User user = (User) getItem(position);
 
             ((TextView) convertView.findViewById(R.id.name)).setText(user.name);
-            ((TextView) convertView.findViewById(R.id.group)).setText(user.group.name());
+            ((TextView) convertView.findViewById(R.id.group)).setText(user.permissions.name());
             return convertView;
         }
     }

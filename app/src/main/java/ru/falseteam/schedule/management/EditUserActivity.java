@@ -10,15 +10,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import ru.falseteam.schedule.R;
 import ru.falseteam.schedule.serializable.Groups;
 import ru.falseteam.schedule.serializable.User;
 import ru.falseteam.schedule.socket.Worker;
-import ru.falseteam.schedule.socket.commands.GetUsers;
+import ru.falseteam.vframe.socket.Container;
 
 public class EditUserActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -56,7 +54,7 @@ public class EditUserActivity extends AppCompatActivity implements View.OnClickL
         group = (Spinner) findViewById(R.id.group);
         group.setAdapter(adapter);
         group.setPrompt("Группа доступа");
-        group.setSelection(groups.indexOf(user.group.name()));
+        group.setSelection(groups.indexOf(user.permissions.name()));
 
         if (user.exists) this.vkId.setVisibility(View.GONE);
         else userVkId.setVisibility(View.GONE);
@@ -67,21 +65,26 @@ public class EditUserActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View view) {
-        Map<String, Object> map = new HashMap<>();
+        Container c = null;
+        String newGroup = null;
         switch (view.getId()) {
             case R.id.btnSave:
                 user.name = name.getText().toString();
-                user.group = Groups.valueOf(groups.get(group.getSelectedItemPosition()));
+                user.permissions = null;
+                //user.permissions = Groups.valueOf(groups.get(group.getSelectedItemPosition()));
+                newGroup = groups.get(group.getSelectedItemPosition());
                 if (!user.exists) user.vkId = Integer.parseInt(vkId.getText().toString());
-                map.put("command", "update_user");
+                c = new Container("UpdateUser", true);
                 break;
             case R.id.btnDelete:
-                map.put("command", "delete_user");
+                c = new Container("DeleteUser", true);
                 break;
         }
-        map.put("user", user);
-        Worker.sendFromMainThread(map);
+        assert c != null;
+        c.data.put("user", user);
+        // TODO: 09.02.17 мегакостыль орундий-256
+        c.data.put("group", newGroup);
+        Worker.get().sendFromMainThread(c);
         finish();
-        Worker.sendFromMainThread(GetUsers.getRequest());
     }
 }

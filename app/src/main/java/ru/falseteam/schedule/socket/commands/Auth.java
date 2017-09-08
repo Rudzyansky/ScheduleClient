@@ -3,25 +3,19 @@ package ru.falseteam.schedule.socket.commands;
 import android.content.Intent;
 import android.os.Build;
 
-import java.util.HashMap;
 import java.util.Map;
 
-import ru.falseteam.schedule.Data;
 import ru.falseteam.schedule.UpdateActivity;
-import ru.falseteam.schedule.serializable.Groups;
-import ru.falseteam.schedule.socket.CommandAbstract;
+import ru.falseteam.schedule.data.StaticData;
 import ru.falseteam.schedule.socket.Worker;
+import ru.falseteam.vframe.socket.Container;
+import ru.falseteam.vframe.socket.ProtocolAbstract;
+import ru.falseteam.vframe.socket.SocketWorker;
 
-public class Auth extends CommandAbstract {
-    public Auth() {
-        super("auth");
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
+public class Auth extends ProtocolAbstract {
     @Override
-    public void exec(Map<String, Object> map) {
-        Data.setCurrentGroup(Groups.valueOf(map.get("group").toString()));
-        if (!map.get("version").toString().equals(Data.getClientVersion())) {
+    public void exec(Map<String, Object> map, SocketWorker worker) {
+        if (!map.get("version").toString().equals(StaticData.getClientVersion())) {
             Intent intent = new Intent(Worker.get().getContext(), UpdateActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("version", map.get("version").toString());
@@ -29,12 +23,11 @@ public class Auth extends CommandAbstract {
         }
     }
 
-    public static Map<String, Object> getRequest(String token) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("command", "auth");
-        map.put("token", token);
-        map.put("app_version", Data.getClientVersion());
-        map.put("sdk_version", Build.VERSION.SDK_INT);
-        return map;
+    public static Container getRequest(String token) {
+        Container c = new Container(Auth.class.getSimpleName(), true);
+        c.data.put("token", token);
+        c.data.put("app_version", StaticData.getClientVersion());
+        c.data.put("sdk_version", Build.VERSION.SDK_INT);
+        return c;
     }
 }

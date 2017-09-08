@@ -12,12 +12,13 @@ import java.util.Map;
 import ru.falseteam.schedule.R;
 import ru.falseteam.schedule.serializable.Lesson;
 import ru.falseteam.schedule.socket.Worker;
-import ru.falseteam.schedule.socket.commands.GetLessons;
+import ru.falseteam.vframe.socket.Container;
 
 public class EditLessonActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Lesson lesson;
 
+    private EditText type;
     private EditText name;
     private EditText audience;
     private EditText teacher;
@@ -32,6 +33,7 @@ public class EditLessonActivity extends AppCompatActivity implements View.OnClic
 
         setTitle(lesson.name);
 
+        type = (EditText) findViewById(R.id.type);
         name = (EditText) findViewById(R.id.name);
         audience = (EditText) findViewById(R.id.audience);
         teacher = (EditText) findViewById(R.id.teacher);
@@ -52,20 +54,20 @@ public class EditLessonActivity extends AppCompatActivity implements View.OnClic
         Map<String, Object> map = new HashMap<>();
         switch (view.getId()) {
             case R.id.btnSave:
+                lesson.type = type.getText().toString();
                 lesson.name = name.getText().toString();
                 lesson.audience = audience.getText().toString();
                 lesson.teacher = teacher.getText().toString();
                 lesson.lastTask = lastTask.getText().toString();
                 map.clear();
-                map.put("command", "update_lesson");
+                map.put("command", "UpdateLesson");
                 break;
             case R.id.btnDelete:
-                map.put("command", "delete_lesson");
+                map.put("command", "DeleteLesson");
                 break;
         }
         map.put("lesson", lesson);
-        Worker.sendFromMainThread(map);
+        Worker.get().sendFromMainThread(new Container(map.get("command").toString(), map));
         finish();
-        Worker.sendFromMainThread(GetLessons.getRequest());
     }
 }
