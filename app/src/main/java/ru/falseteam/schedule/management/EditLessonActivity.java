@@ -18,6 +18,7 @@ public class EditLessonActivity extends AppCompatActivity implements View.OnClic
 
     private Lesson lesson;
 
+    private EditText type;
     private EditText name;
     private EditText audience;
     private EditText teacher;
@@ -32,6 +33,7 @@ public class EditLessonActivity extends AppCompatActivity implements View.OnClic
 
         setTitle(lesson.name);
 
+        type = (EditText) findViewById(R.id.type);
         name = (EditText) findViewById(R.id.name);
         audience = (EditText) findViewById(R.id.audience);
         teacher = (EditText) findViewById(R.id.teacher);
@@ -52,6 +54,7 @@ public class EditLessonActivity extends AppCompatActivity implements View.OnClic
         Map<String, Object> map = new HashMap<>();
         switch (view.getId()) {
             case R.id.btnSave:
+                lesson.type = type.getText().toString();
                 lesson.name = name.getText().toString();
                 lesson.audience = audience.getText().toString();
                 lesson.teacher = teacher.getText().toString();

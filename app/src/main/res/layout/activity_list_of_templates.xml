@@ -6,9 +6,10 @@
 
     <TextView
         android:id="@+id/week_number"
-        android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="@dimen/activity_vertical_margin" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/content"
