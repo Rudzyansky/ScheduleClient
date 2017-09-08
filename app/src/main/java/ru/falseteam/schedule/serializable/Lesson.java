@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class Lesson implements Serializable {
     public boolean exists;
     public int id;
+    public String type;
     public String name;
     public String audience;
     public String teacher;

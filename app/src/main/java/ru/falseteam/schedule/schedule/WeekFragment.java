@@ -38,9 +38,10 @@ public class WeekFragment extends Fragment {
         viewPager.setAdapter(adapter);
 
         int day;
-        if (week < (Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) - 6 - 1)) {
+        // TODO: 08.09.17 мегакостыль
+        if (week < (Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) - 6 - 27 - 1 - 2)) {
             day = 6;
-        } else if (week > (Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) - 6 - 1)) {
+        } else if (week > (Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) - 6 - 27 - 1 - 2)) {
             day = 0;
         } else {
             Calendar c = GregorianCalendar.getInstance();
