@@ -132,7 +132,8 @@ public class EditTemplateActivity extends AppCompatActivity implements Redrawabl
         lesson.setAdapter(new ArrayAdapter<>(contentView.getContext(),
                 android.R.layout.simple_spinner_dropdown_item,
                 ((List<WeekDay>) Worker.get().getSubscriptionManager().getData("GetLessons").get("lessons"))));
-        lesson.setSelection(template.lesson.id - 1);
+        // TODO: 08.09.17 костыль
+        lesson.setSelection(template.lesson.id - 1 - 21);
 
         Button save = (Button) findViewById(R.id.btnSave);
         save.setOnClickListener(this);

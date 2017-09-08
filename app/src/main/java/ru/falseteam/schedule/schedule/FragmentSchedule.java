@@ -38,8 +38,9 @@ public class FragmentSchedule extends Fragment implements Redrawable {
         Adapter adapter = new Adapter(getChildFragmentManager());
         viewPager.setAdapter(adapter);
 
-        int week = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) - 6 - 1;
-        viewPager.setCurrentItem(week);
+//        int week = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) - 6 - 1;
+        // TODO: 08.09.17 Мегакостыль
+        viewPager.setCurrentItem((Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) - 6 - 27 - 1 - 2));
 
         rootView.findViewById(R.id.week_number).setVisibility(View.GONE);
         return rootView;
@@ -50,11 +51,13 @@ public class FragmentSchedule extends Fragment implements Redrawable {
         super.onResume();
         Redrawer.addRedrawable(this);
         Worker.get().getSubscriptionManager().subscribeWithCache("GetTemplates");
+//        Worker.get().getSubscriptionManager().subscribeWithCache("GetWeekNum");
         redraw();
     }
 
     @Override
     public void onPause() {
+//        Worker.get().getSubscriptionManager().unsubscribe("GetWeekNum");
         Worker.get().getSubscriptionManager().unsubscribe("GetTemplates");
         Redrawer.removeRedrawable(this);
         super.onPause();
@@ -70,6 +73,13 @@ public class FragmentSchedule extends Fragment implements Redrawable {
                     viewPager.setVisibility(View.VISIBLE);
                 }
             });
+//        if (Worker.get().getSubscriptionManager().getData("GetWeekNum") != null)
+//            getActivity().runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    viewPager.setCurrentItem((Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) - 6 - 27 - 1));
+//                }
+//            });
     }
 
     private class Adapter extends FragmentPagerAdapter {
